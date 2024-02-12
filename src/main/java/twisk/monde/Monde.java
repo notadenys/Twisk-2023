@@ -69,10 +69,17 @@ public class Monde implements Iterable<Etape>{
 
     @Override
     public String toString() {
-        return "Monde{" +
-                "ge=" + ge +
-                ", se=" + se +
-                ", ss=" + ss +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        for (Etape etape : this)
+        {
+            sb.append(etape).append(" : ").append(etape.nbSuccesseurs()).append(" successeurs - ");
+            for (Etape e : etape.getSuccesseurs())
+            {
+                sb.append(e).append(" ");
+            }
+            sb.append('\n');
+        }
+
+        return sb.toString();
     }
 }

@@ -27,12 +27,4 @@ public class Activite extends Etape {
     public boolean estUnGuichet() {
         return false;
     }
-
-    @Override
-    public String toString() {
-        return getNom() + "\n" +
-                "temps=" + temps + "\n" +
-                "ecartTemps=" + ecartTemps +
-                "}" + "\n";
-    }
 }

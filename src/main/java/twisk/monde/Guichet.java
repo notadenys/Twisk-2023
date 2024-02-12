@@ -19,12 +19,4 @@ public class Guichet extends Etape {
     public boolean estUneActivite() {
         return false;
     }
-
-    @Override
-    public String toString() {
-        return "Guichet{" +
-                "nom=" + getNom() +
-                "nbJetons=" + nbJetons +
-                '}';
-    }
 }
