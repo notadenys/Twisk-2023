@@ -64,6 +64,9 @@ public class Monde implements Iterable<Etape>{
         return ge.iterator();
     }
 
+    public SasEntree getEntree() {return se;}
+    public SasSortie getSortie() {return ss;}
+
     @Override
     public String toString() {
         return "Monde{" +
