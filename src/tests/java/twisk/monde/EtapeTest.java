@@ -1,8 +1,6 @@
 package tests.java.twisk.monde;
 
-import main.java.twisk.monde.Activite;
-import main.java.twisk.monde.Etape;
-import main.java.twisk.monde.Guichet;
+import main.java.twisk.monde.*;
 import org.junit.jupiter.api.Test;
 
 
