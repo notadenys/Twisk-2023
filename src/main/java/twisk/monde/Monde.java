@@ -8,6 +8,9 @@ public class Monde implements Iterable<Etape>{
     private final SasEntree se;
     private final SasSortie ss;
 
+    /**
+     * constructor for Monde
+     */
     public Monde() {
         se = new SasEntree();
         ss = new SasSortie();
@@ -15,22 +18,43 @@ public class Monde implements Iterable<Etape>{
         ge.ajouter(se, ss);
     }
 
+    /**
+     * sets entrances for the world
+     * @param etapes stages are to be set as entrances
+     */
     public void aCommeEntree(Etape... etapes) {
         se.ajouterSuccesseur(etapes);
     }
 
+    /**
+     * sets exits for the world
+     * @param etapes stages are to be set as exits
+     */
     public void aCommeSortie(Etape... etapes) {
-        forEach(etape -> etape.ajouterSuccesseur(ss));
+        for (Etape etape : etapes)
+        {
+            etape.ajouterSuccesseur(ss);
+        }
     }
 
+    /**
+     * add stages to the world
+     * @param etapes stages to add
+     */
     public void ajouter(Etape...etapes) {
         ge.ajouter(etapes);
     }
 
+    /**
+     * @return amount of existing stages
+     */
     public int nbEtapes() {
         return ge.nbEtapes();
     }
 
+    /**
+     * @return amount of counters
+     */
     public int nbGuichets() {
         return ge.nbGuichets();
     }
