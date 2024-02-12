@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 
 public class Monde implements Iterable<Etape>{
-    private final GestionaireEtapes ge;
+    private final GestionnaireEtapes ge;
     private final SasEntree se;
     private final SasSortie ss;
 
@@ -14,7 +14,7 @@ public class Monde implements Iterable<Etape>{
     public Monde() {
         se = new SasEntree();
         ss = new SasSortie();
-        ge = new GestionaireEtapes();
+        ge = new GestionnaireEtapes();
         ge.ajouter(se, ss);
     }
 
@@ -63,6 +63,9 @@ public class Monde implements Iterable<Etape>{
     {
         return ge.iterator();
     }
+
+    public SasEntree getEntree() {return se;}
+    public SasSortie getSortie() {return ss;}
 
     @Override
     public String toString() {

@@ -1,5 +1,7 @@
 package main.java.twisk.monde;
 
+import main.java.twisk.outils.FabriqueNumero;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -7,7 +9,7 @@ import java.util.Iterator;
 public abstract class Etape implements Iterable<Etape> {
     private final String nom;
     private final ArrayList<Etape> successeurs;
-    private int nEtapes;
+    private final int numEtape;
 
     /**
      * @param nom name of stage
@@ -15,6 +17,7 @@ public abstract class Etape implements Iterable<Etape> {
     public Etape(String nom) {
         this.nom = nom;
         this.successeurs = new ArrayList<>();
+        numEtape = FabriqueNumero.getInstance().getNumeroEtape();
     }
 
     /**
@@ -22,6 +25,11 @@ public abstract class Etape implements Iterable<Etape> {
      */
     public void ajouterSuccesseur(Etape... successeurs) {
         Collections.addAll(this.successeurs, successeurs);
+    }
+
+    public int nbSuccesseurs()
+    {
+        return successeurs.size();
     }
 
     /**
@@ -39,12 +47,17 @@ public abstract class Etape implements Iterable<Etape> {
     }
 
     public String getNom(){return nom;}
+    public int getNum(){return numEtape;}
+
+    public ArrayList<Etape> getSuccesseurs() {
+        return successeurs;
+    }
 
     @Override
     public String toString() {
         return "Etape{" +
                 ", successeurs=" + successeurs +
-                ", nEtapes=" + nEtapes +
+                ", nEtapes=" + numEtape +
                 '}';
     }
 }
