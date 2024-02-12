@@ -4,9 +4,4 @@ public class SasEntree extends Activite {
     public SasEntree() {
         super("SASENTREE");
     }
-
-    @Override
-    public String toString() {
-        return getNom();
-    }
 }
