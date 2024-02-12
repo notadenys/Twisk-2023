@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class GestionaireEtapes implements Iterable<Etape> {
+public class GestionnaireEtapes implements Iterable<Etape> {
     private final ArrayList<Etape> etapes;
 
-    public GestionaireEtapes() {
+    public GestionnaireEtapes() {
         etapes = new ArrayList<>();
     }
 
