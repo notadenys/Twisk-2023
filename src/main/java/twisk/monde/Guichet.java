@@ -5,7 +5,6 @@ public class Guichet extends Etape {
 
     public Guichet(String nom) {
         super(nom);
-        this.nom = nom;
     }
 
     public Guichet(String nom, int nb) {
@@ -19,5 +18,13 @@ public class Guichet extends Etape {
 
     public boolean estUneActivite() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Guichet{" +
+                "nom=" + getNom() +
+                "nbJetons=" + nbJetons +
+                '}';
     }
 }

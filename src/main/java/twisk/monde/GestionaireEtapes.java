@@ -11,12 +11,34 @@ public class GestionaireEtapes implements Iterable<Etape> {
         etapes = new ArrayList<>();
     }
 
+    /**
+     * add stages to the world
+     * @param etapes stages to add
+     */
     public void ajouter(Etape...etapes) {
         this.etapes.addAll(Arrays.asList(etapes));
     }
 
+    /**
+     * @return amount of existing stages
+     */
     public int nbEtapes() {
         return etapes.size();
+    }
+
+    /**
+     * @return amount of counters
+     */
+    public int nbGuichets() {
+        int nb = 0;
+        for (Etape etape : etapes)
+        {
+            if (etape.estUnGuichet())
+            {
+                nb++;
+            }
+        }
+        return nb;
     }
 
     @Override

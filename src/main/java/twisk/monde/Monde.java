@@ -1,42 +1,75 @@
 package main.java.twisk.monde;
-import java.security.Provider;
-import java.util.ArrayList;
-public class Monde {
-    private ArrayList<Etape> etapesList;
-    private int nbEtapes;
-    private int nbGuichets;
 
+import java.util.Iterator;
+
+
+public class Monde implements Iterable<Etape>{
+    private final GestionaireEtapes ge;
+    private final SasEntree se;
+    private final SasSortie ss;
+
+    /**
+     * constructor for Monde
+     */
     public Monde() {
-        this.etapesList = new ArrayList<Etape>();
+        se = new SasEntree();
+        ss = new SasSortie();
+        ge = new GestionaireEtapes();
+        ge.ajouter(se, ss);
     }
 
-    void aCommeEntree(Etape...etapes) {
-
+    /**
+     * sets entrances for the world
+     * @param etapes stages are to be set as entrances
+     */
+    public void aCommeEntree(Etape... etapes) {
+        se.ajouterSuccesseur(etapes);
     }
 
-    void aCommeSortie(Etape...etapes) {
-
-    }
-
-    void ajouter(Etape...etapes) {
-        for (Etape e : etapes) {
-            if(etapesList.contains(e)) {
-                etapesList.add(etapesList.size()-1, e);
-                nbEtapes++;
-            }
-            if(e instanceof Guichet) {
-                etapesList.add((Guichet)e);
-                nbGuichets++;
-            }
+    /**
+     * sets exits for the world
+     * @param etapes stages are to be set as exits
+     */
+    public void aCommeSortie(Etape... etapes) {
+        for (Etape etape : etapes)
+        {
+            etape.ajouterSuccesseur(ss);
         }
     }
 
-    int nbEtapes() {
-        return 0;
+    /**
+     * add stages to the world
+     * @param etapes stages to add
+     */
+    public void ajouter(Etape...etapes) {
+        ge.ajouter(etapes);
     }
 
-    int nbGuichets() {
-        return 0;
+    /**
+     * @return amount of existing stages
+     */
+    public int nbEtapes() {
+        return ge.nbEtapes();
     }
 
+    /**
+     * @return amount of counters
+     */
+    public int nbGuichets() {
+        return ge.nbGuichets();
+    }
+
+    public Iterator<Etape> iterator()
+    {
+        return ge.iterator();
+    }
+
+    @Override
+    public String toString() {
+        return "Monde{" +
+                "ge=" + ge +
+                ", se=" + se +
+                ", ss=" + ss +
+                '}';
+    }
 }

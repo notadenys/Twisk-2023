@@ -1,29 +1,29 @@
 package main.java.twisk.monde;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 public abstract class Etape implements Iterable<Etape> {
-    protected String nom;
-    protected ArrayList<Etape> successeur;
-    protected int nEtape;
+    private final String nom;
+    private final ArrayList<Etape> successeurs;
+    private int nEtapes;
+
     /**
      * @param nom name of stage
      */
     public Etape(String nom) {
         this.nom = nom;
-        this.nEtape = 0;
-        this.successeur = new ArrayList<>();
-        this.successeur.add(this);
+        this.successeurs = new ArrayList<>();
     }
+
     /**
-     * @param successeurs adding stages
+     * @param successeurs adding successors
      */
-    void ajouterSuccesseur(Etape[] successeurs) {
-        for(Etape etape : successeurs) {
-            successeur.add(etape);
-            nEtape++;
-        }
+    void ajouterSuccesseur(Etape... successeurs) {
+        Collections.addAll(this.successeurs, successeurs);
     }
+
     /**
      * @return true if activity
      */
@@ -35,6 +35,17 @@ public abstract class Etape implements Iterable<Etape> {
     public abstract boolean estUnGuichet();
 
     public Iterator<Etape> iterator() {
-        return successeur.iterator();
+        return successeurs.iterator();
+    }
+
+    public String getNom(){return nom;}
+
+    @Override
+    public String toString() {
+        return "Etape{" +
+                "nom='" + nom + '\'' +
+                ", successeurs=" + successeurs +
+                ", nEtapes=" + nEtapes +
+                '}';
     }
 }

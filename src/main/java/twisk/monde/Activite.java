@@ -1,14 +1,13 @@
 package main.java.twisk.monde;
 
 public class Activite extends Etape {
-    protected int temps = 0;
-    protected int ecartTemps = 0;
+    private int temps = 0;
+    private int ecartTemps = 0;
     /**
      * @param nom name of activity
      */
     public Activite(String nom) {
         super(nom);
-        this.nom = nom;
     }
     /**
      * @param nom name of activity
@@ -17,7 +16,6 @@ public class Activite extends Etape {
      */
     public Activite(String nom, int temps, int ecartTemps) {
         super(nom);
-        this.nom = nom;
         this.temps = temps;
         this.ecartTemps = ecartTemps;
     }
@@ -28,5 +26,14 @@ public class Activite extends Etape {
 
     public boolean estUnGuichet() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Activite{" +
+                "nom=" + getNom() +
+                "temps=" + temps +
+                ", ecartTemps=" + ecartTemps +
+                '}';
     }
 }
