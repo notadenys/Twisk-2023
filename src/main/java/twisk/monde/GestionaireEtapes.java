@@ -19,6 +19,18 @@ public class GestionaireEtapes implements Iterable<Etape> {
         return etapes.size();
     }
 
+    public int nbGuichets() {
+        int nb = 0;
+        for (Etape etape : etapes)
+        {
+            if (etape.estUnGuichet())
+            {
+                nb++;
+            }
+        }
+        return nb;
+    }
+
     @Override
     public Iterator<Etape> iterator()
     {

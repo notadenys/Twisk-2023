@@ -5,7 +5,6 @@ public class Guichet extends Etape {
 
     public Guichet(String nom) {
         super(nom);
-        this.nom = nom;
     }
 
     public Guichet(String nom, int nb) {

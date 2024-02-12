@@ -1,42 +1,42 @@
 package main.java.twisk.monde;
-import java.security.Provider;
-import java.util.ArrayList;
-public class Monde {
-    private ArrayList<Etape> etapesList;
-    private int nbEtapes;
-    private int nbGuichets;
+
+import java.util.Iterator;
+
+
+public class Monde implements Iterable<Etape>{
+    private final GestionaireEtapes ge;
+    private final SasEntree se;
+    private final SasSortie ss;
 
     public Monde() {
-        this.etapesList = new ArrayList<Etape>();
+        se = new SasEntree();
+        ss = new SasSortie();
+        ge = new GestionaireEtapes();
+        ge.ajouter(se, ss);
     }
 
-    void aCommeEntree(Etape...etapes) {
-
+    public void aCommeEntree(Etape... etapes) {
+        se.ajouterSuccesseur(etapes);
     }
 
-    void aCommeSortie(Etape...etapes) {
-
+    public void aCommeSortie(Etape... etapes) {
+        forEach(etape -> etape.ajouterSuccesseur(ss));
     }
 
-    void ajouter(Etape...etapes) {
-        for (Etape e : etapes) {
-            if(etapesList.contains(e)) {
-                etapesList.add(etapesList.size()-1, e);
-                nbEtapes++;
-            }
-            if(e instanceof Guichet) {
-                etapesList.add((Guichet)e);
-                nbGuichets++;
-            }
-        }
+    public void ajouter(Etape...etapes) {
+        ge.ajouter(etapes);
     }
 
-    int nbEtapes() {
-        return 0;
+    public int nbEtapes() {
+        return ge.nbEtapes();
     }
 
-    int nbGuichets() {
-        return 0;
+    public int nbGuichets() {
+        return ge.nbGuichets();
     }
 
+    public Iterator<Etape> iterator()
+    {
+        return ge.iterator();
+    }
 }

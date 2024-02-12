@@ -8,7 +8,6 @@ public class Activite extends Etape {
      */
     public Activite(String nom) {
         super(nom);
-        this.nom = nom;
     }
     /**
      * @param nom name of activity
@@ -17,7 +16,6 @@ public class Activite extends Etape {
      */
     public Activite(String nom, int temps, int ecartTemps) {
         super(nom);
-        this.nom = nom;
         this.temps = temps;
         this.ecartTemps = ecartTemps;
     }
