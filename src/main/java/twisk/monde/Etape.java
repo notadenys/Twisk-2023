@@ -55,10 +55,6 @@ public abstract class Etape implements Iterable<Etape> {
 
     @Override
     public String toString() {
-        return "Etape{" +
-                "nom='" + nom + '\'' +
-                ", successeurs=" + successeurs +
-                ", nEtapes=" + numEtape +
-                '}';
+        return getNom();
     }
 }
