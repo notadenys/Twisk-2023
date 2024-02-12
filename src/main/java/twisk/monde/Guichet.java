@@ -10,7 +10,6 @@ public class Guichet extends Etape {
 
     public Guichet(String nom, int nb) {
         super(nom);
-        this.nom = nom;
         this.nbJetons = nb;
     }
 
