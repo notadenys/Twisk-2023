@@ -7,20 +7,23 @@ import java.util.Iterator;
 public abstract class Etape implements Iterable<Etape> {
     private final String nom;
     private final ArrayList<Etape> successeurs;
+    private int nEtapes;
+
     /**
      * @param nom name of stage
      */
     public Etape(String nom) {
         this.nom = nom;
         this.successeurs = new ArrayList<>();
-        this.successeurs.add(this);
     }
+
     /**
      * @param successeurs adding successors
      */
     void ajouterSuccesseur(Etape... successeurs) {
         Collections.addAll(this.successeurs, successeurs);
     }
+
     /**
      * @return true if activity
      */
@@ -33,5 +36,16 @@ public abstract class Etape implements Iterable<Etape> {
 
     public Iterator<Etape> iterator() {
         return successeurs.iterator();
+    }
+
+    public String getNom(){return nom;}
+
+    @Override
+    public String toString() {
+        return "Etape{" +
+                "nom='" + nom + '\'' +
+                ", successeurs=" + successeurs +
+                ", nEtapes=" + nEtapes +
+                '}';
     }
 }

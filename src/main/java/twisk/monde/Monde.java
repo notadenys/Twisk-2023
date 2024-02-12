@@ -39,4 +39,13 @@ public class Monde implements Iterable<Etape>{
     {
         return ge.iterator();
     }
+
+    @Override
+    public String toString() {
+        return "Monde{" +
+                "ge=" + ge +
+                ", se=" + se +
+                ", ss=" + ss +
+                '}';
+    }
 }
