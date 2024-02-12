@@ -5,7 +5,7 @@ public class Simulation {
     public Simulation() {
         monde = new Monde();
     }
-    public void simuler() {
-
+    public void simuler(Monde monde) {
+        System.out.println(monde);
     }
 }

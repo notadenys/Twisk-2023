@@ -30,10 +30,9 @@ public class Activite extends Etape {
 
     @Override
     public String toString() {
-        return "Activite{" +
-                "nom=" + getNom() +
-                "temps=" + temps +
-                ", ecartTemps=" + ecartTemps +
-                '}';
+        return getNom() + "\n" +
+                "temps=" + temps + "\n" +
+                "ecartTemps=" + ecartTemps +
+                "}" + "\n";
     }
 }

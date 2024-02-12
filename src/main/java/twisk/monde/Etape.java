@@ -20,7 +20,7 @@ public abstract class Etape implements Iterable<Etape> {
     /**
      * @param successeurs adding successors
      */
-    void ajouterSuccesseur(Etape... successeurs) {
+    public void ajouterSuccesseur(Etape... successeurs) {
         Collections.addAll(this.successeurs, successeurs);
     }
 
@@ -43,7 +43,6 @@ public abstract class Etape implements Iterable<Etape> {
     @Override
     public String toString() {
         return "Etape{" +
-                "nom='" + nom + '\'' +
                 ", successeurs=" + successeurs +
                 ", nEtapes=" + nEtapes +
                 '}';
