@@ -1,18 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "def.h"
 
-void delai(int temps, int delta) { // 0 < delta < temps < 100
-
-}
-
-void entrer(int etape) {
-
-}
-
-void transferer(int source, int destination) {
-
-}
+#define SASENTREE 0
+#define ACTIVITE 1
+#define SASSORTIE 2
 
 void simulation(int ids) {
-    
+    entrer(SASENTREE);
+    delai(6, 3);
+    transfert(SASENTREE, ACTIVITE);
+    delai(3, 1);
+    transfert(ACTIVITE, SASSORTIE);
 }
