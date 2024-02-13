@@ -1,13 +1,17 @@
 CC = gcc
-CFLAGS = -Wall -fPIC -c
+CFLAGS = -Wall
+LIBS = -lTwisk
 
-all : client.o libTwisk.so
+all : main client.o libTwisk.so
+
+main : main.c libTwisk.so
+		$(CC) $(CFLAGS) -L. $< -o $@ $(LIBS)
 
 libTwisk.so : programmeC.o client.o
 		$(CC) -shared $^ -o $@
 
 client.o : client.c
-		$(CC) $(CFLAGS) $<
+		$(CC) $(CFLAGS) -fPIC -c $<
 
 clean:
-	rm -f client.o
+	rm -f client.o libTwisk.so main
