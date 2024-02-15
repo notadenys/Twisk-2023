@@ -1,6 +1,6 @@
-package main.java.twisk.monde;
+package twisk.monde;
 
-import main.java.twisk.outils.FabriqueNumero;
+import twisk.outils.FabriqueNumero;
 
 import java.util.ArrayList;
 import java.util.Collections;

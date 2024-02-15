@@ -1,4 +1,4 @@
-package main.java.twisk.outils;
+package twisk.outils;
 
 public class FabriqueNumero {
     private int cptEtape;

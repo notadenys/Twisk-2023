@@ -1,4 +1,4 @@
-package main.java.twisk.monde;
+package twisk.monde;
 
 public class Activite extends Etape {
     private int temps = 0;
