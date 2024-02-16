@@ -19,7 +19,7 @@ int main(int argc, char ** argv) {
 
     int * where_clients = ou_sont_les_clients(nbEtapes, nbClients);
     do {
-       int * where_clients = ou_sont_les_clients(nbEtapes, nbClients);
+       where_clients = ou_sont_les_clients(nbEtapes, nbClients);
        printf("%d\n", where_clients[(nbClients+1) * (nbEtapes - 1)]);
        printf("%b\n", where_clients[(nbClients+1) * (nbEtapes - 1)] != nbClients);
        for(int i=1; i<=nbClients*nbEtapes; i=i+nbClients+1) {
@@ -30,8 +30,7 @@ int main(int argc, char ** argv) {
           printf("\n");
        }
        sleep(3);
-       if (where_clients[(nbClients+1) * (nbEtapes - 1)] == nbClients) break;
-    } while(where_clients[(nbClients+1) * (nbEtapes - 1)] != nbClients);  // why doesn't work??
+    } while(where_clients[(nbClients+1) * (nbEtapes - 1)] != nbClients);
     nettoyage();
     return 0;
 }
