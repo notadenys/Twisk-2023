@@ -1,6 +1,6 @@
-package main.java.twisk.monde;
+package twisk.monde;
 
-import main.java.twisk.outils.FabriqueNumero;
+import twisk.outils.FabriqueNumero;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,10 +27,6 @@ public abstract class Etape implements Iterable<Etape> {
         Collections.addAll(this.successeurs, successeurs);
     }
 
-    public int nbSuccesseurs()
-    {
-        return successeurs.size();
-    }
 
     /**
      * @return true if activity
@@ -52,9 +48,23 @@ public abstract class Etape implements Iterable<Etape> {
     public ArrayList<Etape> getSuccesseurs() {
         return successeurs;
     }
+    public int nbSuccesseurs()
+    {
+        return successeurs.size();
+    }
 
     @Override
     public String toString() {
-        return getNom();
+        StringBuilder sb = new StringBuilder();
+        sb.append(getNom()).append(" (id : ").append(getNum()).append(") : ").append(nbSuccesseurs()).append(" successeur(s)");
+        if(nbSuccesseurs() > 0)
+        {
+            sb.append(" - ");
+            for (Etape etape : getSuccesseurs())
+            {
+                sb.append(etape.getNom()).append(" ");
+            }
+        }
+        return sb.toString();
     }
 }

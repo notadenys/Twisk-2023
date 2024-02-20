@@ -1,6 +1,5 @@
-package tests.java.twisk.monde;
+package twisk.monde;
 
-import main.java.twisk.monde.*;
 import org.junit.jupiter.api.Test;
 
 
