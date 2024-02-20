@@ -3,3 +3,4 @@
 /out/
 *.o
 /main
+src/main/C/libTwisk.so
