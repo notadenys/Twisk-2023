@@ -28,10 +28,10 @@ void simulation(int ids) {
     V(ids, 2);
     transfert(ACTIVITE2, GUICHET3);
     sleep(2);
-    P(ids, 2);
+    P(ids, 3);
     transfert(GUICHET3, ACTIVITE_RES);
     delai(5, 3);
-    V(ids, 2);
+    V(ids, 3);
     transfert(ACTIVITE_RES, SASSORTIE);
 }
 
