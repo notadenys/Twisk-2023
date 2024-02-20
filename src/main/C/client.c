@@ -7,8 +7,9 @@
 #define ACTIVITE1 2
 #define GUICHET2 3
 #define ACTIVITE2 4
-#define ACTIVITE3 5
-#define SASSORTIE 6
+#define GUICHET3 5
+#define ACTIVITE_RES 6
+#define SASSORTIE 7
 
 void simulation(int ids) {
     entrer(SASENTREE);
@@ -25,9 +26,13 @@ void simulation(int ids) {
     transfert(GUICHET2, ACTIVITE2);
     delai(5, 3);
     V(ids, 2);
-    transfert(ACTIVITE2, ACTIVITE3);
-    delai(3, 1);
-    transfert(ACTIVITE3, SASSORTIE);
+    transfert(ACTIVITE2, GUICHET3);
+    sleep(2);
+    P(ids, 2);
+    transfert(GUICHET3, ACTIVITE_RES);
+    delai(5, 3);
+    V(ids, 2);
+    transfert(ACTIVITE_RES, SASSORTIE);
 }
 
 // export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
