@@ -3,8 +3,8 @@
 #include <stdbool.h>
 #include "def.h"
 
-#define nbEtapes 3
-#define nbGuichets 0
+#define nbEtapes 4
+#define nbGuichets 1
 #define nbClients 6
 
 int main(int argc, char ** argv) {
