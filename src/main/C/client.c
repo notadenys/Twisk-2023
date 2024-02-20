@@ -7,8 +7,8 @@
 #define ACTIVITE1 2
 #define GUICHET2 3
 #define ACTIVITE2 4
-#define ACTIVITE3 6
-#define SASSORTIE 5
+#define ACTIVITE3 5
+#define SASSORTIE 6
 
 void simulation(int ids) {
     entrer(SASENTREE);
