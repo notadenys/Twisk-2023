@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include "def.h"
 
-#define nbEtapes 7
+#define nbEtapes 8
 #define nbGuichets 2
 #define nbClients 6
 
