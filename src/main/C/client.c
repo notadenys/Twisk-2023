@@ -11,9 +11,12 @@ void simulation(int ids) {
     entrer(SASENTREE);
     delai(6, 3);
     transfert(SASENTREE,GUICHET);
+    sleep(1);
     P(ids, 1);
     transfert(GUICHET, ACTIVITE);
     delai(3, 1);
     V(ids, 1);
     transfert(ACTIVITE, SASSORTIE);
 }
+
+// export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
