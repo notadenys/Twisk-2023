@@ -4,3 +4,4 @@
 *.o
 /main
 src/main/C/libTwisk.so
+/src/main/C/main

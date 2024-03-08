@@ -1,4 +1,4 @@
-package main.java.twisk.monde;
+package twisk.monde;
 
 public class Guichet extends Etape {
     private int nbJetons;

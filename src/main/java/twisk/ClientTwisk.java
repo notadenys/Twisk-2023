@@ -1,9 +1,9 @@
-package main.java.twisk;
-import main.java.twisk.monde.Activite;
-import main.java.twisk.monde.Etape;
-import main.java.twisk.monde.Guichet;
-import main.java.twisk.monde.Monde;
-import main.java.twisk.simulation.Simulation;
+package twisk;
+import twisk.monde.Activite;
+import twisk.monde.Etape;
+import twisk.monde.Guichet;
+import twisk.monde.Monde;
+import twisk.simulation.Simulation;
 public class ClientTwisk {
 
     public static void main(String[] args) {
