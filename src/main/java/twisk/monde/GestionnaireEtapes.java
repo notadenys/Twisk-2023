@@ -1,4 +1,4 @@
-package twisk.monde;
+package main.java.twisk.monde;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +9,10 @@ public class GestionnaireEtapes implements Iterable<Etape> {
 
     public GestionnaireEtapes() {
         etapes = new ArrayList<>();
+    }
+
+    public ArrayList<Etape> getEtapes(){
+        return etapes;
     }
 
     /**

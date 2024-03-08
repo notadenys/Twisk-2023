@@ -1,6 +1,6 @@
-package twisk.monde;
+package main.java.twisk.monde;
 
-import twisk.outils.FabriqueNumero;
+import main.java.twisk.outils.FabriqueNumero;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,16 +38,30 @@ public abstract class Etape implements Iterable<Etape> {
      */
     public abstract boolean estUnGuichet();
 
+    /**
+     * @return code C of step
+     */
+    public abstract String toC();
+
     public Iterator<Etape> iterator() {
         return successeurs.iterator();
     }
 
     public String getNom(){return nom;}
+
     public int getNum(){return numEtape;}
 
     public ArrayList<Etape> getSuccesseurs() {
         return successeurs;
     }
+
+    public Etape getSuccesseur(){
+        if (successeurs.isEmpty() || successeurs.size() == 1){
+            return null;
+        }
+        return successeurs.get(1);
+    }
+
     public int nbSuccesseurs()
     {
         return successeurs.size();
@@ -67,4 +81,5 @@ public abstract class Etape implements Iterable<Etape> {
         }
         return sb.toString();
     }
+
 }

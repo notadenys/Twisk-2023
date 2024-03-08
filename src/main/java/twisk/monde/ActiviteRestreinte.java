@@ -1,4 +1,4 @@
-package twisk.monde;
+package main.java.twisk.monde;
 
 public class ActiviteRestreinte extends Activite{
     public ActiviteRestreinte(String nom) {

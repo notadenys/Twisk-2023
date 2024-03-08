@@ -1,7 +1,7 @@
-package twisk.monde;
+package tests.java.twisk.monde;
 
 import org.junit.jupiter.api.Test;
-
+import main.java.twisk.monde.*;
 
 class GestionnaireEtapesTest {
 

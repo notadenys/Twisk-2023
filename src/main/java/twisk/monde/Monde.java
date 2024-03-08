@@ -1,5 +1,5 @@
-package twisk.monde;
-
+package main.java.twisk.monde;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 
@@ -76,5 +76,25 @@ public class Monde implements Iterable<Etape>{
         }
 
         return sb.toString();
+    }
+
+    public String toC() {
+        StringBuilder str = new StringBuilder("");
+        String includes = "#include <stdio.h> \n" +
+                "#include <stdlib.h>\n" +
+                "#include \"def.h\"\n"
+                ;
+        String simulation = "\nvoid simulation(int ids)\n" +
+                "{\n";
+        str.append(includes);
+        str.append(simulation);
+        str.append(se.toC());
+        if(ge.getEtapes() != null) {
+            for (Etape e : ge.getEtapes()) {
+                str.append(e.toC());
+            }
+        }
+        str.append("} ");
+        return str.toString();
     }
 }
