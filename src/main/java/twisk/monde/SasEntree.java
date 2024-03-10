@@ -9,7 +9,6 @@ public class SasEntree extends Activite {
 
     public String toC() {
         if(this.getSuccesseurs() == null) {
-            System.out.println("0\n");
             return "";
         }
         StringBuilder str = new StringBuilder();

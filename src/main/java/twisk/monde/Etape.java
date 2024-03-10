@@ -56,10 +56,12 @@ public abstract class Etape implements Iterable<Etape> {
     }
 
     public Etape getSuccesseur(){
-        if (successeurs.isEmpty() || successeurs.size() == 1){
+        if (successeurs.isEmpty()){
+            System.out.println("a");
             return null;
         }
-        return successeurs.get(1);
+        System.out.println("b");
+        return successeurs.get(0);
     }
 
     public int nbSuccesseurs()

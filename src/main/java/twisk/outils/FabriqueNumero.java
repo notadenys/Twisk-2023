@@ -6,7 +6,6 @@ public class FabriqueNumero {
 
     private static FabriqueNumero instance;
 
-
     private FabriqueNumero() {
         this.cptEtape = 0;
         this.cptSemaphore = 1;

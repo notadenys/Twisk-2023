@@ -47,8 +47,7 @@ public class Activite extends Etape {
      */
     public String toC() {
         if(this.getSuccesseur() == null) {
-            System.out.println("0/n");
-            return "";
+            return "   ERROR : Pas de successeurs dans " + this.getNom().toString()+"\n";
         }
         StringBuilder str = new StringBuilder();
         String s1 = "transfert(" + this.getNum() + ","+ this.getSuccesseur().getNum() +");\n" ;
