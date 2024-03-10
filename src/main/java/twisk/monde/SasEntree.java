@@ -14,7 +14,9 @@ public class SasEntree extends Activite {
         StringBuilder str = new StringBuilder();
         String s1 = "   entrer(" + this.getNom() + ");\n";
         String s2 = "   delai(" + this.getTemps() + ", " + this.getEcartTemps() + ");\n";
-        str.append(s1).append(s2);
+        String s3 = "   transfert(" + this.getNom().toString() + ","+ this.getSuccesseur().getNom().toString() +");\n";
+
+        str.append(s1).append(s2).append(s3);
         return str.toString();
     }
 }

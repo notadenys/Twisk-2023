@@ -90,7 +90,7 @@ public class Monde implements Iterable<Etape>{
         str.append(simulation);
         if (ge.getEtapes() != null && ge.getEtapes().size() > 1) {
             ArrayList<Etape> etapes = ge.getEtapes();
-            for (int i = 0; i < etapes.size() - 1; i++) {
+            for (int i = 0; i < etapes.size() - 2; i++) {
                 Etape e = etapes.get(i);
                 str.append(e.toC());
             }

@@ -38,6 +38,8 @@ public abstract class Etape implements Iterable<Etape> {
      */
     public abstract boolean estUnGuichet();
 
+    public abstract boolean estUneSortie();
+
     /**
      * @return code C of step
      */
@@ -57,10 +59,8 @@ public abstract class Etape implements Iterable<Etape> {
 
     public Etape getSuccesseur(){
         if (successeurs.isEmpty()){
-            System.out.println("a");
             return null;
         }
-        System.out.println("b");
         return successeurs.get(0);
     }
 
