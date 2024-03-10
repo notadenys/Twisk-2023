@@ -53,13 +53,13 @@ public class Activite extends Etape {
             return "";
         }
         StringBuilder str = new StringBuilder();
-        String s1 = "   transfert(" + this.getNom().toString() + ","+ this.getSuccesseur().getNom().toString() +");\n" ;
+        String s1 = "    transfert(" + this.getNom().toString() + ","+ this.getSuccesseur().getNom().toString() +");\n" ;
         String s2 = "";
 
         if (this.getSuccesseur().estUnGuichet() || this.getSuccesseur().estUneSortie()) {
             s2 = "";
         } else {
-            s2 = "   delai(" + this.temps + "," + this.ecartTemps + ");\n";
+            s2 = "    delai(" + this.temps + "," + this.ecartTemps + ");\n";
         }
         str.append(s1).append(s2);
         str.append(this.getSuccesseur().toC());

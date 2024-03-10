@@ -1,14 +1,19 @@
 package twisk.simulation;
+
 import twisk.monde.Monde;
+import twisk.outils.KitC;
 public class Simulation {
     public Monde monde;
+    private KitC kitC;
     public Simulation() {
         monde = new Monde();
+        kitC = new KitC();
+        kitC.creerEnvironnement();
     }
     public void simuler(Monde  monde) {
         System.out.println(monde);
-        System.out.println("\n########## Code C ##########\n");
+        System.out.println("########## Code C ##########\n");
         System.out.println(monde.toC());
-        System.out.println("\n############################\n");
+        System.out.println("\n############################");
     }
 }
