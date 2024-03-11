@@ -53,8 +53,8 @@ public class Activite extends Etape {
             return "";
         }
         StringBuilder str = new StringBuilder();
-        String s1 = "    transfert(" + this.getNom().toString() + ","+ this.getSuccesseur().getNom().toString() +");\n" ;
-        String s2 = "";
+        String s1 = "    transfert(" + this.getConstNom() + ","+ this.getSuccesseur().getConstNom() +");\n" ;
+        String s2;
 
         if (this.getSuccesseur().estUnGuichet() || this.getSuccesseur().estUneSortie()) {
             s2 = "";
@@ -64,5 +64,17 @@ public class Activite extends Etape {
         str.append(s1).append(s2);
         str.append(this.getSuccesseur().toC());
         return str.toString() ;
+    }
+
+    @Override
+    public String getConstNom()
+    {
+        return getNom().toUpperCase();
+    }
+
+    @Override
+    public String toDefine()
+    {
+        return "#define " + getConstNom() + " " + getNum();
     }
 }

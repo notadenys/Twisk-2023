@@ -82,12 +82,17 @@ public class Monde implements Iterable<Etape>{
         StringBuilder str = new StringBuilder("");
         String includes = "#include <stdio.h> \n" +
                 "#include <stdlib.h>\n" +
-                "#include \"def.h\"\n"
-                ;
-        String simulation = "\nvoid simulation(int ids)\n" +
+                "#include \"def.h\"\n\n";
+        String simulation = "\n\nvoid simulation(int ids)\n" +
                 "{\n";
         str.append(includes);
+        for (Etape etape : ge.getEtapes())
+        {
+            str.append(etape.toDefine());
+            str.append("\n");
+        }
         str.append(simulation);
+
         if (ge.getEtapes() != null && ge.getEtapes().size() > 1) {
             ArrayList<Etape> etapes = ge.getEtapes();
             for (int i = 0; i < etapes.size() - 2; i++) {

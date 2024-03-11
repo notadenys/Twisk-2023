@@ -44,12 +44,14 @@ public abstract class Etape implements Iterable<Etape> {
      * @return code C of step
      */
     public abstract String toC();
+    public abstract String toDefine();
 
     public Iterator<Etape> iterator() {
         return successeurs.iterator();
     }
 
     public String getNom(){return nom;}
+    public abstract String getConstNom();
 
     public int getNum(){return numEtape;}
 

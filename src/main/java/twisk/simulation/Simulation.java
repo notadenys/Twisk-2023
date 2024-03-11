@@ -3,8 +3,6 @@ package twisk.simulation;
 import twisk.monde.Monde;
 import twisk.outils.KitC;
 
-import java.io.File;
-
 public class Simulation {
     public Monde monde;
     private final KitC kitC;
@@ -15,6 +13,9 @@ public class Simulation {
     }
     public void simuler(Monde  monde) {
         System.out.println(monde);
+        System.out.println(monde.toC());
         kitC.creerFichier(monde.toC());
+        kitC.compiler();
+        kitC.construireLaBibliotheque();
     }
 }
