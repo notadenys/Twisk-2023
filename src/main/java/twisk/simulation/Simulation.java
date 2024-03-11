@@ -2,9 +2,12 @@ package twisk.simulation;
 
 import twisk.monde.Monde;
 import twisk.outils.KitC;
+
+import java.io.File;
+
 public class Simulation {
     public Monde monde;
-    private KitC kitC;
+    private final KitC kitC;
     public Simulation() {
         monde = new Monde();
         kitC = new KitC();
@@ -12,8 +15,6 @@ public class Simulation {
     }
     public void simuler(Monde  monde) {
         System.out.println(monde);
-        System.out.println("########## Code C ##########\n");
-        System.out.println(monde.toC());
-        System.out.println("\n############################");
+        kitC.creerFichier(monde.toC());
     }
 }

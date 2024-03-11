@@ -1,5 +1,7 @@
 package twisk.outils;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -18,6 +20,20 @@ public class KitC {
                 Path dest = directory.resolve(nom);
                 Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void creerFichier(String codeC)
+    {
+        Path directory = Paths.get("/tmp/twisk");
+        try {
+            Files.createDirectories(directory);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(directory + "/client.c"));
+            writer.write(codeC);
+
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
