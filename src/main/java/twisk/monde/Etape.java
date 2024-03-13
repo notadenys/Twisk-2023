@@ -5,6 +5,8 @@ import twisk.outils.FabriqueNumero;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class Etape implements Iterable<Etape> {
     private final String nom;
@@ -15,6 +17,11 @@ public abstract class Etape implements Iterable<Etape> {
      * @param nom name of stage
      */
     public Etape(String nom) {
+        // name should commence by a letter and contain only english letters, numbers and undescore
+        Pattern pattern = Pattern.compile("^[a-z][a-z0-9_]*", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(nom);
+        assert matcher.find() : "Invalid name of Etape";
+
         this.nom = nom;
         this.successeurs = new ArrayList<>();
         numEtape = FabriqueNumero.getInstance().getNumeroEtape();
