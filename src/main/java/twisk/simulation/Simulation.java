@@ -23,5 +23,4 @@ public class Simulation {
     public native int[] ou_sont_les_clients(int nbEtapes, int nbClients);
     public native void nettoyage();
 
-    // start_simulation, ou_sont_les_clients et nettoyage
 }
