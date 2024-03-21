@@ -18,4 +18,10 @@ public class Simulation {
         kitC.compiler();
         kitC.construireLaBibliotheque();
     }
+
+    public native int[] start_simulation(int nbEtapes, int nbGuichets, int nbClients, int[] tabJetonsGuichets);
+    public native int[] ou_sont_les_clients(int nbEtapes, int nbClients);
+    public native void nettoyage();
+
+    // start_simulation, ou_sont_les_clients et nettoyage
 }
