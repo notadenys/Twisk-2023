@@ -1,21 +1,28 @@
 package twisk.monde;
+import javax.naming.InvalidNameException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 
 public class Monde implements Iterable<Etape>{
-    private final GestionnaireEtapes ge;
-    private final SasEntree se;
-    private final SasSortie ss;
+    private GestionnaireEtapes ge;
+    private SasEntree se;
+    private SasSortie ss;
 
     /**
      * constructor for Monde
      */
     public Monde() {
-        se = new SasEntree();
-        ss = new SasSortie();
-        ge = new GestionnaireEtapes();
-        ge.ajouter(se, ss);
+        try {
+            se = new SasEntree();
+            ss = new SasSortie();
+            ge = new GestionnaireEtapes();
+            ge.ajouter(se, ss);
+        }
+        catch (InvalidNameException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**

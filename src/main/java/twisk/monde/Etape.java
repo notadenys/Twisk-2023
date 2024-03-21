@@ -2,6 +2,7 @@ package twisk.monde;
 
 import twisk.outils.FabriqueNumero;
 
+import javax.naming.InvalidNameException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -16,11 +17,14 @@ public abstract class Etape implements Iterable<Etape> {
     /**
      * @param nom name of stage
      */
-    public Etape(String nom) {
+    public Etape(String nom) throws InvalidNameException {
         // name should commence by a letter and contain only english letters, numbers and undescore
         Pattern pattern = Pattern.compile("^[a-z][a-z0-9_]*", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(nom);
-        assert matcher.find() : "Invalid name of Etape";
+        if (!matcher.find())
+        {
+            throw new InvalidNameException("Invalid name of Etape");
+        }
 
         this.nom = nom;
         this.successeurs = new ArrayList<>();

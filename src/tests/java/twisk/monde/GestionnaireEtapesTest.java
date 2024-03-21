@@ -3,10 +3,12 @@ package twisk.monde;
 import org.junit.jupiter.api.Test;
 import twisk.monde.*;
 
+import javax.naming.InvalidNameException;
+
 class GestionnaireEtapesTest {
 
     @Test
-    void ajouter() {
+    void ajouter() throws InvalidNameException {
         GestionnaireEtapes ge = new GestionnaireEtapes();
         Etape Et1 = new Activite("1");
         Etape Et2 = new Activite("2");
@@ -16,7 +18,7 @@ class GestionnaireEtapesTest {
     }
 
     @Test
-    void nbEtapes() {
+    void nbEtapes() throws InvalidNameException {
         GestionnaireEtapes ge = new GestionnaireEtapes();
         Etape Et1 = new Activite("A1");
         Etape Et2 = new Activite("A2");
@@ -27,7 +29,7 @@ class GestionnaireEtapesTest {
     }
 
     @Test
-    void nbGuichets() {
+    void nbGuichets() throws InvalidNameException {
         GestionnaireEtapes ge = new GestionnaireEtapes();
         Etape Et1 = new Activite("A1");
         Etape Et2 = new Activite("A2");

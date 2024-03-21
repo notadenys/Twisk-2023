@@ -1,12 +1,14 @@
 package twisk.monde;
 
+import javax.naming.InvalidNameException;
+
 public class Activite extends Etape {
     protected int temps = 0;
     protected int ecartTemps = 0;
     /**
      * @param nom name of activity
      */
-    public Activite(String nom) {
+    public Activite(String nom) throws InvalidNameException {
         super(nom);
     }
     /**
@@ -14,7 +16,7 @@ public class Activite extends Etape {
      * @param temps time on activity
      * @param ecartTemps +- time on activity
      */
-    public Activite(String nom, int temps, int ecartTemps) {
+    public Activite(String nom, int temps, int ecartTemps) throws InvalidNameException {
         super(nom);
         this.temps = temps;
         this.ecartTemps = ecartTemps;

@@ -3,10 +3,12 @@ package twisk.monde;
 import org.junit.jupiter.api.Test;
 import twisk.monde.*;
 
+import javax.naming.InvalidNameException;
+
 class EtapeTest {
 
     @Test
-    void ajouterSuccesseur() {
+    void ajouterSuccesseur() throws InvalidNameException {
         Etape a = new Activite("a1");
         Etape b = new Activite("a2");
 
@@ -15,7 +17,7 @@ class EtapeTest {
     }
 
     @Test
-    void estUneActivite() {
+    void estUneActivite() throws InvalidNameException {
         Etape a = new Activite("a1");
         boolean b = a.estUneActivite();
         assert(b):"Error in estUneActivite()";
@@ -26,7 +28,7 @@ class EtapeTest {
     }
 
     @Test
-    void estUnGuichet() {
+    void estUnGuichet() throws InvalidNameException {
         Etape a = new Activite("a1");
         boolean b = a.estUnGuichet();
         assert(!b):"Error estUnGuichet()";
@@ -38,7 +40,7 @@ class EtapeTest {
     }
 
     @Test
-    void testAjouterSuccesseur() {
+    void testAjouterSuccesseur() throws InvalidNameException {
         Etape a = new Activite("a1");
         Etape c = new Guichet("a1");
         a.ajouterSuccesseur(c);

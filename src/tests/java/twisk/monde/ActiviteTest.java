@@ -3,11 +3,13 @@ package twisk.monde;
 import twisk.monde.*;
 import org.junit.jupiter.api.Test;
 
+import javax.naming.InvalidNameException;
+
 class ActiviteTest {
 
     @Test
-    void estUneActivite() {
-        Activite a = new Activite("1");
+    void estUneActivite() throws InvalidNameException {
+        Activite a = new Activite("a1");
         boolean b = a.estUneActivite();
         assert(b):"Error in estUneActivite()";
 

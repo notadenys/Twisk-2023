@@ -1,7 +1,9 @@
 package twisk.monde;
 
+import javax.naming.InvalidNameException;
+
 public class SasSortie extends Activite {
-    public SasSortie() {
+    public SasSortie() throws InvalidNameException {
         super("SASSORTIE");
     }
 

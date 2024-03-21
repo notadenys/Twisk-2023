@@ -1,41 +1,42 @@
 package twisk.monde;
 
-import twisk.monde.*;
 import org.junit.jupiter.api.Test;
+
+import javax.naming.InvalidNameException;
 
 
 class MondeTest {
 
     @Test
-    void aCommeEntree() {
+    void aCommeEntree() throws InvalidNameException {
         Monde mn = new Monde();
-        Etape g1 = new Guichet("1");
+        Etape g1 = new Guichet("g1");
         mn.aCommeEntree(g1);
         assert(mn.getEntree().getSuccesseurs().get(0).getNum() == g1.getNum()) : "Error in aCommeEntree()";
     }
 
     @Test
-    void aCommeSortie() {
+    void aCommeSortie() throws InvalidNameException {
         Monde mn = new Monde();
-        Etape g1 = new Guichet("1");
+        Etape g1 = new Guichet("g1");
         mn.aCommeSortie(g1);
         assert(mn.getSortie().getNum() == g1.getSuccesseurs().get(0).getNum()) : "Error in aCommeSortie()";
     }
 
     @Test
-    void ajouter() {
+    void ajouter() throws InvalidNameException {
         Monde mn = new Monde();
-        Etape g1 = new Guichet("1");
+        Etape g1 = new Guichet("g1");
         mn.ajouter(g1);
         System.out.println(mn.nbEtapes());
         assert(mn.nbEtapes() == 3) : "Error in ajouter()";
     }
 
     @Test
-    void nbGuichets() {
+    void nbGuichets() throws InvalidNameException {
         Monde mn = new Monde();
-        Etape g1 = new Guichet("1");
-        Etape act1 = new Activite("1");
+        Etape g1 = new Guichet("g1");
+        Etape act1 = new Activite("a1");
 
         mn.ajouter(g1, act1);
         boolean b = mn.nbGuichets() == 1;
