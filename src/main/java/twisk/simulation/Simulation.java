@@ -17,6 +17,7 @@ public class Simulation {
         kitC.creerFichier(monde.toC());
         kitC.compiler();
         kitC.construireLaBibliotheque();
+        System.load("/tmp/twisk/libTwisk.so") ;
     }
 
     public native int[] start_simulation(int nbEtapes, int nbGuichets, int nbClients, int[] tabJetonsGuichets);

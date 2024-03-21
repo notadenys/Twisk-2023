@@ -14,7 +14,7 @@ public class KitC {
         Path directory = Paths.get("/tmp/twisk");
         try {
             Files.createDirectories(directory);
-            String[] liste = {"programmeC.o", "def.h"};
+            String[] liste = {"programmeC.o", "def.h", "codeNatif.o"};
             for (String nom : liste) {
                 InputStream src = getClass().getResourceAsStream("/codeC/" + nom);
                 Path dest = directory.resolve(nom);
@@ -51,7 +51,7 @@ public class KitC {
 
     public void construireLaBibliotheque()
     {
-        ProcessBuilder pb = new ProcessBuilder("gcc", "-shared", "/tmp/twisk/programmeC.o", "/tmp/twisk/client.o", "-o", "/tmp/twisk/libTwisk.so");
+        ProcessBuilder pb = new ProcessBuilder("gcc", "-shared", "/tmp/twisk/programmeC.o", "/tmp/twisk/codeNatif.o", "/tmp/twisk/client.o", "-o", "/tmp/twisk/libTwisk.so");
         try {
             pb.inheritIO().start().waitFor();
         } catch (InterruptedException | IOException e) {
