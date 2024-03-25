@@ -1,7 +1,6 @@
 /.idea/
 /twisk-shcherba2u-osadtsiv1u.iml
 /out/
-*.o
-/main
+/src/main/C/*.o
 src/main/C/libTwisk.so
 /src/main/C/main
