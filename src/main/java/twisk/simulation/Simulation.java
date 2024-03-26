@@ -49,7 +49,7 @@ public class Simulation {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-        } while(where_clients[(nbClients+1) * (monde.nbEtapes() - 1)] != nbClients);
+        } while(where_clients[(nbClients+1)] != nbClients);
         nettoyage();
     }
 
