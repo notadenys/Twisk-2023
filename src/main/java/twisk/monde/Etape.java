@@ -18,7 +18,7 @@ public abstract class Etape implements Iterable<Etape> {
      */
     public Etape(String nom){
         this.nom = nom;
-        // very difficult code which replaces all spaces by _ and all non-word characters by a random letter :')
+        // very complicated code which replaces all spaces by _ and all non-word characters by a random letter :')
         this.modifiedNom = nom.replace(' ', '_').replaceAll("\\W", Character.toString((char)(97 + new Random().nextInt(25)))).replaceAll("^[0-9]", Character.toString((char)(97 + new Random().nextInt(25))));
         this.successeurs = new ArrayList<>();
         numEtape = FabriqueNumero.getInstance().getNumeroEtape();
