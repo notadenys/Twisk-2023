@@ -7,7 +7,7 @@ public class ActiviteRestreinte extends Activite{
         super(nom);
     }
 
-    public ActiviteRestreinte(String nom, int temps, int ecartTemps) throws InvalidNameException {
+    public ActiviteRestreinte(String nom, int temps, int ecartTemps) {
         super(nom, temps, ecartTemps);
     }
 }

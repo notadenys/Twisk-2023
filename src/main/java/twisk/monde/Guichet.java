@@ -3,6 +3,7 @@ package twisk.monde;
 import twisk.outils.FabriqueNumero;
 
 import javax.naming.InvalidNameException;
+import java.util.Random;
 
 public class Guichet extends Etape {
     private int nbJetons;
@@ -12,7 +13,7 @@ public class Guichet extends Etape {
         super(nom);
     }
 
-    public Guichet(String nom, int nb) throws InvalidNameException {
+    public Guichet(String nom, int nb){
         super(nom);
         this.nbJetons = nb;
         this.nSemaphore = FabriqueNumero.getInstance().getNumeroSemaphore();
@@ -47,12 +48,12 @@ public class Guichet extends Etape {
     @Override
     public String getConstNom()
     {
-        return "GUICHET_" + getNom().toUpperCase();
+        return "GUICHET_" + getModifiedNom().toUpperCase();
     }
 
     public String getConstSem()
     {
-        return "SEM_TICKET_" + getNom().toUpperCase();
+        return "SEM_TICKET_" + getModifiedNom().toUpperCase();
     }
 
     @Override

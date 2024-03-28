@@ -1,6 +1,7 @@
 package twisk.monde;
 
 import javax.naming.InvalidNameException;
+import java.util.Random;
 
 public class Activite extends Etape {
     protected int temps = 0;
@@ -16,7 +17,7 @@ public class Activite extends Etape {
      * @param temps time on activity
      * @param ecartTemps +- time on activity
      */
-    public Activite(String nom, int temps, int ecartTemps) throws InvalidNameException {
+    public Activite(String nom, int temps, int ecartTemps){
         super(nom);
         this.temps = temps;
         this.ecartTemps = ecartTemps;
@@ -71,7 +72,7 @@ public class Activite extends Etape {
     @Override
     public String getConstNom()
     {
-        return getNom().toUpperCase();
+        return getModifiedNom().toUpperCase();
     }
 
     @Override
