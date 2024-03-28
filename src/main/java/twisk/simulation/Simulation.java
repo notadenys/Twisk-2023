@@ -64,7 +64,7 @@ public class Simulation {
             System.out.println();
 
             try {
-                Thread.sleep(30);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
