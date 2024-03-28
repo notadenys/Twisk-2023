@@ -1,4 +1,5 @@
 package twisk;
+
 import twisk.monde.*;
 import twisk.simulation.Simulation;
 
@@ -10,9 +11,9 @@ public class ClientTwisk {
         try
         {
             Monde monde = new Monde();
-            Etape zoo = new Activite("zoo", 4, 2);
-            Etape guichet = new Guichet("guichet",2);
-            Etape toboggan = new Activite("toboggan", 2, 1);
+            Activite zoo = new Activite("zoo", 4, 2);
+            Guichet guichet = new Guichet("guichet",2);
+            Activite toboggan = new ActiviteRestreinte("toboggan", 2, 1);
             monde.ajouter(zoo, guichet, toboggan);
             monde.getEntree().ajouterSuccesseur(zoo);
             monde.aCommeEntree(zoo);

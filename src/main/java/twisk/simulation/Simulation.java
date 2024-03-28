@@ -6,11 +6,14 @@ import twisk.outils.KitC;
 public class Simulation {
     public Monde monde;
     private final KitC kitC;
+    private int nbClients;
+
     public Simulation() {
         monde = new Monde();
         kitC = new KitC();
         kitC.creerEnvironnement();
     }
+
     public void simuler(Monde  monde) {
         System.out.println(monde);
         System.out.println(monde.toC());
@@ -24,7 +27,7 @@ public class Simulation {
         {
             tabJetonsGuichet[i] = i+3;
         }
-        int nbClients = 6;
+        setNbClients(6);
         int[] resultat = start_simulation(monde.nbEtapes(), monde.nbGuichets(), nbClients, tabJetonsGuichet);
         System.out.print("les clients : ");
         for(int i=0; i<nbClients; i++)
@@ -54,12 +57,16 @@ public class Simulation {
             System.out.println();
 
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         } while(where_clients[(nbClients+1)] != nbClients);
         nettoyage();
+    }
+
+    public void setNbClients(int clients) {
+        this.nbClients = clients;
     }
 
     public native int[] start_simulation(int nbEtapes, int nbGuichets, int nbClients, int[] tabJetonsGuichets);
