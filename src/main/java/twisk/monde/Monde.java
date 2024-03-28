@@ -110,4 +110,7 @@ public class Monde implements Iterable<Etape>{
         str.append("} ");
         return str.toString();
     }
+    public String getName(int id) {
+        return this.ge.getNomByID(id);
+    }
 }

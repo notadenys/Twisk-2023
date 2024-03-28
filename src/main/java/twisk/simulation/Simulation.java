@@ -37,27 +37,34 @@ public class Simulation {
         System.out.println();
 
         int[] where_clients;
-        String sortie;
         do {
             where_clients = ou_sont_les_clients(monde.nbEtapes(), nbClients);
             System.out.println();
             for(int i=1; i<=(nbClients+1)*monde.nbEtapes(); i=i+nbClients+1) {
                 if(i / (nbClients + 1) != 1) {
-                    System.out.print("étape " + i / (nbClients + 1) + " : " + where_clients[i - 1] + " clients : ");
+                    int padding = 0;
+                    if(monde.getName(i / (nbClients + 1)).length() < 20) { // without this, if name longer than 20, code falls
+                        padding = 20 - monde.getName(i / (nbClients + 1)).length();
+                    }
+                    System.out.print("étape " + i / (nbClients + 1) + " (" + monde.getName(i / (nbClients + 1)) + ") : " + " ".repeat(padding) + where_clients[i - 1] + " clients : ");
                     for (int j = i; j < i + where_clients[i - 1]; j++) {
                         System.out.print(where_clients[j] + " ");
                     }
                     System.out.println();
                 }
             }
-            System.out.print("étape " + 8 / (nbClients + 1) + " : " + where_clients[8 - 1] + " clients : ");
+            int padding = 0;
+            if(monde.getName(8 / (nbClients + 1)).length() < 20) {
+                padding = 20 - monde.getName(8 / (nbClients + 1)).length();
+            }
+            System.out.print("étape " + 8 / (nbClients + 1)  + " (" + monde.getName(8 / (nbClients + 1)) + ") : " + " ".repeat(padding) + where_clients[8 - 1] + " clients : ");
             for (int j = 8; j < 8 + where_clients[8 - 1]; j++) {
                 System.out.print(where_clients[j] + " ");
             }
             System.out.println();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(30);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

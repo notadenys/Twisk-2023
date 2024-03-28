@@ -57,4 +57,15 @@ public class GestionnaireEtapes implements Iterable<Etape> {
                 "etapes=" + etapes +
                 '}';
     }
+
+    public String getNomByID(int id) {
+        for (Etape etape : etapes)
+        {
+            if (etape.getNum() == id)
+            {
+                return etape.getNom();
+            }
+        }
+        return null;
+    }
 }
