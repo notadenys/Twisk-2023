@@ -1,15 +1,13 @@
 package twisk.monde;
 
 import twisk.outils.FabriqueNumero;
-
 import javax.naming.InvalidNameException;
-import java.util.Random;
 
 public class Guichet extends Etape {
     private int nbJetons;
     private int nSemaphore;
 
-    public Guichet(String nom) throws InvalidNameException {
+    public Guichet(String nom) {
         super(nom);
     }
 
@@ -31,18 +29,20 @@ public class Guichet extends Etape {
         return false;
     }
 
-    public String toC()
-    {
-        StringBuilder str = new StringBuilder();
-        String s1 = "    P(ids,"+ nSemaphore + ");\n";
-        if (this.getSuccesseur() != null) {
-            String s2 = "    transfert(" + this.getConstNom() + "," + this.getSuccesseur().getConstNom() + ");\n";
-            String s4 = "    delai(3,1);\n";
-            String s3 = "    V(ids," + nSemaphore + ");\n";
-            str.append(s1).append(s2).append(s4).append(s3);
-            str.append(this.getSuccesseur().toC());
+    public String toC() {
+        if(this.estUnGuichet()) {
+            StringBuilder str = new StringBuilder();
+            String s1 = "    P(ids," + nSemaphore + ");\n";
+            if (this.getSuccesseur() != null) {
+                String s2 = "    transfert(" + this.getConstNom() + "," + this.getSuccesseur().getConstNom() + ");\n";
+                String s4 = "    delai(3,1);\n";
+                String s3 = "    V(ids," + nSemaphore + ");\n";
+                str.append(s1).append(s2).append(s4).append(s3);
+                str.append(this.getSuccesseur().toC());
+            }
+            return str.toString();
         }
-        return str.toString();
+        return"";
     }
 
     @Override

@@ -55,7 +55,10 @@ public abstract class Etape implements Iterable<Etape> {
     }
 
     public String getNom(){return nom;}
-    public String getModifiedNom(){return modifiedNom;}
+
+    public String getModifiedNom(){
+        return modifiedNom;
+    }
 
     public abstract String getConstNom();
 
@@ -72,8 +75,7 @@ public abstract class Etape implements Iterable<Etape> {
         return successeurs.get(0);
     }
 
-    public int nbSuccesseurs()
-    {
+    public int nbSuccesseurs() {
         return successeurs.size();
     }
 

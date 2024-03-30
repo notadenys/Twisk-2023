@@ -1,7 +1,6 @@
 package twisk.monde;
 
 import javax.naming.InvalidNameException;
-import java.util.Random;
 
 public class Activite extends Etape {
     protected int temps = 0;
@@ -52,7 +51,7 @@ public class Activite extends Etape {
      * @return code C of activity step
      */
     public String toC() {
-        if(this.getSuccesseur() == null) {
+        if(this.getSuccesseur() == null && this.estUneActivite()) {
             return "";
         }
         StringBuilder str = new StringBuilder();

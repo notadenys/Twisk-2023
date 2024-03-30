@@ -66,8 +66,7 @@ public class Monde implements Iterable<Etape>{
         return ge.nbGuichets();
     }
 
-    public Iterator<Etape> iterator()
-    {
+    public Iterator<Etape> iterator() {
         return ge.iterator();
     }
 
@@ -86,15 +85,14 @@ public class Monde implements Iterable<Etape>{
     }
 
     public String toC() {
-        StringBuilder str = new StringBuilder("");
+        StringBuilder str = new StringBuilder();
         String includes = "#include <stdio.h> \n" +
                 "#include <stdlib.h>\n" +
                 "#include \"def.h\"\n\n";
         String simulation = "\n\nvoid simulation(int ids)\n" +
                 "{\n";
         str.append(includes);
-        for (Etape etape : ge.getEtapes())
-        {
+        for (Etape etape : ge.getEtapes()) {
             str.append(etape.toDefine());
             str.append("\n");
         }

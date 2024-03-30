@@ -16,7 +16,7 @@ public class Simulation {
 
     public void simuler(Monde  monde) {
         System.out.println(monde);
-        System.out.println(monde.toC());
+//        System.out.println(monde.toC());
         kitC.creerFichier(monde.toC());
         kitC.compiler();
         kitC.construireLaBibliotheque();
@@ -81,3 +81,11 @@ public class Simulation {
     public native void nettoyage();
 
 }
+
+/*
+    Adding another queue to the simulation introduces a looping problem that we have not been able to identify.
+    If you select the comment on line 19 of this file, the C code will be output to the terminal,
+    which will show exactly where the problem is.
+    As a result, in the presence of at least two queues, the client jumps through one stage,
+    due to which at the next transition it does not find itself in the desired one, stopping the simulation.
+ */
