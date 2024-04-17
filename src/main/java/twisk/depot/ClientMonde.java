@@ -16,7 +16,7 @@ public class ClientMonde {
         monde.aCommeEntree(zoo);
         monde.aCommeSortie(tob);
         Simulation s = new Simulation();
-        s.setNbClients(8);
+        s.setNbClients(5);
         s.simuler(monde);
     }
 }

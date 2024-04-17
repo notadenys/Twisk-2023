@@ -1,7 +1,11 @@
 package twisk.simulation;
 
+import twisk.monde.Etape;
+import twisk.monde.Guichet;
 import twisk.monde.Monde;
 import twisk.outils.KitC;
+
+import java.util.Iterator;
 
 public class Simulation {
     public Monde monde;
@@ -15,7 +19,7 @@ public class Simulation {
         nbClients = 1;
     }
 
-    public void simuler(Monde  monde) {
+    public void simuler(Monde monde) {
         System.out.println(monde);
 //        System.out.println(monde.toC());
         kitC.creerFichier(monde.toC());
@@ -23,11 +27,7 @@ public class Simulation {
         kitC.construireLaBibliotheque();
         System.load("/tmp/twisk/libTwisk.so") ;
 
-        int[] tabJetonsGuichet = new int[monde.nbGuichets()];
-        for(int i=0;i<monde.nbGuichets();i++)
-        {
-            tabJetonsGuichet[i] = i+3;
-        }
+        int[] tabJetonsGuichet = creationTabJeton(monde);
         int[] resultat = start_simulation(monde.nbEtapes(), monde.nbGuichets(), nbClients, tabJetonsGuichet);
         System.out.print("les clients : ");
         for(int i=0; i<nbClients; i++)
@@ -74,6 +74,21 @@ public class Simulation {
 
     public void setNbClients(int clients) {
         this.nbClients = clients;
+    }
+
+    private int[] creationTabJeton(Monde monde) {
+        int[] tab = new int[monde.nbEtapes()];
+        Iterator<Etape> iterator = monde.iterator() ;
+        int i = 0 ;
+
+        while (iterator.hasNext()){
+            Etape e = iterator.next();
+            if (e.estUnGuichet()){
+                Guichet g = (Guichet) e ;
+                tab[i++] = g.getNbJetons() ;
+            }
+        }
+        return tab ;
     }
 
     public native int[] start_simulation(int nbEtapes, int nbGuichets, int nbClients, int[] tabJetonsGuichets);

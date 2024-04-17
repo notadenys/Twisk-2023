@@ -1,14 +1,14 @@
 package twisk.monde;
 
 import twisk.outils.FabriqueNumero;
-import javax.naming.InvalidNameException;
 
 public class Guichet extends Etape {
-    private int nbJetons;
+    private final int nbJetons;
     private int nSemaphore;
 
     public Guichet(String nom) {
         super(nom);
+        nbJetons = 0;
     }
 
     public Guichet(String nom, int nb){
@@ -16,6 +16,8 @@ public class Guichet extends Etape {
         this.nbJetons = nb;
         this.nSemaphore = FabriqueNumero.getInstance().getNumeroSemaphore();
     }
+
+    public int getNbJetons() {return nbJetons;}
 
     public boolean estUnGuichet() {
         return true;
