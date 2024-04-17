@@ -12,6 +12,7 @@ public class Simulation {
         monde = new Monde();
         kitC = new KitC();
         kitC.creerEnvironnement();
+        nbClients = 5;
     }
 
     public void simuler(Monde  monde) {
@@ -27,7 +28,6 @@ public class Simulation {
         {
             tabJetonsGuichet[i] = i+3;
         }
-        setNbClients(6);
         int[] resultat = start_simulation(monde.nbEtapes(), monde.nbGuichets(), nbClients, tabJetonsGuichet);
         System.out.print("les clients : ");
         for(int i=0; i<nbClients; i++)
