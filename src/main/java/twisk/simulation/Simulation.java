@@ -12,7 +12,7 @@ public class Simulation {
         monde = new Monde();
         kitC = new KitC();
         kitC.creerEnvironnement();
-        nbClients = 5;
+        nbClients = 1;
     }
 
     public void simuler(Monde  monde) {
@@ -54,11 +54,11 @@ public class Simulation {
                 }
             }
             int padding = 0;
-            if(monde.getName(8 / (nbClients + 1)).length() < 20) {
-                padding = 20 - monde.getName(8 / (nbClients + 1)).length();
+            if(monde.getName((nbClients + 2) / (nbClients + 1)).length() < 20) {
+                padding = 20 - monde.getName((nbClients + 2) / (nbClients + 1)).length();
             }
-            System.out.print("étape " + 8 / (nbClients + 1)  + " (" + monde.getName(8 / (nbClients + 1)) + ") : " + " ".repeat(padding) + where_clients[8 - 1] + " clients : ");
-            for (int j = 8; j < 8 + where_clients[8 - 1]; j++) {
+            System.out.print("étape " + (nbClients + 2) / (nbClients + 1)  + " (" + monde.getName((nbClients + 2) / (nbClients + 1)) + ") : " + " ".repeat(padding) + where_clients[(nbClients + 2) - 1] + " clients : ");
+            for (int j = (nbClients + 2); j < (nbClients + 2) + where_clients[(nbClients + 2) - 1]; j++) {
                 System.out.print(where_clients[j] + " ");
             }
             System.out.println();
