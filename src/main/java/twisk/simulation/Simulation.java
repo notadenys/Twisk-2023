@@ -21,7 +21,7 @@ public class Simulation {
 
     public void simuler(Monde monde) {
         System.out.println(monde);
-//        System.out.println(monde.toC());
+        System.out.println(monde.toC());
         kitC.creerFichier(monde.toC());
         kitC.compiler();
         kitC.construireLaBibliotheque();

@@ -12,8 +12,7 @@ public class ClientTwisk2 {
         Activite another_activity = new Activite("another_activity", 4, 2);
         Guichet another_guichet = new Guichet("another_guichet", 2);
         Activite toboggan = new ActiviteRestreinte("toboggan", 2, 1);
-        monde.ajouter(zoo, guichet, another_activity, another_guichet, toboggan);
-        monde.getEntree().ajouterSuccesseur(zoo);
+        monde.ajouter(guichet, zoo, another_activity, another_guichet, toboggan);
         monde.aCommeEntree(zoo);
         zoo.ajouterSuccesseur(guichet);
         guichet.ajouterSuccesseur(another_activity);
@@ -21,6 +20,7 @@ public class ClientTwisk2 {
         another_guichet.ajouterSuccesseur(toboggan);
         monde.aCommeSortie(toboggan);
         Simulation sim = new Simulation();
+        sim.setNbClients(5);
         sim.simuler(monde);
     }
 }

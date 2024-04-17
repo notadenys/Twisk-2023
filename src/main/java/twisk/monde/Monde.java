@@ -98,12 +98,16 @@ public class Monde implements Iterable<Etape>{
         }
         str.append(simulation);
 
-        if (ge.getEtapes() != null && ge.getEtapes().size() > 1) {
+//        for (Etape etape : ge.getEtapes())
+//        {
+//            System.out.println(etape);
+//            str.append(etape.toC());
+//        }
+
+        if (ge.getEtapes() != null && !ge.getEtapes().isEmpty()) {
             ArrayList<Etape> etapes = ge.getEtapes();
-            for (int i = 0; i < etapes.size() - 2; i++) {
-                Etape e = etapes.get(i);
-                str.append(e.toC());
-            }
+            str.append(etapes.get(0).toC());
+            str.append(etapes.get(0).getSuccesseur().toC());
         }
         str.append("} ");
         return str.toString();

@@ -12,7 +12,7 @@ public class ClientMonde {
         Activite tob = new ActiviteRestreinte("toboggan", 2, 1);
         zoo.ajouterSuccesseur(guichet);
         guichet.ajouterSuccesseur(tob);
-        monde.ajouter(zoo, tob, guichet);
+        monde.ajouter(tob, guichet, zoo);
         monde.aCommeEntree(zoo);
         monde.aCommeSortie(tob);
         Simulation s = new Simulation();
