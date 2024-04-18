@@ -7,10 +7,11 @@ import twisk.outils.KitC;
 
 import java.util.Iterator;
 
-public class Simulation {
+public class Simulation implements Iterable<Client> {
     public Monde monde;
     private final KitC kitC;
     private int nbClients;
+    private GestionnaireClients gestClients;
 
     public Simulation() {
         monde = new Monde();
@@ -30,8 +31,7 @@ public class Simulation {
         int[] tabJetonsGuichet = creationTabJeton(monde);
         int[] resultat = start_simulation(monde.nbEtapes(), monde.nbGuichets(), nbClients, tabJetonsGuichet);
         System.out.print("les clients : ");
-        for(int i=0; i<nbClients; i++)
-        {
+        for(int i=0; i<nbClients; i++) {
             System.out.print(resultat[i]+" ");
         }
         System.out.println();
@@ -94,13 +94,9 @@ public class Simulation {
     public native int[] start_simulation(int nbEtapes, int nbGuichets, int nbClients, int[] tabJetonsGuichets);
     public native int[] ou_sont_les_clients(int nbEtapes, int nbClients);
     public native void nettoyage();
-
+    @Override
+    public Iterator<Client> iterator() {
+        return gestClients.iterator();
+    }
 }
 
-/*
-    Adding another queue to the simulation introduces a looping problem that we have not been able to identify.
-    If you select the comment on line 19 of this file, the C code will be output to the terminal,
-    which will show exactly where the problem is.
-    As a result, in the presence of at least two queues, the client jumps through one stage,
-    due to which at the next transition it does not find itself in the desired one, stopping the simulation.
- */
