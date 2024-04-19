@@ -9,7 +9,7 @@ public class Activite extends Etape {
      * @param nom name of activity
      */
     public Activite(String nom) throws InvalidNameException {
-        super(nom, 1);
+        super(nom);
     }
     /**
      * @param nom name of activity
@@ -17,7 +17,7 @@ public class Activite extends Etape {
      * @param ecartTemps +- time on activity
      */
     public Activite(String nom, int temps, int ecartTemps){
-        super(nom, 1);
+        super(nom);
         this.temps = temps;
         this.ecartTemps = ecartTemps;
     }

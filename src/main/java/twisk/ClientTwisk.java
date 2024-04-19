@@ -11,7 +11,6 @@ public class ClientTwisk {
         Guichet guichet = new Guichet("guichet",2);
         Activite toboggan = new ActiviteRestreinte("toboggan", 2, 1);
         monde.ajouter(zoo, guichet, toboggan);
-        monde.getEntree().ajouterSuccesseur(zoo);
         monde.aCommeEntree(zoo);
         zoo.ajouterSuccesseur(guichet);
         guichet.ajouterSuccesseur(toboggan);
