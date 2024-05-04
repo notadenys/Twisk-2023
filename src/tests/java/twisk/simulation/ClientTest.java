@@ -9,7 +9,7 @@ class ClientTest {
     @Test
     public void testAllerA() {
         Client client = new Client(1);
-        Etape etape = new Etape("Etape", 1) {
+        Etape etape = new Etape("Etape") {
             @Override
             public boolean estUneActivite() {
                 return false;

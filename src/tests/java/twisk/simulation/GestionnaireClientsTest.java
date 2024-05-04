@@ -24,7 +24,7 @@ class GestionnaireClientsTest {
     @Test
     void testAllerA() {
         gestionnaire.setClients(new int[]{1, 2, 3});
-        Etape etape = new Etape("Test", 1) {
+        Etape etape = new Etape("Test") {
             @Override
             public boolean estUneActivite() {
                 return false;
