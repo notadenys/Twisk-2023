@@ -5,12 +5,12 @@ import twisk.outils.TailleComposants;
 
 import java.util.*;
 
-public class EtapeIG implements Iterable<PointDeControleIG>{
+public abstract class EtapeIG implements Iterable<PointDeControleIG>{
     private String nom;
     private final int id;
     private int x;
     private int y;
-    private final int largeur;
+    private int largeur;
     private int hauteur;
     private boolean isEntree;
     private boolean isSortie;
@@ -45,11 +45,7 @@ public class EtapeIG implements Iterable<PointDeControleIG>{
         resetPoints();
     }
 
-    public EtapeIG(String nom)
-    {
-        this(nom, 50, 50);
-    }
-    public EtapeIG() {this("Etape", TailleComposants.getInstance().getEtapeW(), TailleComposants.getInstance().getEtapeH());}
+    public EtapeIG() {this("Etape", 0, 0);}
 
     public String getNom() {
         return nom;
@@ -71,13 +67,23 @@ public class EtapeIG implements Iterable<PointDeControleIG>{
     }
     public void setSortie(boolean bool) {isSortie = bool;}
 
+    public void setLargeur(int l){largeur = l;}
+    public void setHauteur(int h){hauteur = h;}
+
     public void changeHauteur(int hauteurDiff) {
-        if (hauteur == TailleComposants.getInstance().getEtapeH()) hauteur += hauteurDiff;
+        if (hauteur == TailleComposants.getInstance().getActiviteH()) hauteur += hauteurDiff;
         resetPoints();
     }
     public void resetHauteur()
     {
-        hauteur = TailleComposants.getInstance().getEtapeH();
+        if(estUneActivite())
+        {
+            hauteur = TailleComposants.getInstance().getActiviteH();
+        }
+        else
+        {
+            hauteur = TailleComposants.getInstance().getGuichetH();
+        }
         resetPoints();
     }
 
@@ -89,12 +95,14 @@ public class EtapeIG implements Iterable<PointDeControleIG>{
         points.add(new PointDeControleIG(this, 'R'));
         points.add(new PointDeControleIG(this, 'B'));
     }
-    public boolean isEntree() {
+    public boolean estUneEntree() {
         return isEntree;
     }
-    public boolean isSortie() {
+    public boolean estUneSortie() {
         return isSortie;
     }
+    public abstract boolean estUneActivite();
+    public abstract boolean estUnGuichet();
     public int getId() {return id;}
     public int getX() {
         return x;

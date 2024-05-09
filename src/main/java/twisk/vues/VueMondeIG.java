@@ -16,6 +16,7 @@ import java.util.Map;
 public class VueMondeIG extends Pane implements Observateur{
     private final MondeIG monde;
     private ArrayList<VueActiviteIG> activites;
+    private ArrayList<VueGuichetIG> guichets;
     private ArrayList<VuePointDeControleIG> points;
     private ArrayList<VueArcIG> arcs;
 
@@ -52,14 +53,28 @@ public class VueMondeIG extends Pane implements Observateur{
     {
         getChildren().clear();
         activites = new ArrayList<>();
+        guichets = new ArrayList<>();
         points = new ArrayList<>();
-        for (Map.Entry<Integer,EtapeIG> activite : monde)
+        for (Map.Entry<Integer,EtapeIG> etapeMap : monde)
         {
-            activites.add(new VueActiviteIG(monde, activite.getValue()));
-            for (PointDeControleIG point : activite.getValue())
+            EtapeIG etape = etapeMap.getValue();
+            if (etape.estUneActivite())
             {
-                points.add(new VuePointDeControleIG(monde, point));
+                activites.add(new VueActiviteIG(monde, etape));
+                for (PointDeControleIG point : etape)
+                {
+                    points.add(new VuePointDeControleIG(monde, point));
+                }
             }
+            else if (etape.estUnGuichet())
+            {
+                guichets.add(new VueGuichetIG(monde, etape));
+                for (PointDeControleIG point : etape)
+                {
+                    points.add(new VuePointDeControleIG(monde, point));
+                }
+            }
+
         }
         arcs = new ArrayList<>();
         monde.refreshArcs();
@@ -73,8 +88,13 @@ public class VueMondeIG extends Pane implements Observateur{
         {
             activite.relocate(activite.getX(), activite.getY());
         }
+        for (VueGuichetIG vueGuichetIG : guichets)
+        {
+            vueGuichetIG.relocate(vueGuichetIG.getX(), vueGuichetIG.getY());
+        }
         getChildren().addAll(arcs);
         getChildren().addAll(activites);
+        getChildren().addAll(guichets);
         getChildren().addAll(points);
     }
 }

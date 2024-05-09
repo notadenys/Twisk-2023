@@ -3,8 +3,7 @@ package twisk.vues;
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import twisk.mondeIG.EtapeIG;
 import twisk.mondeIG.MondeIG;
 import twisk.outils.TailleComposants;
@@ -12,24 +11,36 @@ import twisk.outils.TailleComposants;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class VueActiviteIG extends VueEtapeIG {
-    private final HBox clientWindow;
+public class VueGuichetIG extends VueEtapeIG implements Observateur{
+    GridPane grid;
 
-    public VueActiviteIG(MondeIG monde, EtapeIG etape)
+    public VueGuichetIG(MondeIG monde, EtapeIG etape)
     {
         super(monde, etape);
         monde.ajouterObservateur(this);
-        clientWindow = new HBox();
-        clientWindow.setStyle("-fx-border-color: #0059FF; " +
-                "-fx-background-color: #E9E9E9; " +
-                "-fx-background-insets: 0 0 -1 0, 0, 1, 2; " +
-                "-fx-background-radius: 3px, 3px, 2px, 1px;");
-        clientWindow.setMinSize(TailleComposants.getInstance().getClientsW(), TailleComposants.getInstance().getClientsH());
+
+        grid = new GridPane() ;
+        grid.setGridLinesVisible(false);
+        grid.setStyle("-fx-background-color: linear-gradient(to top, #AFAFAF, #E4E1E1) ");
+        grid.setStyle("-fx-border-color: #00FF36;");
+        ColumnConstraints columnConstraints = new ColumnConstraints();
+        columnConstraints.setPercentWidth(10);
+        grid.setHgap(1);
+        for (int i = 0; i < 10; i++) {
+            Pane pane = new Pane() ;
+            pane.minHeight(TailleComposants.getInstance().getGridH() ) ;
+            pane.minWidth(TailleComposants.getInstance().getGridW() ) ;
+            pane.prefWidth(TailleComposants.getInstance().getGridW() ) ;
+            pane.setPrefHeight(TailleComposants.getInstance().getGridH() );
+            pane.setStyle("-fx-background-color: linear-gradient(to top, #AFAFAF, #E4E1E1) ;-fx-border-color: #00FF36; ");
+            grid.add(pane,i,0);
+            grid.getColumnConstraints().add(columnConstraints) ;
+        }
         reagir();
     }
 
-    public void reagir()
-    {
+    @Override
+    public void reagir() {
         getChildren().clear();
 
         BorderPane es = new BorderPane();
@@ -72,7 +83,7 @@ public class VueActiviteIG extends VueEtapeIG {
         }
         setPrefHeight(getEtape().getHauteur());
         getChildren().add(getLabel());
-        getChildren().add(clientWindow);
+        getChildren().add(grid);
         getChildren().add(es);
 
         if (getMonde().getEtapesSelectionnes().contains(getEtape()))

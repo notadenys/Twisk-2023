@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import twisk.mondeIG.ActiviteIG;
+import twisk.mondeIG.GuichetIG;
 import twisk.mondeIG.MondeIG;
 
 import java.io.FileNotFoundException;
@@ -20,6 +21,7 @@ public class VueOutils extends TilePane implements Observateur{
     public VueOutils(MondeIG monde)
     {
         setPadding(new Insets(5));
+        setHgap(10);
         this.monde = monde;
 
         buttons = new ArrayList<>();
@@ -27,14 +29,23 @@ public class VueOutils extends TilePane implements Observateur{
         try {
             FileInputStream input = new FileInputStream("src/main/ressources/images/plus.png");
             Image image = new Image(input);
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(50);
-            imageView.setFitWidth(50);
-            Button button = new Button("", imageView);
-            button.setOnAction(e -> monde.ajouter(new ActiviteIG(4, 2)));
-            button.setTooltip(new Tooltip("bouton qui permet d’ajouter une activité"));
-            buttons.add(button);
-        } catch (FileNotFoundException e)
+            ImageView imageViewActivite = new ImageView(image);
+            imageViewActivite.setFitHeight(50);
+            imageViewActivite.setFitWidth(50);
+            Button ajouterActivite = new Button("Activite", imageViewActivite);
+            ajouterActivite.setOnAction(e -> monde.ajouter(new ActiviteIG(4, 2)));
+            ajouterActivite.setTooltip(new Tooltip("bouton qui permet d’ajouter une activité"));
+            buttons.add(ajouterActivite);
+
+            ImageView imageViewGuichet = new ImageView(image);
+            imageViewGuichet.setFitHeight(50);
+            imageViewGuichet.setFitWidth(50);
+            Button ajouterGuichet = new Button("Guichet", imageViewGuichet);
+            ajouterGuichet.setOnAction(e -> monde.ajouter(new GuichetIG(2)));
+            ajouterGuichet.setTooltip(new Tooltip("bouton qui permet d’ajouter une activité"));
+            buttons.add(ajouterGuichet);
+        }
+        catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }

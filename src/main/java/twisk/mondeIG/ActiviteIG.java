@@ -1,6 +1,7 @@
 package twisk.mondeIG;
 
 import twisk.exceptions.TempsException;
+import twisk.outils.TailleComposants;
 
 public class ActiviteIG extends EtapeIG
 {
@@ -12,6 +13,8 @@ public class ActiviteIG extends EtapeIG
         this.temps = temps;
         this.ecartTemps = ecartTemps;
         setNom("Activite"+getId());
+        setLargeur(TailleComposants.getInstance().getActiviteW());
+        setHauteur(TailleComposants.getInstance().getActiviteH());
     }
 
     public int getTemps() {
@@ -40,6 +43,13 @@ public class ActiviteIG extends EtapeIG
             this.ecartTemps = ecart;
         }
 
+    }
+
+    public boolean estUnGuichet() {
+        return false;
+    }
+    public boolean estUneActivite() {
+        return true;
     }
 
     @Override

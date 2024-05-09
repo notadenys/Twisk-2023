@@ -10,6 +10,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import twisk.mondeIG.EtapeIG;
 import twisk.mondeIG.MondeIG;
+import twisk.outils.TailleComposants;
 
 
 public abstract class VueEtapeIG extends VBox implements Observateur{
@@ -18,6 +19,8 @@ public abstract class VueEtapeIG extends VBox implements Observateur{
     private final Label label;
     private final int x;
     private final int y;
+    private int largeur;
+    private int hauteur;
 
     public VueEtapeIG(MondeIG monde, EtapeIG etape)
     {

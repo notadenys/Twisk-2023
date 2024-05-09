@@ -56,12 +56,7 @@ public class Activite extends Etape {
         }
         StringBuilder str = new StringBuilder();
         String s1 = "    transfert(" + this.getConstNom() + ","+ this.getSuccesseur().getConstNom() +");\n" ;
-        String s2;
-
-//        if (this.getSuccesseur().estUnGuichet() || this.getSuccesseur().estUneSortie()) {
-//            s2 = "";
-//        } else {
-            s2 = "    delai(" + this.temps + "," + this.ecartTemps + ");\n";
+        String s2 = "    delai(" + this.temps + "," + this.ecartTemps + ");\n";
 
         str.append(s2);
         str.append(s1);

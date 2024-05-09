@@ -6,8 +6,12 @@ public class TailleComposants {
     private final int clientsH;
     private final int fenetreW;
     private final int fenetreH;
-    private final int etapeW;
-    private final int etapeH;
+    private final int activiteW;
+    private final int activiteH;
+    private final int guichetW;
+    private final int guichetH;
+    private final int gridW;
+    private final int gridH;
 
     private static TailleComposants instance;
 
@@ -16,8 +20,12 @@ public class TailleComposants {
         fenetreH = 1000;
         clientsW = 230;
         clientsH = 70;
-        etapeW = clientsW + 20;
-        etapeH = clientsH + 44;
+        activiteW = clientsW + 20;
+        activiteH = clientsH + 44;
+        gridW = 250;
+        gridH = 50;
+        guichetW = gridW + 20;
+        guichetH = gridH + 44;
     }
 
     public static TailleComposants getInstance() {
@@ -43,11 +51,27 @@ public class TailleComposants {
         return fenetreH;
     }
 
-    public int getEtapeW() {
-        return etapeW;
+    public int getActiviteW() {
+        return activiteW;
     }
 
-    public int getEtapeH() {
-        return etapeH;
+    public int getActiviteH() {
+        return activiteH;
+    }
+
+    public int getGuichetW() {
+        return guichetW;
+    }
+
+    public int getGuichetH() {
+        return guichetH;
+    }
+
+    public int getGridW() {
+        return gridW;
+    }
+
+    public int getGridH() {
+        return gridH;
     }
 }

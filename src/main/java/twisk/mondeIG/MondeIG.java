@@ -28,6 +28,12 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         notifierObservateurs();
     }
 
+    public void ajouter(GuichetIG guichet)
+    {
+        etapes.put(guichet.getId(), guichet);
+        notifierObservateurs();
+    }
+
     public void delete(EtapeIG... etapes)
     {
         for (EtapeIG etapeIG : etapes)
@@ -43,7 +49,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     {
         for (EtapeIG etape : etapesSelectionnes)
         {
-            etape.setEntree(!etape.isEntree());
+            etape.setEntree(!etape.estUneEntree());
         }
         etapesSelectionnes.clear();
         notifierObservateurs();
@@ -53,7 +59,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     {
         for (EtapeIG etape : etapesSelectionnes)
         {
-            etape.setSortie(!etape.isSortie());
+            etape.setSortie(!etape.estUneSortie());
         }
         etapesSelectionnes.clear();
         notifierObservateurs();
