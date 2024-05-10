@@ -1,5 +1,6 @@
 package twisk.mondeIG;
 
+import twisk.exceptions.JetonsException;
 import twisk.outils.TailleComposants;
 
 public class GuichetIG extends EtapeIG{
@@ -14,7 +15,11 @@ public class GuichetIG extends EtapeIG{
     }
 
     public int getNbJetons() {return nbJetons;}
-    public void setNbJetons(int nb) {nbJetons = nb;}
+    public void setNbJetons(int nb) throws JetonsException
+    {
+        if (nb < 1) throw new JetonsException("Invalid nombre de jetons");
+        nbJetons = nb;
+    }
 
     public boolean estUnGuichet() {
         return true;
@@ -26,5 +31,11 @@ public class GuichetIG extends EtapeIG{
     @Override
     public boolean estUneSortie() {
         return false;
+    }
+
+    @Override
+    public String toString()
+    {
+        return getNom()+" : "+getNbJetons()+" jetons";
     }
 }

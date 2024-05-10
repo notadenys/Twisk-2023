@@ -71,7 +71,14 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG>{
     public void setHauteur(int h){hauteur = h;}
 
     public void changeHauteur(int hauteurDiff) {
-        if (hauteur == TailleComposants.getInstance().getActiviteH()) hauteur += hauteurDiff;
+        if (estUneActivite())
+        {
+            if (hauteur == TailleComposants.getInstance().getActiviteH()) hauteur += hauteurDiff;
+        }
+        else if (estUnGuichet())
+        {
+            if (hauteur == TailleComposants.getInstance().getGuichetH()) hauteur += hauteurDiff;
+        }
         resetPoints();
     }
     public void resetHauteur()

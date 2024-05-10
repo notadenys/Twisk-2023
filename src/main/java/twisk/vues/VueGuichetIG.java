@@ -63,24 +63,6 @@ public class VueGuichetIG extends VueEtapeIG implements Observateur{
             es.setLeft(imageViewEntree);
             getEtape().changeHauteur(30);
         }
-
-        if (getEtape().estUneSortie())
-        {
-            Image imageSortie = null;
-            try {
-                imageSortie = new Image(new FileInputStream("src/main/ressources/images/sortie.png"));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            ImageView imageViewSortie = new ImageView(imageSortie);
-            imageViewSortie.setPreserveRatio(true);
-            imageViewSortie.setFitHeight(25);
-
-            BorderPane.setMargin(imageViewSortie, new Insets(10, 0, 0, 0));
-
-            es.setRight(imageViewSortie);
-            getEtape().changeHauteur(30);
-        }
         setPrefHeight(getEtape().getHauteur());
         getChildren().add(getLabel());
         getChildren().add(grid);
@@ -91,7 +73,7 @@ public class VueGuichetIG extends VueEtapeIG implements Observateur{
             setStyle("-fx-padding: 10px; " +
                     "-fx-background-radius: 10px; " +
                     "-fx-border-radius: 10px; " +
-                    "-fx-border-color: #0059FF; " +
+                    "-fx-border-color: #00FF36; " +
                     "-fx-background-color: #348feb;");
         }
         else
@@ -99,7 +81,7 @@ public class VueGuichetIG extends VueEtapeIG implements Observateur{
             setStyle("-fx-padding: 10px; " +
                     "-fx-background-radius: 10px; " +
                     "-fx-border-radius: 10px; " +
-                    "-fx-border-color: #0059FF; " +
+                    "-fx-border-color: #00FF36 ; " +
                     "-fx-background-color: #FFFFFF;");
         }
 

@@ -5,10 +5,7 @@ import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.util.Duration;
 import twisk.exceptions.TwiskException;
-import twisk.mondeIG.ActiviteIG;
-import twisk.mondeIG.ArcIG;
-import twisk.mondeIG.EtapeIG;
-import twisk.mondeIG.MondeIG;
+import twisk.mondeIG.*;
 
 
 public class VueMenu extends MenuBar implements Observateur {
@@ -21,6 +18,7 @@ public class VueMenu extends MenuBar implements Observateur {
     private final MenuItem sortie;
     private final MenuItem delai;
     private final MenuItem ecart;
+    private final MenuItem jetons;
 
     public VueMenu(MondeIG monde)
     {
@@ -104,10 +102,32 @@ public class VueMenu extends MenuBar implements Observateur {
             }
         });
 
+        jetons = new MenuItem("Changer le nombre de jetons");
+        jetons.setOnAction(e ->
+        {
+            try {
+                TextInputDialog input = new TextInputDialog();
+                input.setHeaderText("Entrez le nombre de jetons desire de : " + monde.getEtapesSelectionnes().get(0).getNom());
+                input.showAndWait();
+                ((GuichetIG)monde.getEtapesSelectionnes().get(0)).setNbJetons(Integer.parseInt(input.getEditor().getText()));
+                monde.notifierObservateurs();
+            } catch (TwiskException exc){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText(exc.getMessage());
+                PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                pause.play();
+                pause.setOnFinished(ev -> alert.close());
+                alert.showAndWait();
+            }
+        });
+
+
         fichier.getItems().addAll(quitter);
         edition.getItems().addAll(deselectionner, supprimer, renommer);
         mondeMenu.getItems().addAll(entree, sortie);
-        parametres.getItems().addAll(delai, ecart);
+        parametres.getItems().addAll(delai, ecart, jetons);
         getMenus().addAll(fichier, edition, mondeMenu, parametres);
         monde.notifierObservateurs();
     }
@@ -118,8 +138,9 @@ public class VueMenu extends MenuBar implements Observateur {
         deselectionner.setDisable(monde.getEtapesSelectionnes().size() + monde.getArcsSelectionnes().size() < 1);
         supprimer.setDisable(monde.getEtapesSelectionnes().size() + monde.getArcsSelectionnes().size() < 1);
         entree.setDisable(monde.getEtapesSelectionnes().isEmpty());
-        sortie.setDisable(monde.getEtapesSelectionnes().isEmpty());
-        delai.setDisable(monde.getEtapesSelectionnes().size() != 1);
-        ecart.setDisable(monde.getEtapesSelectionnes().size() != 1);
+        sortie.setDisable(monde.getEtapesSelectionnes().isEmpty() || monde.isGuichetSelectionne());
+        delai.setDisable(monde.getEtapesSelectionnes().size() != 1 || monde.isGuichetSelectionne());
+        ecart.setDisable(monde.getEtapesSelectionnes().size() != 1 || monde.isGuichetSelectionne());
+        jetons.setDisable(monde.getEtapesSelectionnes().size() != 1 || monde.isActiviteSelectionne());
     }
 }

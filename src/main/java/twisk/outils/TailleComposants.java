@@ -23,7 +23,7 @@ public class TailleComposants {
         activiteW = clientsW + 20;
         activiteH = clientsH + 44;
         gridW = 250;
-        gridH = 50;
+        gridH = 25;
         guichetW = gridW + 20;
         guichetH = gridH + 44;
     }

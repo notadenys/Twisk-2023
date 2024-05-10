@@ -193,6 +193,24 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         return etapesSelectionnes;
     }
 
+    public boolean isGuichetSelectionne()
+    {
+        for (EtapeIG etape : etapesSelectionnes)
+        {
+            if (etape.estUnGuichet()) return true;
+        }
+        return false;
+    }
+
+    public boolean isActiviteSelectionne()
+    {
+        for (EtapeIG etape : etapesSelectionnes)
+        {
+            if (etape.estUneActivite()) return true;
+        }
+        return false;
+    }
+
     public ArrayList<ArcIG> getArcsSelectionnes()
     {
         return arcsSelectionnes;
