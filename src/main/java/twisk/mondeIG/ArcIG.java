@@ -11,6 +11,7 @@ public class ArcIG {
         this.p1 = monde.getPoint(p1);
         this.p2 = monde.getPoint(p2);
         this.p1.getEtape().ajouterSuccesseurs(this.p2.getEtape());
+        this.p2.getEtape().ajouterPredecesseurs(this.p1.getEtape());
     }
 
     public PointDeControleIG getP1() {

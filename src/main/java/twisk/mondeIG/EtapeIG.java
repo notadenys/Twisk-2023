@@ -16,6 +16,7 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG>{
     private boolean isSortie;
     private final ArrayList<PointDeControleIG> points;
     private final ArrayList<EtapeIG> successeurs;
+    private final ArrayList<EtapeIG> predecesseurs;
 
     public EtapeIG(String nom, int l, int h)
     {
@@ -30,6 +31,7 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG>{
         isSortie = false;
 
         successeurs = new ArrayList<>();
+        predecesseurs = new ArrayList<>();
 
         points = new ArrayList<>();
         points.add(new PointDeControleIG(this, 'L'));
@@ -145,6 +147,18 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG>{
     public void supprimerSuccesseurs(EtapeIG... etapes)
     {
         successeurs.removeAll(Arrays.asList(etapes));
+    }
+
+    public ArrayList<EtapeIG> getPredecesseurs() {
+        return predecesseurs;
+    }
+    public void ajouterPredecesseurs(EtapeIG... etapes)
+    {
+        Collections.addAll(predecesseurs, etapes);
+    }
+    public void supprimerPredecesseurs(EtapeIG... etapes)
+    {
+        predecesseurs.removeAll(Arrays.asList(etapes));
     }
 
     public Iterator<PointDeControleIG> iterator()
