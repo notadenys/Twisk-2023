@@ -109,7 +109,15 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
 
     public void checkArcs(EtapeIG etape)
     {
-        arcs.removeIf(arc -> arc.getP1().getEtape() == etape || arc.getP2().getEtape() == etape);
+        ArrayList<ArcIG> arcsToRemove = new ArrayList<>() {};
+        for (ArcIG arc : arcs)
+        {
+            if (arc.getP1().getEtape() == etape || arc.getP2().getEtape() == etape)
+            {
+                arcsToRemove.add(arc);
+            }
+        }
+        delete(arcsToRemove.toArray(new ArcIG[0]));
     }
 
     public void refreshArcs()
