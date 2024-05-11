@@ -6,12 +6,15 @@ import twisk.outils.TailleComposants;
 public class ActiviteIG extends EtapeIG
 {
     private int temps, ecartTemps;
+    private boolean isRestrainte;
+
     public ActiviteIG(int temps, int ecartTemps)
     {
         super();
         assert ecartTemps < temps : "ecartTemps est superiore que temps";
         this.temps = temps;
         this.ecartTemps = ecartTemps;
+        isRestrainte = false;
         setNom("Activite"+getId());
         setLargeur(TailleComposants.getInstance().getActiviteW());
         setHauteur(TailleComposants.getInstance().getActiviteH());
@@ -42,7 +45,13 @@ public class ActiviteIG extends EtapeIG
         } else {
             this.ecartTemps = ecart;
         }
+    }
 
+    public boolean isRestrainte() {
+        return isRestrainte;
+    }
+    public void setRestrainte(boolean restrainte) {
+        isRestrainte = restrainte;
     }
 
     public boolean estUnGuichet() {

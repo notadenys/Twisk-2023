@@ -65,6 +65,85 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         notifierObservateurs();
     }
 
+    public ArrayList<EtapeIG> getEtapes()
+    {
+        return (ArrayList<EtapeIG>)etapes.values();
+    }
+
+    public ArrayList<EtapeIG> getEntrees()
+    {
+        ArrayList<EtapeIG> entrees = new ArrayList<>();
+        for (EtapeIG etape : etapes.values())
+        {
+            if (etape.estUneEntree())
+            {
+                entrees.add(etape);
+            }
+        }
+        return entrees;
+    }
+
+    public ArrayList<EtapeIG> getSorties()
+    {
+        ArrayList<EtapeIG> sorties = new ArrayList<>();
+        for (EtapeIG etape : etapes.values())
+        {
+            if (etape.estUneSortie())
+            {
+                sorties.add(etape);
+            }
+        }
+        return sorties;
+    }
+
+    /**
+     * @return all the guichets in the world
+     */
+    public ArrayList<GuichetIG> getGuichets()
+    {
+        ArrayList<GuichetIG> guichets = new ArrayList<>();
+        for (EtapeIG etape : etapes.values())
+        {
+            if (etape.estUnGuichet())
+            {
+                guichets.add((GuichetIG) etape);
+            }
+        }
+        return guichets;
+    }
+
+    /**
+     * @return all the activities
+     */
+    public ArrayList<ActiviteIG> getActivites()
+    {
+        ArrayList<ActiviteIG> activites = new ArrayList<>();
+        for (EtapeIG etape : etapes.values())
+        {
+            if (etape.estUneActivite())
+            {
+                activites.add((ActiviteIG) etape);
+            }
+        }
+        return activites;
+    }
+
+    /**
+     * @return all the limited activities
+     */
+    public ArrayList<ActiviteIG> getActivitesRestraintes()
+    {
+        ArrayList<ActiviteIG> activites = new ArrayList<>();
+        for (ActiviteIG activite : getActivites())
+        {
+            if (activite.isRestrainte())
+            {
+                activites.add(activite);
+            }
+        }
+        return activites;
+    }
+
     /* Contraintes pour les arcs
     - Meme etape
     - Meme chemin
@@ -77,7 +156,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         {
             throw new ArcException("Impossible d'ajouter l'arc sur le meme etape");
         }
-        else if (p1.getEtape().getSuccesseurs().contains(p2.getEtape()))
+        else if (p1.getEtape().getSuccesseurs().contains(p2.getEtape()) || p2.getEtape().getSuccesseurs().contains(p1.getEtape()))
         {
             throw new ArcException("Impossible d'ajouter l'arc sur etape : deja connecte");
         }
