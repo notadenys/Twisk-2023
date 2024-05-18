@@ -1,20 +1,23 @@
 package twisk.mondeIG;
 
 import twisk.exceptions.MondeException;
+import twisk.monde.Activite;
+import twisk.monde.ActiviteRestreinte;
+import twisk.monde.Guichet;
 import twisk.monde.Monde;
 import twisk.outils.CorrespondancesEtapes;
+import twisk.outils.FabriqueNumero;
+
+import javax.naming.InvalidNameException;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 public class SimulationIG {
     private final MondeIG monde;
     private CorrespondancesEtapes correspondances;
 
-    public SimulationIG(MondeIG mondeIG)
-    {
+    public SimulationIG(MondeIG mondeIG) {
         monde = mondeIG;
-    }
-
-    public void simuler() {
-
     }
 
     // verifies the world to meet all the constraints
@@ -58,8 +61,48 @@ public class SimulationIG {
 
     }
 
-    private Monde creerMonde()
-    {
-        return new Monde();
+    private Monde creerMonde() throws InvalidNameException {
+        FabriqueNumero.getInstance().reset();
+        Monde mondeSim = new Monde();
+        this.correspondances = new CorrespondancesEtapes();
+        Iterator<Entry<Integer, EtapeIG>> iter = this.monde.iterator();
+        while (this.monde.iterator().hasNext()) {
+            EtapeIG etapeIG = iter.next().getValue();
+            if(etapeIG.estUneActivite()) {
+                ActiviteIG actIG = (ActiviteIG) etapeIG;
+                Activite act = null;
+                if(actIG.isRestrainte()) {
+                    act = new ActiviteRestreinte(actIG.getNom(), actIG.getTemps(), actIG.getEcartTemps());
+                }
+                else {
+                    act = new Activite(actIG.getNom(), actIG.getTemps(), actIG.getEcartTemps());
+                }
+                correspondances.ajouter(actIG, act);
+                mondeSim.ajouter(act);
+                if(actIG.estUneEntree()) {
+                    mondeSim.aCommeEntree(act);
+                }
+                if(actIG.estUneSortie()) {
+                    mondeSim.aCommeSortie(act);
+                }
+            }
+            if(etapeIG.estUnGuichet()) {
+                GuichetIG guichetIG = (GuichetIG) etapeIG;
+                Guichet guichet = new Guichet(guichetIG.getNom(), guichetIG.getNbJetons());
+                correspondances.ajouter(guichetIG, guichet);
+                if(guichetIG.estUneEntree()) {
+                    mondeSim.aCommeEntree(guichet);
+                }
+                if(guichetIG.estUneSortie()) {
+                    mondeSim.aCommeSortie(guichet);
+                }
+            }
+        }
+        return mondeSim;
+    }
+
+    public void simuler() throws MondeException, InvalidNameException {
+        this.verifierMondeIG();
+        Monde mondeSim = creerMonde();
     }
 }

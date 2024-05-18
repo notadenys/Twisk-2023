@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CorrespondancesEtapes {
-    private Map<EtapeIG, Etape> correspondances ;
+    private final Map<EtapeIG, Etape> correspondances ;
 
     public CorrespondancesEtapes(){
         this.correspondances = new HashMap<>();
     }
 
-    public void ajouer(EtapeIG etapeIG, Etape etape) {
+    public void ajouter(EtapeIG etapeIG, Etape etape) {
         this.correspondances.put(etapeIG, etape);
     }
 
