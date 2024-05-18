@@ -7,6 +7,7 @@ import twisk.monde.Guichet;
 import twisk.monde.Monde;
 import twisk.outils.CorrespondancesEtapes;
 import twisk.outils.FabriqueNumero;
+import twisk.simulation.Simulation;
 
 import javax.naming.InvalidNameException;
 import java.util.Iterator;
@@ -61,41 +62,56 @@ public class SimulationIG {
 
     }
 
-    private Monde creerMonde() throws InvalidNameException {
+    private Monde creerMonde() {
         FabriqueNumero.getInstance().reset();
         Monde mondeSim = new Monde();
         this.correspondances = new CorrespondancesEtapes();
         Iterator<Entry<Integer, EtapeIG>> iter = this.monde.iterator();
-        while (this.monde.iterator().hasNext()) {
+        while (this.monde.iterator().hasNext()) { // iterating through all etaps of MondeIG
             EtapeIG etapeIG = iter.next().getValue();
-            if(etapeIG.estUneActivite()) {
+            if(etapeIG.estUneActivite()) { // case we have activity
                 ActiviteIG actIG = (ActiviteIG) etapeIG;
-                Activite act = null;
-                if(actIG.isRestrainte()) {
+                Activite act;
+                if(actIG.isRestrainte()) { // checks activity for being Restrainte
                     act = new ActiviteRestreinte(actIG.getNom(), actIG.getTemps(), actIG.getEcartTemps());
-                }
-                else {
+                } else {
                     act = new Activite(actIG.getNom(), actIG.getTemps(), actIG.getEcartTemps());
                 }
                 correspondances.ajouter(actIG, act);
-                mondeSim.ajouter(act);
-                if(actIG.estUneEntree()) {
+                if(actIG.estUneEntree()) { // checks for being first/last etape
                     mondeSim.aCommeEntree(act);
-                }
-                if(actIG.estUneSortie()) {
+                } else if(actIG.estUneSortie()) {
                     mondeSim.aCommeSortie(act);
                 }
-            }
-            if(etapeIG.estUnGuichet()) {
+                for(EtapeIG succ : actIG.getSuccesseurs()) { // adding next steps depending on their type
+                    if(succ.estUnGuichet()) {
+                        GuichetIG guichetIG1 = (GuichetIG) succ;
+                        act.ajouterSuccesseur(new Guichet(guichetIG1.getNom(), guichetIG1.getNbJetons()));
+                    } else if(succ.estUneActivite()){
+                        ActiviteIG activiteIG1 = (ActiviteIG) succ;
+                        act.ajouterSuccesseur(new Activite(activiteIG1.getNom(), activiteIG1.getTemps(), activiteIG1.getEcartTemps()));
+                    }
+                }
+                mondeSim.ajouter(act);
+            } else if(etapeIG.estUnGuichet()) { // case we have guichet
                 GuichetIG guichetIG = (GuichetIG) etapeIG;
                 Guichet guichet = new Guichet(guichetIG.getNom(), guichetIG.getNbJetons());
                 correspondances.ajouter(guichetIG, guichet);
-                if(guichetIG.estUneEntree()) {
+                if(guichetIG.estUneEntree()) { // checks for being first/last etape
                     mondeSim.aCommeEntree(guichet);
-                }
-                if(guichetIG.estUneSortie()) {
+                } else if(guichetIG.estUneSortie()) {
                     mondeSim.aCommeSortie(guichet);
                 }
+                for(EtapeIG succ : guichetIG.getSuccesseurs()) { // adding next steps depending on their type
+                    if(succ.estUnGuichet()) {
+                        GuichetIG guichetIG1 = (GuichetIG) succ;
+                        guichet.ajouterSuccesseur(new Guichet(guichetIG1.getNom(), guichetIG1.getNbJetons()));
+                    } else if(succ.estUneActivite()){
+                        ActiviteIG activiteIG1 = (ActiviteIG) succ;
+                        guichet.ajouterSuccesseur(new Activite(activiteIG1.getNom(), activiteIG1.getTemps(), activiteIG1.getEcartTemps()));
+                    }
+                }
+                mondeSim.ajouter(guichet);
             }
         }
         return mondeSim;
@@ -104,5 +120,7 @@ public class SimulationIG {
     public void simuler() throws MondeException, InvalidNameException {
         this.verifierMondeIG();
         Monde mondeSim = creerMonde();
+        Simulation sim = new Simulation();
+        sim.simuler(mondeSim);
     }
 }
