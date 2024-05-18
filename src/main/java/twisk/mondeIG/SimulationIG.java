@@ -1,21 +1,21 @@
 package twisk.mondeIG;
 
 import twisk.exceptions.MondeException;
-import twisk.monde.Activite;
-import twisk.monde.ActiviteRestreinte;
-import twisk.monde.Guichet;
-import twisk.monde.Monde;
+import twisk.monde.*;
 import twisk.outils.CorrespondancesEtapes;
 import twisk.outils.FabriqueNumero;
 import twisk.simulation.Simulation;
 
 import javax.naming.InvalidNameException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
-
+import java.util.NoSuchElementException;
+import java.util.Set;
 public class SimulationIG {
     private final MondeIG monde;
     private CorrespondancesEtapes correspondances;
+    private GestionnaireEtapes gestionnaireEtapes;
 
     public SimulationIG(MondeIG mondeIG) {
         monde = mondeIG;
@@ -27,10 +27,10 @@ public class SimulationIG {
         for (EtapeIG etape : monde.getEtapes())
         {
             if (etape.getPredecesseurs().isEmpty() && !etape.estUneEntree())
-                throw new MondeException("Etape " + etape.getNom() + " est deconnectee");
+                throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de predecesseurs)");
 
             if (etape.getSuccesseurs().isEmpty() && !etape.estUneSortie())
-                throw new MondeException("Etape " + etape.getNom() + " est deconnectee");
+                throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de successeurs");
         }
 
         // pas d'entrees
@@ -66,49 +66,61 @@ public class SimulationIG {
         FabriqueNumero.getInstance().reset();
         Monde mondeSim = new Monde();
         this.correspondances = new CorrespondancesEtapes();
-        Iterator<Entry<Integer, EtapeIG>> iter = this.monde.iterator();
-        while (this.monde.iterator().hasNext()) { // iterating through all etaps of MondeIG
-            EtapeIG etapeIG = iter.next().getValue();
-            if(etapeIG.estUneActivite()) { // case we have activity
+        this.gestionnaireEtapes = new GestionnaireEtapes();
+
+        System.out.println("Initial state of monde: " + this.monde);
+        Iterator<Entry<Integer, EtapeIG>> iter = this.monde.entrySet().iterator();
+        System.out.println("Gestionnaire :" + gestionnaireEtapes.toString());
+
+        while (iter.hasNext()) {
+            Entry<Integer, EtapeIG> entry = iter.next();
+            EtapeIG etapeIG = entry.getValue();
+            System.out.println("Processing EtapeIG: " + etapeIG.getNom());
+            if (etapeIG.estUneActivite()) {
                 ActiviteIG actIG = (ActiviteIG) etapeIG;
                 Activite act;
-                if(actIG.isRestrainte()) { // checks activity for being Restrainte
+                if (actIG.isRestrainte()) {
                     act = new ActiviteRestreinte(actIG.getNom(), actIG.getTemps(), actIG.getEcartTemps());
                 } else {
                     act = new Activite(actIG.getNom(), actIG.getTemps(), actIG.getEcartTemps());
                 }
                 correspondances.ajouter(actIG, act);
-                if(actIG.estUneEntree()) { // checks for being first/last etape
+                gestionnaireEtapes.ajouter(act);
+                System.out.println("Gestionnaire :" + gestionnaireEtapes.toString());
+                if (actIG.estUneEntree()) {
                     mondeSim.aCommeEntree(act);
-                } else if(actIG.estUneSortie()) {
+                } else if (actIG.estUneSortie()) {
                     mondeSim.aCommeSortie(act);
                 }
-                for(EtapeIG succ : actIG.getSuccesseurs()) { // adding next steps depending on their type
-                    if(succ.estUnGuichet()) {
-                        GuichetIG guichetIG1 = (GuichetIG) succ;
-                        act.ajouterSuccesseur(new Guichet(guichetIG1.getNom(), guichetIG1.getNbJetons()));
-                    } else if(succ.estUneActivite()){
-                        ActiviteIG activiteIG1 = (ActiviteIG) succ;
-                        act.ajouterSuccesseur(new Activite(activiteIG1.getNom(), activiteIG1.getTemps(), activiteIG1.getEcartTemps()));
+                Set<EtapeIG> uniqueSuccessors = new HashSet<>(actIG.getSuccesseurs()); // Ensure successors are only added once
+                for (EtapeIG succ : uniqueSuccessors) {
+                    System.out.println("Processing successor of " + actIG.getNom() + ": " + succ.getNom() + " id: " + succ.getId() +" act id: "+ act.getNum());
+                    try {
+                        Etape etapeSuccesseur = gestionnaireEtapes.getEtapeByID(succ.getId());
+                        act.ajouterSuccesseur(etapeSuccesseur);
+                    } catch (NoSuchElementException e) {
+                        System.err.println("Error adding successor for " + actIG.getNom() + ": " + e.getMessage());
                     }
                 }
                 mondeSim.ajouter(act);
-            } else if(etapeIG.estUnGuichet()) { // case we have guichet
+            } else if (etapeIG.estUnGuichet()) {
                 GuichetIG guichetIG = (GuichetIG) etapeIG;
                 Guichet guichet = new Guichet(guichetIG.getNom(), guichetIG.getNbJetons());
                 correspondances.ajouter(guichetIG, guichet);
-                if(guichetIG.estUneEntree()) { // checks for being first/last etape
+
+                if (guichetIG.estUneEntree()) {
                     mondeSim.aCommeEntree(guichet);
-                } else if(guichetIG.estUneSortie()) {
+                } else if (guichetIG.estUneSortie()) {
                     mondeSim.aCommeSortie(guichet);
                 }
-                for(EtapeIG succ : guichetIG.getSuccesseurs()) { // adding next steps depending on their type
-                    if(succ.estUnGuichet()) {
-                        GuichetIG guichetIG1 = (GuichetIG) succ;
-                        guichet.ajouterSuccesseur(new Guichet(guichetIG1.getNom(), guichetIG1.getNbJetons()));
-                    } else if(succ.estUneActivite()){
-                        ActiviteIG activiteIG1 = (ActiviteIG) succ;
-                        guichet.ajouterSuccesseur(new Activite(activiteIG1.getNom(), activiteIG1.getTemps(), activiteIG1.getEcartTemps()));
+                Set<EtapeIG> uniqueSuccessors = new HashSet<>(guichetIG.getSuccesseurs());
+                for (EtapeIG succ : uniqueSuccessors) {
+                    System.out.println("Processing successor of " + guichetIG.getNom() + ": " + succ.getNom());
+                    try {
+                        Etape etapeSuccesseur = gestionnaireEtapes.getEtapeByID(succ.getId());
+                        guichet.ajouterSuccesseur(etapeSuccesseur);
+                    } catch (NoSuchElementException e) {
+                        System.err.println("Error adding successor for " + guichetIG.getNom() + ": " + e.getMessage());
                     }
                 }
                 mondeSim.ajouter(guichet);
@@ -117,7 +129,8 @@ public class SimulationIG {
         return mondeSim;
     }
 
-    public void simuler() throws MondeException, InvalidNameException {
+
+    public void simuler() throws MondeException {
         this.verifierMondeIG();
         Monde mondeSim = creerMonde();
         Simulation sim = new Simulation();

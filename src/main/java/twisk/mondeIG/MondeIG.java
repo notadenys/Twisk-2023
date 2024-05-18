@@ -1,11 +1,12 @@
 package twisk.mondeIG;
 
 import twisk.exceptions.ArcException;
+import twisk.exceptions.MondeException;
 
 import java.util.*;
 
 public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,EtapeIG>>{
-    private final HashMap<Integer, EtapeIG> etapes;
+    private Map<Integer, EtapeIG> etapes;
     private final ArrayList<ArcIG> arcs;
 
     private final ArrayList<EtapeIG> etapesSelectionnes;
@@ -65,9 +66,8 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         notifierObservateurs();
     }
 
-    public ArrayList<EtapeIG> getEtapes()
-    {
-        return (ArrayList<EtapeIG>)etapes.values();
+    public ArrayList<EtapeIG> getEtapes() {
+        return new ArrayList<>(etapes.values());
     }
 
     public ArrayList<EtapeIG> getEntrees()
@@ -337,10 +337,19 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         return arcs.iterator();
     }
 
+    public void simuler() throws MondeException {
+        SimulationIG sim = new SimulationIG(this);
+        sim.simuler();
+    }
+
     @Override
     public String toString() {
         return "MondeIG{" +
                 "etapes=" + etapes +
                 '}';
+    }
+
+    public Set<Map.Entry<Integer, EtapeIG>> entrySet() {
+        return this.etapes.entrySet();
     }
 }

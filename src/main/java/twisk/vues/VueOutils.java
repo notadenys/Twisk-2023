@@ -6,6 +6,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
+import twisk.exceptions.MondeException;
 import twisk.mondeIG.ActiviteIG;
 import twisk.mondeIG.GuichetIG;
 import twisk.mondeIG.MondeIG;
@@ -44,6 +45,20 @@ public class VueOutils extends TilePane implements Observateur{
             ajouterGuichet.setOnAction(e -> monde.ajouter(new GuichetIG(2)));
             ajouterGuichet.setTooltip(new Tooltip("bouton qui permet d’ajouter une activité"));
             buttons.add(ajouterGuichet);
+
+            ImageView imageViewPlay = new ImageView(image);
+            imageViewPlay.setFitHeight(50);
+            imageViewPlay.setFitWidth(50);
+            Button play = new Button("Lancer", imageViewPlay);
+            play.setOnAction(e -> {
+                try {
+                    monde.simuler();
+                } catch (MondeException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+            play.setTooltip(new Tooltip("lancer la simulation"));
+            buttons.add(play);
         }
         catch (FileNotFoundException e)
         {

@@ -3,6 +3,7 @@ package twisk.monde;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class GestionnaireEtapes implements Iterable<Etape> {
     private final ArrayList<Etape> etapes;
@@ -58,16 +59,13 @@ public class GestionnaireEtapes implements Iterable<Etape> {
                 '}';
     }
 
-    public Etape getEtapeByID(int id)
-    {
-        for (Etape etape : etapes)
-        {
-            if (etape.getNum() == id)
-            {
+    public Etape getEtapeByID(int id) {
+        for (Etape etape : etapes) {
+            if (etape.getNum() == id) {
                 return etape;
             }
         }
-        return null;
+        throw new NoSuchElementException("No Etape found with ID: " + id);
     }
 
     public String getNomByID(int id) {
