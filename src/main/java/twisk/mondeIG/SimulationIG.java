@@ -2,17 +2,18 @@ package twisk.mondeIG;
 
 import twisk.exceptions.MondeException;
 import twisk.monde.Monde;
+import twisk.outils.CorrespondancesEtapes;
 
 public class SimulationIG {
     private final MondeIG monde;
+    private CorrespondancesEtapes correspondances;
 
     public SimulationIG(MondeIG mondeIG)
     {
         monde = mondeIG;
     }
 
-    public void simuler()
-    {
+    public void simuler() {
 
     }
 

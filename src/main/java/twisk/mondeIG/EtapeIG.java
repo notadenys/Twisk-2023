@@ -170,4 +170,8 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG>{
     public String toString() {
         return getNom();
     }
+
+    public boolean estUneActiviteRestreinte() {
+        return false;
+    }
 }
