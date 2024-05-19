@@ -29,7 +29,10 @@ public class VueOutils extends TilePane implements Observateur{
 
         try {
             FileInputStream input = new FileInputStream("src/main/ressources/images/plus.png");
+            FileInputStream input2 = new FileInputStream("src/main/ressources/images/play.png");
+
             Image image = new Image(input);
+            Image image2 = new Image(input2);
             ImageView imageViewActivite = new ImageView(image);
             imageViewActivite.setFitHeight(50);
             imageViewActivite.setFitWidth(50);
@@ -46,7 +49,7 @@ public class VueOutils extends TilePane implements Observateur{
             ajouterGuichet.setTooltip(new Tooltip("bouton qui permet d’ajouter une activité"));
             buttons.add(ajouterGuichet);
 
-            ImageView imageViewPlay = new ImageView(image);
+            ImageView imageViewPlay = new ImageView(image2);
             imageViewPlay.setFitHeight(50);
             imageViewPlay.setFitWidth(50);
             Button play = new Button("Lancer", imageViewPlay);
