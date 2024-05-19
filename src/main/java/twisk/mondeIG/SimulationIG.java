@@ -82,7 +82,8 @@ public class SimulationIG {
                 System.out.println("Gestionnaire :" + gestionnaireEtapes);
                 if (actIG.estUneEntree()) { // checks for being first/last etape
                     mondeSim.aCommeEntree(act);
-                } else if (actIG.estUneSortie()) {
+                }
+                if (actIG.estUneSortie()) {
                     mondeSim.aCommeSortie(act);
                 }
                 mondeSim.ajouter(act);
@@ -92,8 +93,6 @@ public class SimulationIG {
                 correspondances.ajouter(guichetIG, guichet);
                 if (guichetIG.estUneEntree()) { // checks for being first/last etape
                     mondeSim.aCommeEntree(guichet);
-                } else if (guichetIG.estUneSortie()) {
-                    mondeSim.aCommeSortie(guichet);
                 }
                 mondeSim.ajouter(guichet);
             }
