@@ -34,4 +34,9 @@ public class ArcIG {
     public String toString() {
         return p1.toString() + " " + p2.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ArcIG && monde.equals(((ArcIG) obj).monde) && p1.equals(((ArcIG) obj).p1) && p2.equals(((ArcIG) obj).p2);
+    }
 }

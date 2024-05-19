@@ -168,7 +168,6 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         else
         {
             arcs.add(new ArcIG(this, point1, point2));
-            System.out.println(arcs);
             setEnAttente(false);
             notifierObservateurs();
         }
@@ -220,7 +219,6 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         {
             deselectionnerEtape(etapeIG);
         }
-        System.out.println(etapesSelectionnes);
         notifierObservateurs();
     }
 
@@ -236,7 +234,6 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
 
     public void clickArc(ArcIG arcIG)
     {
-        System.out.println(contains(arcIG));
         if (!contains(arcIG))
         {
             selectionnerArc(arcIG);
@@ -245,7 +242,6 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         {
             deselectionnerArc(arcIG);
         }
-        System.out.println(arcsSelectionnes);
         notifierObservateurs();
     }
 
