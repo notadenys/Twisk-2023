@@ -75,4 +75,8 @@ public class Activite extends Etape {
     {
         return "#define " + getConstNom() + " " + getNum();
     }
+
+    public boolean estUneActiviteRestreinte() {
+        return false;
+    }
 }

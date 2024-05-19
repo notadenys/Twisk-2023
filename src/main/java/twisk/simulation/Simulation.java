@@ -43,7 +43,7 @@ public class Simulation implements Iterable<Client> {
             for(int i=1; i<=(nbClients+1)*monde.nbEtapes(); i=i+nbClients+1) {
                 if(i / (nbClients + 1) != 1) {
                     int padding = 0;
-                    if(monde.getName(i / (nbClients + 1)).length() < 20) { // without this, if name longer than 20, code falls
+                    if(monde.getName(i / (nbClients + 1)).length() < 20) {
                         padding = 20 - monde.getName(i / (nbClients + 1)).length();
                     }
                     System.out.print("étape " + i / (nbClients + 1) + " (" + monde.getName(i / (nbClients + 1)) + ") : " + " ".repeat(padding) + where_clients[i - 1] + " clients : ");
