@@ -63,7 +63,7 @@ public class SimulationIG {
 
         System.out.println("Initial state of monde: " + this.monde);
         Iterator<Entry<Integer, EtapeIG>> iter = this.monde.entrySet().iterator();
-        System.out.println("Gestionnaire :" + gestionnaireEtapes.toString());
+        System.out.println("Gestionnaire :" + gestionnaireEtapes);
 
         while (iter.hasNext()) { // iterating through all etaps of MondeIG
             Entry<Integer, EtapeIG> entry = iter.next();
@@ -79,7 +79,7 @@ public class SimulationIG {
                 }
                 correspondances.ajouter(actIG, act);
                 gestionnaireEtapes.ajouter(act);
-                System.out.println("Gestionnaire :" + gestionnaireEtapes.toString());
+                System.out.println("Gestionnaire :" + gestionnaireEtapes);
                 if (actIG.estUneEntree()) { // checks for being first/last etape
                     mondeSim.aCommeEntree(act);
                 } else if (actIG.estUneSortie()) {

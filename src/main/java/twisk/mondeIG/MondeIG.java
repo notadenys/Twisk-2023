@@ -13,7 +13,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     private final ArrayList<ArcIG> arcsSelectionnes;
     private PointDeControleIG pointMemorise;
     private boolean isEnAttente;
-    private ArrayList<EtapeIG[]> liaisons;
+    private final ArrayList<EtapeIG[]> liaisons;
 
 
     public MondeIG()
@@ -183,8 +183,8 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         {
             this.arcs.remove(arcIG);
             arcsSelectionnes.remove(arcIG);
-            arcIG.getP1().getEtape().supprimerSuccesseurs(arcIG.getP2().getEtape());
-            arcIG.getP2().getEtape().supprimerPredecesseurs(arcIG.getP1().getEtape());
+            arcIG.getP1().getEtape().supprimerSuccesseur(arcIG.getP2().getEtape());
+            arcIG.getP2().getEtape().supprimerPredecesseur(arcIG.getP1().getEtape());
         }
         notifierObservateurs();
         updateLiaison();
@@ -343,13 +343,6 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         sim.simuler();
     }
 
-    @Override
-    public String toString() {
-        return "MondeIG{" +
-                "etapes=" + etapes +
-                '}';
-    }
-
     public Set<Map.Entry<Integer, EtapeIG>> entrySet() {
         return this.etapes.entrySet();
     }
@@ -367,5 +360,12 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
 
     public Iterator<EtapeIG[]> iteratorliaison(){
         return this.liaisons.iterator() ;
+    }
+
+    @Override
+    public String toString() {
+        return "MondeIG{" +
+                "etapes=" + etapes +
+                '}';
     }
 }
