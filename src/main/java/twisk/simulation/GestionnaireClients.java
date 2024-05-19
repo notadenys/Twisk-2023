@@ -9,7 +9,7 @@ public class GestionnaireClients implements Iterable<Client> {
     private final ArrayList<Client> clients;
 
     public GestionnaireClients() {
-        clients = new ArrayList<Client>();
+        clients = new ArrayList<>();
     }
 
     public void setClients(int[] tabClients) {
