@@ -10,8 +10,8 @@ public class ArcIG {
         this.monde = monde;
         this.p1 = monde.getPoint(p1);
         this.p2 = monde.getPoint(p2);
-        this.p1.getEtape().ajouterSuccesseurs(this.p2.getEtape());
-        this.p2.getEtape().ajouterPredecesseurs(this.p1.getEtape());
+        this.p1.getEtape().ajouterSuccesseur(this.p2.getEtape());
+        this.p2.getEtape().ajouterPredecesseur(this.p1.getEtape());
     }
 
     public PointDeControleIG getP1() {
@@ -33,5 +33,10 @@ public class ArcIG {
     @Override
     public String toString() {
         return p1.toString() + " " + p2.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ArcIG && monde.equals(((ArcIG) obj).monde) && p1.equals(((ArcIG) obj).p1) && p2.equals(((ArcIG) obj).p2);
     }
 }

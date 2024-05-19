@@ -140,25 +140,22 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG>{
     public ArrayList<EtapeIG> getSuccesseurs() {
         return successeurs;
     }
-    public void ajouterSuccesseurs(EtapeIG... etapes)
-    {
-        Collections.addAll(successeurs, etapes);
+    public void ajouterSuccesseur(EtapeIG etape) {
+        if (!successeurs.contains(etape)) successeurs.add(etape);
     }
-    public void supprimerSuccesseurs(EtapeIG... etapes)
+    public void supprimerSuccesseur(EtapeIG etape)
     {
-        successeurs.removeAll(Arrays.asList(etapes));
+        successeurs.remove(etape);
     }
 
     public ArrayList<EtapeIG> getPredecesseurs() {
         return predecesseurs;
     }
-    public void ajouterPredecesseurs(EtapeIG... etapes)
-    {
-        Collections.addAll(predecesseurs, etapes);
+    public void ajouterPredecesseur(EtapeIG etape) {
+        if (!predecesseurs.contains(etape)) predecesseurs.add(etape);
     }
-    public void supprimerPredecesseurs(EtapeIG... etapes)
-    {
-        predecesseurs.removeAll(Arrays.asList(etapes));
+    public void supprimerPredecesseur(EtapeIG etape) {
+        predecesseurs.remove(etape);
     }
 
     public Iterator<PointDeControleIG> iterator()

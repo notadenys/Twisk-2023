@@ -64,4 +64,9 @@ public class PointDeControleIG {
     public String toString() {
         return id;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof PointDeControleIG && id.equals(((PointDeControleIG) obj).id);
+    }
 }
