@@ -113,6 +113,7 @@ public class SimulationIG {
         this.verifierMondeIG();
         Monde mondeSim = creerMonde();
         Simulation sim = new Simulation();
+        sim.setNbClients(10);
         sim.simuler(mondeSim);
     }
 }
