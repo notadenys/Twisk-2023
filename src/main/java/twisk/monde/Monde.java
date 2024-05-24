@@ -115,4 +115,7 @@ public class Monde implements Iterable<Etape>{
     public String getName(int id) {
         return this.ge.getNomByID(id);
     }
+    public Etape getSasEntree() {
+        return this.se;
+    }
 }

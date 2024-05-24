@@ -1,13 +1,14 @@
 package twisk.simulation;
 
 import twisk.monde.Etape;
+import twisk.monde.GestionnaireEtapes;
 import twisk.monde.Guichet;
 import twisk.monde.Monde;
+import twisk.mondeIG.SujetObserve;
 import twisk.outils.KitC;
-
 import java.util.Iterator;
 
-public class Simulation implements Iterable<Client> {
+public class Simulation extends SujetObserve implements Iterable<Client>  {
     public Monde monde;
     private final KitC kitC;
     private int nbClients;
@@ -18,6 +19,11 @@ public class Simulation implements Iterable<Client> {
         kitC = new KitC();
         kitC.creerEnvironnement();
         nbClients = 1;
+        gestClients = new GestionnaireClients();
+    }
+
+    public GestionnaireClients getGestClients() {
+        return gestClients;
     }
 
     public void simuler(Monde monde) {
@@ -35,13 +41,17 @@ public class Simulation implements Iterable<Client> {
             System.out.print(resultat[i]+" ");
         }
         System.out.println();
+        gestClients.setClients(resultat);
+        notifierObservateurs();
 
         int[] where_clients;
         do {
             where_clients = ou_sont_les_clients(monde.nbEtapes(), nbClients);
+            Etape etape = monde.getSasEntree();
             System.out.println();
             for(int i=1; i<=(nbClients+1)*monde.nbEtapes(); i=i+nbClients+1) {
                 if(i / (nbClients + 1) != 1) {
+                    gestClients.allerA(where_clients[i], etape, i / (nbClients + 1));
                     int padding = 0;
                     if(monde.getName(i / (nbClients + 1)).length() < 20) {
                         padding = 20 - monde.getName(i / (nbClients + 1)).length();
@@ -49,6 +59,9 @@ public class Simulation implements Iterable<Client> {
                     System.out.print("étape " + i / (nbClients + 1) + " (" + monde.getName(i / (nbClients + 1)) + ") : " + " ".repeat(padding) + where_clients[i - 1] + " clients : ");
                     for (int j = i; j < i + where_clients[i - 1]; j++) {
                         System.out.print(where_clients[j] + " ");
+                    }
+                    if (i < monde.nbEtapes() - 1) {
+                        etape = etape.getSuccesseur();
                     }
                     System.out.println();
                 }
@@ -70,6 +83,7 @@ public class Simulation implements Iterable<Client> {
             }
         } while(where_clients[(nbClients+1)] != nbClients);
         nettoyage();
+        notifierObservateurs();
     }
 
     public void setNbClients(int clients) {
