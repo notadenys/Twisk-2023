@@ -14,7 +14,7 @@ public class SimulationIG {
         monde = mondeIG;
     }
 
-    // verifies the world to meet all the constraints
+    // verifie le monde pour repondre a toutes les contraintes
     private void verifierMondeIG() throws MondeException {
         // etapes deconnectees
         for (EtapeIG etape : monde.getEtapes())
@@ -53,6 +53,24 @@ public class SimulationIG {
                 throw new MondeException("Activite " + activite.getNom() + " a plus que 1 predecesseur");
         }
 
+        // verifier si un ou plusieurs etapes ont les noms vides
+        for (EtapeIG etape : monde.getEtapes()) {
+            if (etape.getNom().isEmpty()) throw new MondeException("Un ou plusieurs etapes ont les noms vides");
+        }
+
+        // verifier si un ou plusieurs activites ont les memes noms
+        ArrayList<String> noms = new ArrayList<>();
+        for (ActiviteIG activite : monde.getActivites()) {
+            if (noms.contains(activite.getNom())) throw new MondeException ("Etape " + activite.getNom() + " a un doublon");
+            noms.add(activite.getNom());
+        }
+
+        // verifier si un ou plusieurs guichets ont les memes noms
+        noms = new ArrayList<>();
+        for (GuichetIG guichet : monde.getGuichets()) {
+            if (noms.contains(guichet.getNom())) throw new MondeException ("Etape " + guichet.getNom() + " a un doublon");
+            noms.add(guichet.getNom());
+        }
     }
 
     private Monde creerMonde() {
