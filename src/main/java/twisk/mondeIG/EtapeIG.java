@@ -2,6 +2,7 @@ package twisk.mondeIG;
 
 import twisk.outils.FabriqueIdentifiant;
 import twisk.outils.TailleComposants;
+import twisk.simulation.Client;
 
 import java.util.*;
 

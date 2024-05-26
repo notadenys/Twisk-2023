@@ -1,7 +1,6 @@
 package twisk.simulation;
 
 import twisk.monde.Etape;
-import twisk.monde.GestionnaireEtapes;
 import twisk.monde.Guichet;
 import twisk.monde.Monde;
 import twisk.mondeIG.SujetObserve;
@@ -12,7 +11,7 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
     public Monde monde;
     private final KitC kitC;
     private int nbClients;
-    private GestionnaireClients gestClients;
+    private final GestionnaireClients gestClients;
 
     public Simulation() {
         monde = new Monde();
@@ -76,6 +75,7 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
             }
             System.out.println();
 
+            notifierObservateurs();
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {

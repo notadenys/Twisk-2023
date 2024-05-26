@@ -29,11 +29,9 @@ public class GestionnaireClients implements Iterable<Client> {
     public void nettoyer() {
         clients.clear();
     }
-
     public Iterator<Client> iterator() {
         return this.clients.iterator();
     }
-
     public int getNbClients() {
         return this.clients.size();
     }

@@ -2,11 +2,12 @@ package twisk.mondeIG;
 
 import twisk.exceptions.ArcException;
 import twisk.exceptions.MondeException;
+import twisk.simulation.Client;
 
 import java.util.*;
 
 public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,EtapeIG>>{
-    private Map<Integer, EtapeIG> etapes;
+    private final Map<Integer, EtapeIG> etapes;
     private final ArrayList<ArcIG> arcs;
 
     private final ArrayList<EtapeIG> etapesSelectionnes;
@@ -14,7 +15,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     private PointDeControleIG pointMemorise;
     private boolean isEnAttente;
     private final ArrayList<EtapeIG[]> liaisons;
-
+    private final ArrayList<Client> clients;
 
     public MondeIG()
     {
@@ -23,7 +24,8 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         isEnAttente = false;
         etapesSelectionnes = new ArrayList<>();
         arcsSelectionnes = new ArrayList<>();
-        this.liaisons = new ArrayList<>();
+        liaisons = new ArrayList<>();
+        clients = new ArrayList<>();
     }
 
     public void ajouter(ActiviteIG activite)
@@ -356,6 +358,19 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     }
     public ArrayList<EtapeIG[]> getLiaisons() {
         return this.liaisons;
+    }
+
+    public void updateClient(Client client) {
+        clients.remove(client);
+        clients.add(client);
+    }
+
+    public void clearClients() {
+        clients.clear();
+    }
+
+    public ArrayList<Client> getClients() {
+        return clients;
     }
 
     public Iterator<EtapeIG[]> iteratorliaison(){

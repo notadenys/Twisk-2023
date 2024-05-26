@@ -4,12 +4,16 @@ import twisk.exceptions.MondeException;
 import twisk.monde.*;
 import twisk.outils.CorrespondancesEtapes;
 import twisk.outils.FabriqueNumero;
+import twisk.simulation.Client;
 import twisk.simulation.Simulation;
+import twisk.vues.Observateur;
+
 import java.util.*;
 import java.util.Map.Entry;
 
-public class SimulationIG {
+public class SimulationIG implements Observateur {
     private final MondeIG monde;
+    Simulation simulation;
     public SimulationIG(MondeIG mondeIG) {
         monde = mondeIG;
     }
@@ -73,7 +77,8 @@ public class SimulationIG {
         }
     }
 
-    private Monde creerMonde() {
+    private Monde creerMonde() throws MondeException {
+        verifierMondeIG();
         FabriqueNumero.getInstance().reset();
         Monde mondeSim = new Monde();
         CorrespondancesEtapes correspondances = new CorrespondancesEtapes();
@@ -125,12 +130,22 @@ public class SimulationIG {
         return mondeSim;
     }
 
-
     public void simuler() throws MondeException {
-        this.verifierMondeIG();
         Monde mondeSim = creerMonde();
-        Simulation sim = new Simulation();
-        sim.setNbClients(10);
-        sim.simuler(mondeSim);
+        simulation = new Simulation();
+        simulation.ajouterObservateur(this);
+        simulation.setNbClients(10);
+        simulation.simuler(mondeSim);
+    }
+
+
+
+    @Override
+    public void reagir() {
+        monde.clearClients();
+        for (Client client : simulation) {
+            monde.updateClient(client);
+        }
+        monde.notifierObservateurs();
     }
 }
