@@ -1,10 +1,12 @@
 package twisk.mondeIG;
 
+import javafx.concurrent.Task;
 import twisk.exceptions.MondeException;
 import twisk.monde.*;
 import twisk.outils.ClassLoaderPerso;
 import twisk.outils.CorrespondancesEtapes;
 import twisk.outils.FabriqueNumero;
+import twisk.outils.ThreadsManager;
 import twisk.simulation.GestionnaireClients;
 import twisk.vues.Observateur;
 
@@ -141,14 +143,22 @@ public class SimulationIG implements Observateur {
         Class<?> cl = classLoader.loadClass("twisk.simulation.Simulation");
         Constructor<?> constr = cl.getConstructor();
         Object o = constr.newInstance();
-        Method setNbClients = cl.getMethod("setNbClients", int.class);
-        setNbClients.invoke(o, 5);
-        Method ajouterObservateur = cl.getMethod("ajouterObservateur", Observateur.class);
-        ajouterObservateur.invoke(o, this);
-        Method getGestionnaireClients = cl.getMethod("getGestionnaireClients");
-        monde.setGestionnaireClients((GestionnaireClients) getGestionnaireClients.invoke(o));
-        Method simuler = cl.getMethod("simuler", Monde.class);
-        simuler.invoke(o, mondeSim);
+        SimulationIG sIG = this;
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                Method setNbClients = cl.getMethod("setNbClients", int.class);
+                setNbClients.invoke(o, 5);
+                Method ajouterObservateur = cl.getMethod("ajouterObservateur", Observateur.class);
+                ajouterObservateur.invoke(o, sIG);
+                Method getGestionnaireClients = cl.getMethod("getGestionnaireClients");
+                monde.setGestionnaireClients((GestionnaireClients) getGestionnaireClients.invoke(o));
+                Method simuler = cl.getMethod("simuler", Monde.class);
+                simuler.invoke(o, mondeSim);
+                return null;
+            }
+        };
+        ThreadsManager.getInstance().lancer(task);
     }
 
     @Override
