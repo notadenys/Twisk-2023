@@ -5,6 +5,7 @@ import twisk.monde.Guichet;
 import twisk.monde.Monde;
 import twisk.mondeIG.SujetObserve;
 import twisk.outils.KitC;
+
 import java.util.Iterator;
 
 public class Simulation extends SujetObserve implements Iterable<Client>  {
@@ -41,7 +42,9 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
         }
         System.out.println();
         gestClients.setClients(resultat);
+
         notifierObservateurs();
+
 
         int[] where_clients;
         do {
@@ -81,6 +84,7 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
         } while(where_clients[(nbClients+1)] != nbClients);
         nettoyage();
         notifierObservateurs();

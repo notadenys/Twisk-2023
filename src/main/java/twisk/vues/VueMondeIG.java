@@ -1,5 +1,6 @@
 package twisk.vues;
 
+import javafx.application.Platform;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -51,50 +52,58 @@ public class VueMondeIG extends Pane implements Observateur{
 
     public void reagir()
     {
-        getChildren().clear();
-        activites = new ArrayList<>();
-        guichets = new ArrayList<>();
-        points = new ArrayList<>();
-        for (Map.Entry<Integer,EtapeIG> etapeMap : monde)
-        {
-            EtapeIG etape = etapeMap.getValue();
-            if (etape.estUneActivite())
+        Runnable command = () -> {
+            getChildren().clear();
+            activites = new ArrayList<>();
+            guichets = new ArrayList<>();
+            points = new ArrayList<>();
+            for (Map.Entry<Integer,EtapeIG> etapeMap : monde)
             {
-                activites.add(new VueActiviteIG(monde, etape));
-                for (PointDeControleIG point : etape)
+                EtapeIG etape = etapeMap.getValue();
+                if (etape.estUneActivite())
                 {
-                    points.add(new VuePointDeControleIG(monde, point));
+                    activites.add(new VueActiviteIG(monde, etape));
+                    for (PointDeControleIG point : etape)
+                    {
+                        points.add(new VuePointDeControleIG(monde, point));
+                    }
                 }
-            }
-            else if (etape.estUnGuichet())
-            {
-                guichets.add(new VueGuichetIG(monde, etape));
-                for (PointDeControleIG point : etape)
+                else if (etape.estUnGuichet())
                 {
-                    points.add(new VuePointDeControleIG(monde, point));
+                    guichets.add(new VueGuichetIG(monde, etape));
+                    for (PointDeControleIG point : etape)
+                    {
+                        points.add(new VuePointDeControleIG(monde, point));
+                    }
                 }
-            }
 
+            }
+            arcs = new ArrayList<>();
+            monde.refreshArcs();
+            Iterator<ArcIG> iterator = monde.arcs();
+            while (iterator.hasNext())
+            {
+                ArcIG arc = iterator.next();
+                arcs.add(new VueArcIG(monde, arc));
+            }
+            for (VueActiviteIG activite : activites)
+            {
+                activite.relocate(activite.getX(), activite.getY());
+            }
+            for (VueGuichetIG vueGuichetIG : guichets)
+            {
+                vueGuichetIG.relocate(vueGuichetIG.getX(), vueGuichetIG.getY());
+            }
+            getChildren().addAll(arcs);
+            getChildren().addAll(activites);
+            getChildren().addAll(guichets);
+            getChildren().addAll(points);
+        };
+
+        if (Platform.isFxApplicationThread()) {
+            command.run();
+        } else {
+            Platform.runLater(command);
         }
-        arcs = new ArrayList<>();
-        monde.refreshArcs();
-        Iterator<ArcIG> iterator = monde.arcs();
-        while (iterator.hasNext())
-        {
-            ArcIG arc = iterator.next();
-            arcs.add(new VueArcIG(monde, arc));
-        }
-        for (VueActiviteIG activite : activites)
-        {
-            activite.relocate(activite.getX(), activite.getY());
-        }
-        for (VueGuichetIG vueGuichetIG : guichets)
-        {
-            vueGuichetIG.relocate(vueGuichetIG.getX(), vueGuichetIG.getY());
-        }
-        getChildren().addAll(arcs);
-        getChildren().addAll(activites);
-        getChildren().addAll(guichets);
-        getChildren().addAll(points);
     }
 }
