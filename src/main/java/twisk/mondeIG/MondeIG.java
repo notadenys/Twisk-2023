@@ -3,7 +3,9 @@ package twisk.mondeIG;
 import twisk.exceptions.ArcException;
 import twisk.exceptions.MondeException;
 import twisk.simulation.Client;
+import twisk.simulation.GestionnaireClients;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,EtapeIG>>{
@@ -15,7 +17,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     private PointDeControleIG pointMemorise;
     private boolean isEnAttente;
     private final ArrayList<EtapeIG[]> liaisons;
-    private final ArrayList<Client> clients;
+    private GestionnaireClients gestionnaireClients;
 
     public MondeIG()
     {
@@ -25,7 +27,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         etapesSelectionnes = new ArrayList<>();
         arcsSelectionnes = new ArrayList<>();
         liaisons = new ArrayList<>();
-        clients = new ArrayList<>();
+        gestionnaireClients = new GestionnaireClients();
     }
 
     public void ajouter(ActiviteIG activite)
@@ -57,7 +59,6 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         {
             etape.setEntree(!etape.estUneEntree());
         }
-        etapesSelectionnes.clear();
         notifierObservateurs();
     }
 
@@ -67,7 +68,6 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         {
             etape.setSortie(!etape.estUneSortie());
         }
-        etapesSelectionnes.clear();
         notifierObservateurs();
     }
 
@@ -340,7 +340,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         return arcs.iterator();
     }
 
-    public void simuler() throws MondeException {
+    public void simuler() throws MondeException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         SimulationIG sim = new SimulationIG(this);
         sim.simuler();
     }
@@ -360,17 +360,12 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         return this.liaisons;
     }
 
-    public void updateClient(Client client) {
-        clients.remove(client);
-        clients.add(client);
+    public GestionnaireClients getGestionnaireClients() {
+        return gestionnaireClients;
     }
 
-    public void clearClients() {
-        clients.clear();
-    }
-
-    public ArrayList<Client> getClients() {
-        return clients;
+    public void setGestionnaireClients(GestionnaireClients gestionnaireClients) {
+        this.gestionnaireClients = gestionnaireClients;
     }
 
     public Iterator<EtapeIG[]> iteratorliaison(){

@@ -12,6 +12,7 @@ import twisk.mondeIG.GuichetIG;
 import twisk.mondeIG.MondeIG;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.io.FileInputStream;
 
@@ -57,6 +58,16 @@ public class VueOutils extends TilePane implements Observateur{
                 try {
                     monde.simuler();
                 } catch (MondeException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InvocationTargetException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NoSuchMethodException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InstantiationException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IllegalAccessException ex) {
                     throw new RuntimeException(ex);
                 }
             });

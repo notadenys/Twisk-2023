@@ -51,7 +51,7 @@ public class VueMenu extends MenuBar implements Observateur {
             input.setHeaderText("Entrez le nouvelle nom de : " + monde.getEtapesSelectionnes().get(0).getNom());
             input.showAndWait();
             monde.getEtapesSelectionnes().get(0).setNom(input.getEditor().getText());
-            monde.notifierObservateurs();
+            monde.deselectionner();
         });
 
         entree = new MenuItem("Marquer comme entree");
@@ -68,7 +68,7 @@ public class VueMenu extends MenuBar implements Observateur {
                 input.setHeaderText("Entrez le delai desire de : " + monde.getEtapesSelectionnes().get(0).getNom());
                 input.showAndWait();
                 ((ActiviteIG)monde.getEtapesSelectionnes().get(0)).setTemps(Integer.parseInt(input.getEditor().getText()));
-                monde.notifierObservateurs();
+                monde.deselectionner();
             } catch (TwiskException exc){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -89,7 +89,7 @@ public class VueMenu extends MenuBar implements Observateur {
                 input.setHeaderText("Entrez l'ecart de temps desire de : " + monde.getEtapesSelectionnes().get(0).getNom());
                 input.showAndWait();
                 ((ActiviteIG)monde.getEtapesSelectionnes().get(0)).setEcartTemps(Integer.parseInt(input.getEditor().getText()));
-                monde.notifierObservateurs();
+                monde.deselectionner();
             } catch (TwiskException exc){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -110,7 +110,7 @@ public class VueMenu extends MenuBar implements Observateur {
                 input.setHeaderText("Entrez le nombre de jetons desire de : " + monde.getEtapesSelectionnes().get(0).getNom());
                 input.showAndWait();
                 ((GuichetIG)monde.getEtapesSelectionnes().get(0)).setNbJetons(Integer.parseInt(input.getEditor().getText()));
-                monde.notifierObservateurs();
+                monde.deselectionner();
             } catch (TwiskException exc){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");

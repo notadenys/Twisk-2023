@@ -2,18 +2,22 @@ package twisk.mondeIG;
 
 import twisk.exceptions.MondeException;
 import twisk.monde.*;
+import twisk.outils.ClassLoaderPerso;
 import twisk.outils.CorrespondancesEtapes;
 import twisk.outils.FabriqueNumero;
-import twisk.simulation.Client;
-import twisk.simulation.Simulation;
+import twisk.simulation.GestionnaireClients;
 import twisk.vues.Observateur;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.Map.Entry;
 
 public class SimulationIG implements Observateur {
     private final MondeIG monde;
-    Simulation simulation;
+
+
     public SimulationIG(MondeIG mondeIG) {
         monde = mondeIG;
     }
@@ -130,22 +134,25 @@ public class SimulationIG implements Observateur {
         return mondeSim;
     }
 
-    public void simuler() throws MondeException {
+    public void simuler() throws MondeException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Monde mondeSim = creerMonde();
-        simulation = new Simulation();
-        simulation.ajouterObservateur(this);
-        simulation.setNbClients(10);
-        simulation.simuler(mondeSim);
+        System.gc();
+        ClassLoaderPerso classLoader = new ClassLoaderPerso(SimulationIG.class.getClassLoader());
+        Class<?> cl = classLoader.loadClass("twisk.simulation.Simulation");
+        Constructor<?> constr = cl.getConstructor();
+        Object o = constr.newInstance();
+        Method setNbClients = cl.getMethod("setNbClients", int.class);
+        setNbClients.invoke(o, 5);
+        Method ajouterObservateur = cl.getMethod("ajouterObservateur", Observateur.class);
+        ajouterObservateur.invoke(o, this);
+        Method getGestionnaireClients = cl.getMethod("getGestionnaireClients");
+        monde.setGestionnaireClients((GestionnaireClients) getGestionnaireClients.invoke(o));
+        Method simuler = cl.getMethod("simuler", Monde.class);
+        simuler.invoke(o, mondeSim);
     }
-
-
 
     @Override
     public void reagir() {
-        monde.clearClients();
-        for (Client client : simulation) {
-            monde.updateClient(client);
-        }
         monde.notifierObservateurs();
     }
 }
