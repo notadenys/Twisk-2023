@@ -15,17 +15,14 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
     private final GestionnaireClients gestClients;
 
     public Simulation() {
-        System.out.println("#################### SATGE 5 : creating Simulation");
         monde = new Monde();
         kitC = new KitC();
         kitC.creerEnvironnement();
         nbClients = 1;
-        System.out.println("#################### SATGE X5 : GC created");
         gestClients = new GestionnaireClients();
     }
 
     public void simuler(Monde monde) {
-        System.out.println("#################### SATGE 6 : Simulation started");
         System.out.println(monde);
         System.out.println(monde.toC());
         kitC.creerFichier(monde.toC());
@@ -40,7 +37,6 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
             System.out.print(resultat[i]+" ");
         }
         System.out.println();
-        System.out.println("#################### SATGE X4 : GC got clients");
 
         gestClients.setClients(resultat);
 
@@ -89,7 +85,6 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
         } while(where_clients[(nbClients+1)] != nbClients);
         nettoyage();
         notifierObservateurs();
-        System.out.println("#################### SATGE 7 : Simulation finished");
     }
 
     public void setNbClients(int clients) {

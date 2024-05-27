@@ -20,12 +20,12 @@ public class VueMondeIG extends Pane implements Observateur{
     private ArrayList<VueGuichetIG> guichets;
     private ArrayList<VuePointDeControleIG> points;
     private ArrayList<VueArcIG> arcs;
-    private ArrayList<Circle> clients;
+//    private ArrayList<Circle> clients;
 
     public VueMondeIG(MondeIG monde)
     {
         this.monde = monde;
-        this.clients = createClients();
+//        this.clients = createClients();
         monde.ajouterObservateur(this);
 
         setOnDragOver((DragEvent event) -> {
@@ -108,41 +108,41 @@ public class VueMondeIG extends Pane implements Observateur{
                 }
             }
 
-            if(monde.getGestionnaireClients() != null) {
-                int id = 0;
-                Iterator<Client> iter = monde.getGestionnaireClients().iterator();
-                while (iter.hasNext()) {
-                    Client client = iter.next();
-                    EtapeIG etp = monde.getCorrespondance().getIG(client.getEtapeActuelle());
-                    if (etp != null) {
-                        if (etp.estUneActivite()) {
-                            ActiviteIG a = (ActiviteIG) etp;
-                            Random random = new Random();
-                            int randomNumber = random.nextInt(35);
-                            int randomNumber2 = random.nextInt(100);
-                            int x = a.getX() + 45 + randomNumber2;
-                            int y = a.getY() + 35 + randomNumber;
-                            clients.get(id).setCenterX(x);
-                            clients.get(id).setCenterY(y);
-                            id++;
-                        }
-                        if (etp.estUnGuichet()) {
-                            assert etp instanceof GuichetIG;
-                            GuichetIG a = (GuichetIG) etp;
-                            int mult = client.getRang();
-                            if (mult > 8) {
-                                mult = 8;
-                            }
-                            int x = a.getX() + 200 - (22 * mult);
-                            int y = a.getY() + 40;
-                            clients.get(id).setCenterX(x);
-                            clients.get(id).setCenterY(y);
-                            id++;
-                        }
-                    }
-                }
+//            if(monde.getGestionnaireClients() != null) {
+//                int id = 0;
+//                Iterator<Client> iter = monde.getGestionnaireClients().iterator();
+//                while (iter.hasNext()) {
+//                    Client client = iter.next();
+//                    EtapeIG etp = monde.getCorrespondance().getIG(client.getEtapeActuelle());
+//                    if (etp != null) {
+//                        if (etp.estUneActivite()) {
+//                            ActiviteIG a = (ActiviteIG) etp;
+//                            Random random = new Random();
+//                            int randomNumber = random.nextInt(35);
+//                            int randomNumber2 = random.nextInt(100);
+//                            int x = a.getX() + 45 + randomNumber2;
+//                            int y = a.getY() + 35 + randomNumber;
+//                            clients.get(id).setCenterX(x);
+//                            clients.get(id).setCenterY(y);
+//                            id++;
+//                        }
+//                        if (etp.estUnGuichet()) {
+//                            assert etp instanceof GuichetIG;
+//                            GuichetIG a = (GuichetIG) etp;
+//                            int mult = client.getRang();
+//                            if (mult > 8) {
+//                                mult = 8;
+//                            }
+//                            int x = a.getX() + 200 - (22 * mult);
+//                            int y = a.getY() + 40;
+//                            clients.get(id).setCenterX(x);
+//                            clients.get(id).setCenterY(y);
+//                            id++;
+//                        }
+//                    }
+//                }
 
-            }
+//            }
             arcs = new ArrayList<>();
             monde.refreshArcs();
             Iterator<ArcIG> iterator = monde.arcs();
@@ -163,7 +163,7 @@ public class VueMondeIG extends Pane implements Observateur{
             getChildren().addAll(activites);
             getChildren().addAll(guichets);
             getChildren().addAll(points);
-            getChildren().addAll(clients);
+//            getChildren().addAll(clients);
         };
 
         if (Platform.isFxApplicationThread()) {
