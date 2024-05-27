@@ -22,6 +22,7 @@ public class VueOutils extends TilePane implements Observateur{
 
     public VueOutils(MondeIG monde)
     {
+        System.out.println("#################### SATGE 3 : VueOutils creating");
         setPadding(new Insets(5));
         setHgap(10);
         this.monde = monde;

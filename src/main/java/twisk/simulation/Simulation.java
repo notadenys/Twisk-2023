@@ -15,18 +15,17 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
     private final GestionnaireClients gestClients;
 
     public Simulation() {
+        System.out.println("#################### SATGE 5 : creating Simulation");
         monde = new Monde();
         kitC = new KitC();
         kitC.creerEnvironnement();
         nbClients = 1;
+        System.out.println("#################### SATGE X5 : GC created");
         gestClients = new GestionnaireClients();
     }
 
-    public GestionnaireClients getGestClients() {
-        return gestClients;
-    }
-
     public void simuler(Monde monde) {
+        System.out.println("#################### SATGE 6 : Simulation started");
         System.out.println(monde);
         System.out.println(monde.toC());
         kitC.creerFichier(monde.toC());
@@ -41,6 +40,8 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
             System.out.print(resultat[i]+" ");
         }
         System.out.println();
+        System.out.println("#################### SATGE X4 : GC got clients");
+
         gestClients.setClients(resultat);
 
         notifierObservateurs();
@@ -88,6 +89,7 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
         } while(where_clients[(nbClients+1)] != nbClients);
         nettoyage();
         notifierObservateurs();
+        System.out.println("#################### SATGE 7 : Simulation finished");
     }
 
     public void setNbClients(int clients) {
@@ -117,6 +119,15 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
     @Override
     public Iterator<Client> iterator() {
         return gestClients.iterator();
+    }
+
+    public GestionnaireClients getGestClients() {
+        if(gestClients == null) {
+            System.out.println("GestClient IS empty");
+        } else {
+            System.out.println("GestClient is NOT empty");
+        }
+        return gestClients;
     }
 }
 

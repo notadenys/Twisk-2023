@@ -2,6 +2,7 @@ package twisk.mondeIG;
 
 import twisk.exceptions.ArcException;
 import twisk.exceptions.MondeException;
+import twisk.outils.CorrespondancesEtapes;
 import twisk.simulation.Client;
 import twisk.simulation.GestionnaireClients;
 
@@ -18,6 +19,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     private boolean isEnAttente;
     private final ArrayList<EtapeIG[]> liaisons;
     private GestionnaireClients gestionnaireClients;
+    private CorrespondancesEtapes correspondance ;
 
     public MondeIG()
     {
@@ -377,5 +379,12 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         return "MondeIG{" +
                 "etapes=" + etapes +
                 '}';
+    }
+    public CorrespondancesEtapes getCorrespondance() {
+        return correspondance;
+    }
+
+    public void setCorrespondance(CorrespondancesEtapes correspondance) {
+        this.correspondance = correspondance;
     }
 }
