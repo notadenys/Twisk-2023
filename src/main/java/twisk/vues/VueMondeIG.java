@@ -16,15 +16,19 @@ import java.util.Map;
 
 public class VueMondeIG extends Pane implements Observateur{
     private final MondeIG monde;
-    private ArrayList<VueActiviteIG> activites;
-    private ArrayList<VueGuichetIG> guichets;
-    private ArrayList<VuePointDeControleIG> points;
-    private ArrayList<VueArcIG> arcs;
+    private final ArrayList<VueActiviteIG> activites;
+    private final ArrayList<VueGuichetIG> guichets;
+    private final ArrayList<VuePointDeControleIG> points;
+    private final ArrayList<VueArcIG> arcs;
 
     public VueMondeIG(MondeIG monde)
     {
         this.monde = monde;
         monde.ajouterObservateur(this);
+        activites = new ArrayList<>();
+        guichets = new ArrayList<>();
+        points = new ArrayList<>();
+        arcs = new ArrayList<>();
 
         setOnDragOver((DragEvent event) -> {
             if (event.getDragboard().hasString()) {
@@ -54,9 +58,9 @@ public class VueMondeIG extends Pane implements Observateur{
     {
         Runnable command = () -> {
             getChildren().clear();
-            activites = new ArrayList<>();
-            guichets = new ArrayList<>();
-            points = new ArrayList<>();
+            activites.clear();
+            guichets.clear();
+            points.clear();
             for (Map.Entry<Integer,EtapeIG> etapeMap : monde)
             {
                 EtapeIG etape = etapeMap.getValue();
@@ -78,7 +82,7 @@ public class VueMondeIG extends Pane implements Observateur{
                 }
 
             }
-            arcs = new ArrayList<>();
+            arcs.clear();
             monde.refreshArcs();
             Iterator<ArcIG> iterator = monde.arcs();
             while (iterator.hasNext())
