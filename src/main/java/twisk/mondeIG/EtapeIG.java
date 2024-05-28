@@ -99,11 +99,9 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG>{
 
     public void resetPoints()
     {
-        points.clear();
-        points.add(new PointDeControleIG(this, 'L'));
-        points.add(new PointDeControleIG(this, 'T'));
-        points.add(new PointDeControleIG(this, 'R'));
-        points.add(new PointDeControleIG(this, 'B'));
+        for (PointDeControleIG p : points) {
+            p.follow();
+        }
     }
     public boolean estUneEntree() {
         return isEntree;
