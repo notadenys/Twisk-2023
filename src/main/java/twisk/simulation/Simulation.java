@@ -13,6 +13,7 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
     private final KitC kitC;
     private int nbClients;
     private final GestionnaireClients gestClients;
+    private volatile boolean running;
 
     public Simulation() {
         monde = new Monde();
@@ -23,6 +24,7 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
     }
 
     public void simuler(Monde monde) {
+        running = true;
         System.out.println(monde);
         System.out.println(monde.toC());
         kitC.creerFichier(monde.toC());
@@ -68,13 +70,21 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
                 throw new RuntimeException(e);
             }
 
-        } while(where_clients[(nbClients+1)] != nbClients);
+        } while(where_clients[(nbClients+1)] != nbClients && running);
         nettoyage();
         notifierObservateurs();
     }
 
     public void setNbClients(int clients) {
         this.nbClients = clients;
+    }
+
+    public void stopSimulation() {
+        running = false;
+    }
+
+    public void startSimulation() {
+        running = true;
     }
 
     private int[] creationTabJeton(Monde monde) {

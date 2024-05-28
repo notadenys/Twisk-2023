@@ -18,10 +18,11 @@ import java.util.Map.Entry;
 
 public class SimulationIG implements Observateur {
     private final MondeIG monde;
-
+    private boolean simulation;
 
     public SimulationIG(MondeIG mondeIG) {
         monde = mondeIG;
+        simulation = false;
     }
 
     // verifie le monde pour repondre a toutes les contraintes
@@ -138,13 +139,20 @@ public class SimulationIG implements Observateur {
     }
 
     public void simuler() throws MondeException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+
         Monde mondeSim = creerMonde();
+
         System.gc();
         ClassLoaderPerso classLoader = new ClassLoaderPerso(SimulationIG.class.getClassLoader());
         Class<?> cl = classLoader.loadClass("twisk.simulation.Simulation");
         Constructor<?> constr = cl.getConstructor();
         Object o = constr.newInstance();
         SimulationIG sIG = this;
+//        if(simulation) {
+//            // simulation.stop
+//        } else {
+//            simulation = true;
+//        }
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() throws Exception {
@@ -160,6 +168,12 @@ public class SimulationIG implements Observateur {
             }
         };
         ThreadsManager.getInstance().lancer(task);
+//        simulation = false;
+    }
+
+    public void setSimulation() {
+        simulation = !simulation;
+        System.out.println("STOP STOP STOP STOP STOP");
     }
 
     @Override

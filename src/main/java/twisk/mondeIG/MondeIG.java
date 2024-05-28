@@ -2,8 +2,8 @@ package twisk.mondeIG;
 
 import twisk.exceptions.ArcException;
 import twisk.exceptions.MondeException;
+
 import twisk.outils.CorrespondancesEtapes;
-import twisk.simulation.Client;
 import twisk.simulation.GestionnaireClients;
 
 import java.lang.reflect.InvocationTargetException;
@@ -19,7 +19,9 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     private boolean isEnAttente;
     private final ArrayList<EtapeIG[]> liaisons;
     private GestionnaireClients gestionnaireClients;
-    private CorrespondancesEtapes correspondance ;
+    private CorrespondancesEtapes correspondance;
+    private final boolean simulation;
+    private SimulationIG sim;
 
     public MondeIG()
     {
@@ -30,6 +32,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         arcsSelectionnes = new ArrayList<>();
         liaisons = new ArrayList<>();
         gestionnaireClients = new GestionnaireClients();
+        simulation = false;
     }
 
     public void ajouter(ActiviteIG activite)
@@ -343,8 +346,12 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     }
 
     public void simuler() throws MondeException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        SimulationIG sim = new SimulationIG(this);
-        sim.simuler();
+        if(simulation) {
+            sim.setSimulation();
+        }else {
+            sim = new SimulationIG(this);
+            sim.simuler();
+        }
     }
 
     public Set<Map.Entry<Integer, EtapeIG>> entrySet() {
@@ -386,5 +393,9 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
 
     public void setCorrespondance(CorrespondancesEtapes correspondance) {
         this.correspondance = correspondance;
+    }
+
+    public boolean getSimulatonState() {
+        return simulation;
     }
 }
