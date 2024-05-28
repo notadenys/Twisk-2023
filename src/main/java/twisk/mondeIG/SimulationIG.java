@@ -133,6 +133,7 @@ public class SimulationIG implements Observateur {
             Etape etape2 = correspondances.get(liaison[1]);
             etape1.ajouterSuccesseur(etape2);
         }
+        this.monde.setCorrespondance(correspondances);
         return mondeSim;
     }
 

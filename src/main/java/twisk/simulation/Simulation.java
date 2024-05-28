@@ -22,10 +22,6 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
         gestClients = new GestionnaireClients();
     }
 
-    public GestionnaireClients getGestClients() {
-        return gestClients;
-    }
-
     public void simuler(Monde monde) {
         System.out.println(monde);
         System.out.println(monde.toC());
@@ -41,43 +37,30 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
             System.out.print(resultat[i]+" ");
         }
         System.out.println();
-        gestClients.setClients(resultat);
+
+        gestClients.setClients(resultat); // clients are in gest with null as Etape
 
         notifierObservateurs();
-
 
         int[] where_clients;
         do {
             where_clients = ou_sont_les_clients(monde.nbEtapes(), nbClients);
             Etape etape = monde.getSasEntree();
-            System.out.println();
-            for(int i=1; i<=(nbClients+1)*monde.nbEtapes(); i=i+nbClients+1) {
-                if(i / (nbClients + 1) != 1) {
-                    gestClients.allerA(where_clients[i], etape, i / (nbClients + 1));
-                    int padding = 0;
-                    if(monde.getName(i / (nbClients + 1)).length() < 20) {
-                        padding = 20 - monde.getName(i / (nbClients + 1)).length();
-                    }
-                    System.out.print("étape " + i / (nbClients + 1) + " (" + monde.getName(i / (nbClients + 1)) + ") : " + " ".repeat(padding) + where_clients[i - 1] + " clients : ");
-                    for (int j = i; j < i + where_clients[i - 1]; j++) {
-                        System.out.print(where_clients[j] + " ");
-                    }
-                    if (i < monde.nbEtapes() - 1) {
-                        etape = etape.getSuccesseur();
-                    }
-                    System.out.println();
+            System.out.println("###################################");
+            for (int i = 0; i < monde.nbEtapes(); i++) {
+
+                System.out.println("etape " + etape.getNum() + " (" + etape.getNom() + ") : " + where_clients[etape.getNum() * (nbClients + 1)] + "  clients : ");
+
+                for (int j = 1; j < where_clients[etape.getNum() * (nbClients + 1)] + 1; j++) {
+                    gestClients.allerA(where_clients[j + etape.getNum() * (nbClients + 1)], etape, j);
+                    System.out.print(where_clients[j + etape.getNum() * (nbClients + 1)] + " ");
+                }
+               System.out.println();
+
+                if (i < monde.nbEtapes() - 1) {
+                    etape = etape.getSuccesseur();
                 }
             }
-            int padding = 0;
-            if(monde.getName((nbClients + 2) / (nbClients + 1)).length() < 20) {
-                padding = 20 - monde.getName((nbClients + 2) / (nbClients + 1)).length();
-            }
-            System.out.print("étape " + (nbClients + 2) / (nbClients + 1)  + " (" + monde.getName((nbClients + 2) / (nbClients + 1)) + ") : " + " ".repeat(padding) + where_clients[(nbClients + 2) - 1] + " clients : ");
-            for (int j = (nbClients + 2); j < (nbClients + 2) + where_clients[(nbClients + 2) - 1]; j++) {
-                System.out.print(where_clients[j] + " ");
-            }
-            System.out.println();
-
             notifierObservateurs();
             try {
                 Thread.sleep(3000);
@@ -117,6 +100,15 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
     @Override
     public Iterator<Client> iterator() {
         return gestClients.iterator();
+    }
+
+    public GestionnaireClients getGestClients() {
+        if(gestClients == null) {
+            System.out.println("GestClient IS empty");
+        } else {
+            System.out.println("GestClient is NOT empty");
+        }
+        return gestClients;
     }
 }
 

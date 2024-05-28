@@ -5,30 +5,29 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
-import twisk.mondeIG.ArcIG;
-import twisk.mondeIG.EtapeIG;
-import twisk.mondeIG.MondeIG;
-import twisk.mondeIG.PointDeControleIG;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import twisk.mondeIG.*;
+import twisk.simulation.Client;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class VueMondeIG extends Pane implements Observateur{
+public class VueMondeIG extends Pane implements Observateur {
     private final MondeIG monde;
-    private final ArrayList<VueActiviteIG> activites;
-    private final ArrayList<VueGuichetIG> guichets;
-    private final ArrayList<VuePointDeControleIG> points;
-    private final ArrayList<VueArcIG> arcs;
+    private CopyOnWriteArrayList<VueActiviteIG> activites;
+    private CopyOnWriteArrayList<VueGuichetIG> guichets;
+    private CopyOnWriteArrayList<VuePointDeControleIG> points;
+    private CopyOnWriteArrayList<VueArcIG> arcs;
+    private CopyOnWriteArrayList<Circle> clients;
+    private int id = 0;
 
-    public VueMondeIG(MondeIG monde)
-    {
+    public VueMondeIG(MondeIG monde) {
         this.monde = monde;
+        this.clients = createClients();
         monde.ajouterObservateur(this);
-        activites = new ArrayList<>();
-        guichets = new ArrayList<>();
-        points = new ArrayList<>();
-        arcs = new ArrayList<>();
 
         setOnDragOver((DragEvent event) -> {
             if (event.getDragboard().hasString()) {
@@ -41,7 +40,7 @@ public class VueMondeIG extends Pane implements Observateur{
             Dragboard db = event.getDragboard();
             if (db.hasString()) {
                 EtapeIG etape = monde.getEtape(Integer.parseInt(db.getString()));
-                etape.move((int)event.getX()-(etape.getLargeur()/2), (int)event.getY()-(etape.getHauteur()/2));
+                etape.move((int) event.getX() - (etape.getLargeur() / 2), (int) event.getY() - (etape.getHauteur() / 2));
                 monde.setEnAttente(false);
                 reagir();
                 event.setDropCompleted(true);
@@ -54,54 +53,114 @@ public class VueMondeIG extends Pane implements Observateur{
         reagir();
     }
 
-    public void reagir()
-    {
+    private CopyOnWriteArrayList<Circle> createClients() {
+        CopyOnWriteArrayList<Circle> circles = new CopyOnWriteArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Random random = new Random();
+            int color = random.nextInt(5);
+            Circle circle = new Circle(5);
+            switch (color) {
+                case 0:
+                    circle.setFill(Color.RED);
+                    break;
+                case 1:
+                    circle.setFill(Color.GREENYELLOW);
+                    break;
+                case 2:
+                    circle.setFill(Color.BLUE);
+                    break;
+                case 3:
+                    circle.setFill(Color.MAGENTA);
+                    break;
+                case 4:
+                    circle.setFill(Color.ORANGE);
+                    break;
+            }
+            circles.add(circle);
+        }
+        return circles;
+    }
+
+    public void reagir() {
         Runnable command = () -> {
             getChildren().clear();
-            activites.clear();
-            guichets.clear();
-            points.clear();
-            for (Map.Entry<Integer,EtapeIG> etapeMap : monde)
-            {
+            activites = new CopyOnWriteArrayList<>();
+            guichets = new CopyOnWriteArrayList<>();
+            points = new CopyOnWriteArrayList<>();
+            for (Map.Entry<Integer, EtapeIG> etapeMap : monde) {
                 EtapeIG etape = etapeMap.getValue();
-                if (etape.estUneActivite())
-                {
+                if (etape.estUneActivite()) {
                     activites.add(new VueActiviteIG(monde, etape));
-                    for (PointDeControleIG point : etape)
-                    {
+                    for (PointDeControleIG point : etape) {
                         points.add(new VuePointDeControleIG(monde, point));
                     }
-                }
-                else if (etape.estUnGuichet())
-                {
+                } else if (etape.estUnGuichet()) {
                     guichets.add(new VueGuichetIG(monde, etape));
-                    for (PointDeControleIG point : etape)
-                    {
+                    for (PointDeControleIG point : etape) {
                         points.add(new VuePointDeControleIG(monde, point));
                     }
                 }
-
             }
-            arcs.clear();
+            if(monde.getGestionnaireClients() != null) {
+                int id = 0;
+                Iterator<Client> iter = monde.getGestionnaireClients().iterator();
+                while (iter.hasNext()) {
+                    Client client = iter.next();
+                    EtapeIG etp = monde.getCorrespondance().getIG(client.getEtapeActuelle());
+                    if (etp != null) {
+                        if (etp.estUneActivite()) {
+                            ActiviteIG a = (ActiviteIG) etp;
+                            Random random = new Random();
+                            int randomX = random.nextInt(210);
+                            int randomY = random.nextInt(55);
+                            int x = a.getX() + 20 + randomX;
+                            int y = a.getY() + 35 + randomY;
+//                            if(client.getEtapeActuelle().getSuccesseur() != null) {
+                                clients.get(id).setCenterX(x);
+                                clients.get(id).setCenterY(y);
+//                            } else {
+                                clients.get(id).setCenterX(0);
+                                clients.get(id).setCenterY(0);
+//                            }
+                            id++;
+                        }
+                        if (etp.estUnGuichet()) {
+                            assert etp instanceof GuichetIG;
+                            GuichetIG a = (GuichetIG) etp;
+                            int mult = client.getRang();
+                            if (mult > 8) {
+                                mult = 8;
+                            }
+                            int x = a.getX() + 200 - (22 * mult);
+                            int y = a.getY() + 40;
+                            clients.get(id).setCenterX(x);
+                            clients.get(id).setCenterY(y);
+                            id++;
+                        }
+                    }
+                }
+            }
+
+            arcs = new CopyOnWriteArrayList<>();
             monde.refreshArcs();
-            Iterator<ArcIG> iterator = monde.arcs();
-            while (iterator.hasNext())
-            {
-                ArcIG arc = iterator.next();
+            for (Iterator<ArcIG> it = monde.arcs(); it.hasNext(); ) {
+                ArcIG arc = it.next();
                 arcs.add(new VueArcIG(monde, arc));
             }
-            for (VueActiviteIG activite : activites)
-            {
+
+            for (VueActiviteIG activite : activites) {
                 activite.relocate(activite.getX(), activite.getY());
             }
-            for (VueGuichetIG vueGuichetIG : guichets)
-            {
+            for (VueGuichetIG vueGuichetIG : guichets) {
                 vueGuichetIG.relocate(vueGuichetIG.getX(), vueGuichetIG.getY());
             }
+
             getChildren().addAll(arcs);
             getChildren().addAll(activites);
             getChildren().addAll(guichets);
             getChildren().addAll(points);
+            getChildren().addAll(clients);
+//            updateClientPositions();
         };
 
         if (Platform.isFxApplicationThread()) {
@@ -110,4 +169,49 @@ public class VueMondeIG extends Pane implements Observateur{
             Platform.runLater(command);
         }
     }
+
+//    private void updateClientPositions() {
+//        for (Client client : monde.getGestionnaireClients()) {
+//            System.out.println("id" + id);
+////            System.out.println("Client " + client.getNumeroClient() + " in " + client.getEtapeActuelle());
+//            EtapeIG etp = monde.getCorrespondance().getIG(client.getEtapeActuelle());
+//            if (etp != null) {
+//                if (etp.estUneActivite()) {
+//                    ActiviteIG a = (ActiviteIG) etp;
+//                    Random random = new Random();
+//                    int randomX = random.nextInt(35);
+//                    int randomY = random.nextInt(100);
+//                    int x = a.getX() + 45 + randomX;
+//                    int y = a.getY() + 35 + randomY;
+//                    clients.get(id).setCenterX(x);
+//                    clients.get(id).setCenterY(y);
+//                    getChildren().add(clients.get(id));
+//                    id++;
+//                } else if (etp.estUnGuichet()) {
+//                    GuichetIG a = (GuichetIG) etp;
+//                    int mult = client.getRang();
+//                    if (mult > 8) {
+//                        mult = 8;
+//                    }
+//                    int x = a.getX() + 200 - (22 * mult);
+//                    int y = a.getY() + 40;
+//                    if (id < clients.size()) {
+//                        clients.get(id).setCenterX(x);
+//                        clients.get(id).setCenterY(y);
+//                    } else {
+//                        Circle newClient = new Circle(5, Color.BLACK);
+//                        newClient.setCenterX(x);
+//                        newClient.setCenterY(y);
+//                        clients.add(newClient);
+//                    }
+//                    getChildren().add(clients.get(id));
+//                    id++;
+//                }
+//            }
+//        }
+//        while (id < clients.size()) {
+//            clients.remove(id);
+//        }
+//        id = 0;
+//    }
 }
