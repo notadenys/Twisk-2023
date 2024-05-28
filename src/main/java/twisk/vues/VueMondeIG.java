@@ -115,13 +115,8 @@ public class VueMondeIG extends Pane implements Observateur {
                             int randomY = random.nextInt(55);
                             int x = a.getX() + 20 + randomX;
                             int y = a.getY() + 35 + randomY;
-//                            if(client.getEtapeActuelle().getSuccesseur() != null) {
-                                clients.get(id).setCenterX(x);
-                                clients.get(id).setCenterY(y);
-//                            } else {
-                                clients.get(id).setCenterX(0);
-                                clients.get(id).setCenterY(0);
-//                            }
+                            clients.get(id).setCenterX(x);
+                            clients.get(id).setCenterY(y);
                             id++;
                         }
                         if (etp.estUnGuichet()) {
@@ -160,7 +155,6 @@ public class VueMondeIG extends Pane implements Observateur {
             getChildren().addAll(guichets);
             getChildren().addAll(points);
             getChildren().addAll(clients);
-//            updateClientPositions();
         };
 
         if (Platform.isFxApplicationThread()) {
@@ -169,49 +163,4 @@ public class VueMondeIG extends Pane implements Observateur {
             Platform.runLater(command);
         }
     }
-
-//    private void updateClientPositions() {
-//        for (Client client : monde.getGestionnaireClients()) {
-//            System.out.println("id" + id);
-////            System.out.println("Client " + client.getNumeroClient() + " in " + client.getEtapeActuelle());
-//            EtapeIG etp = monde.getCorrespondance().getIG(client.getEtapeActuelle());
-//            if (etp != null) {
-//                if (etp.estUneActivite()) {
-//                    ActiviteIG a = (ActiviteIG) etp;
-//                    Random random = new Random();
-//                    int randomX = random.nextInt(35);
-//                    int randomY = random.nextInt(100);
-//                    int x = a.getX() + 45 + randomX;
-//                    int y = a.getY() + 35 + randomY;
-//                    clients.get(id).setCenterX(x);
-//                    clients.get(id).setCenterY(y);
-//                    getChildren().add(clients.get(id));
-//                    id++;
-//                } else if (etp.estUnGuichet()) {
-//                    GuichetIG a = (GuichetIG) etp;
-//                    int mult = client.getRang();
-//                    if (mult > 8) {
-//                        mult = 8;
-//                    }
-//                    int x = a.getX() + 200 - (22 * mult);
-//                    int y = a.getY() + 40;
-//                    if (id < clients.size()) {
-//                        clients.get(id).setCenterX(x);
-//                        clients.get(id).setCenterY(y);
-//                    } else {
-//                        Circle newClient = new Circle(5, Color.BLACK);
-//                        newClient.setCenterX(x);
-//                        newClient.setCenterY(y);
-//                        clients.add(newClient);
-//                    }
-//                    getChildren().add(clients.get(id));
-//                    id++;
-//                }
-//            }
-//        }
-//        while (id < clients.size()) {
-//            clients.remove(id);
-//        }
-//        id = 0;
-//    }
 }
