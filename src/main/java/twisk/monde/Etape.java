@@ -43,6 +43,7 @@ public abstract class Etape implements Iterable<Etape> {
     public abstract boolean estUnGuichet();
 
     public abstract boolean estUneSortie();
+    public boolean estUneEntree() {return false;}
 
     /**
      * @return code C of step

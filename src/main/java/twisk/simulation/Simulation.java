@@ -6,6 +6,7 @@ import twisk.monde.Monde;
 import twisk.mondeIG.SujetObserve;
 import twisk.outils.KitC;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class Simulation extends SujetObserve implements Iterable<Client>  {
@@ -47,6 +48,7 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
         int[] where_clients;
         do {
             where_clients = ou_sont_les_clients(monde.nbEtapes(), nbClients);
+            System.out.println(Arrays.toString(where_clients));
             Etape etape = monde.getSasEntree();
             System.out.println("###################################");
             for (int i = 0; i < monde.nbEtapes(); i++) {
@@ -59,13 +61,13 @@ public class Simulation extends SujetObserve implements Iterable<Client>  {
                 }
                System.out.println();
 
-                if (i < monde.nbEtapes() - 1) {
+                if (!etape.estUneSortie()) {
                     etape = etape.getSuccesseur();
                 }
             }
             notifierObservateurs();
             try {
-                Thread.sleep(3000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

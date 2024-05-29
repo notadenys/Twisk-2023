@@ -86,32 +86,32 @@ public class Monde implements Iterable<Etape>{
 
     public String toC() {
         StringBuilder str = new StringBuilder();
-        String includes = "#include <stdio.h> \n" +
+        str.append("#include <stdio.h> \n" +
                 "#include <stdlib.h>\n" +
-                "#include \"def.h\"\n\n";
-        String simulation = "\n\nvoid simulation(int ids)\n" +
-                "{\n";
-        str.append(includes);
+                "#include <time.h>\n" +
+                "#include \"def.h\"\n\n");
         for (Etape etape : ge.getEtapes()) {
             str.append(etape.toDefine());
             str.append("\n");
         }
-        str.append(simulation);
+        str.append("\n\nvoid simulation(int ids) {\n");
+        if (!isLinear()) str.append("    int choice;\n");
 
-//        for (Etape etape : ge.getEtapes())
-//        {
-//            System.out.println(etape);
-//            str.append(etape.toC());
-//        }
-
-        if (ge.getEtapes() != null && !ge.getEtapes().isEmpty()) {
-            ArrayList<Etape> etapes = ge.getEtapes();
-            str.append(etapes.get(0).toC());
-            str.append(etapes.get(0).getSuccesseur().toC());
-        }
+        ArrayList<Etape> etapes = ge.getEtapes();
+        str.append(etapes.get(0).toC());
         str.append("} ");
         return str.toString();
     }
+
+    private boolean isLinear() {
+        for (Etape etape : ge.getEtapes()) {
+            if (etape.getSuccesseurs().size() > 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public String getName(int id) {
         return this.ge.getNomByID(id);
     }
