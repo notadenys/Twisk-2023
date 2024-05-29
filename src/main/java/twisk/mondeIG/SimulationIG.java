@@ -164,7 +164,7 @@ public class SimulationIG implements Observateur {
             }
         };
         ThreadsManager.getInstance().lancer(task);
-//        simulation = false;
+        simulation = false;
     }
 
     public void setSimulation() {

@@ -19,7 +19,9 @@ import java.io.FileInputStream;
 public class VueOutils extends TilePane implements Observateur{
     MondeIG monde;
     ArrayList<Button> buttons;
-    boolean simulation ;
+    boolean simulation;
+    private Button play;
+    ImageView imageViewPlay;
 
     public VueOutils(MondeIG monde)
     {
@@ -58,10 +60,10 @@ public class VueOutils extends TilePane implements Observateur{
             imageViewStop.setFitHeight(50);
             imageViewStop.setFitWidth(50);
 
-            ImageView imageViewPlay = new ImageView(image2);
+            imageViewPlay = new ImageView(image2);
             imageViewPlay.setFitHeight(50);
             imageViewPlay.setFitWidth(50);
-            Button play = new Button("Lancer", imageViewPlay);
+            play = new Button("Lancer", imageViewPlay);
             play.setOnAction(e -> {
                 if(!simulation) {
                     try {
@@ -88,7 +90,6 @@ public class VueOutils extends TilePane implements Observateur{
                     simulation = false;
                     play.setGraphic(imageViewPlay);
                     play.setText("Lancer");
-
                 }
             });
 
@@ -99,7 +100,6 @@ public class VueOutils extends TilePane implements Observateur{
         {
             e.printStackTrace();
         }
-
         reagir();
     }
 
@@ -108,6 +108,11 @@ public class VueOutils extends TilePane implements Observateur{
         getChildren().clear();
         for (Button b : buttons) {
             this.getChildren().add(b);
+        }
+        if(ThreadsManager.getInstance() == null) {
+            simulation = false;
+            play.setGraphic(imageViewPlay);
+            play.setText("Lancer");
         }
     }
 }

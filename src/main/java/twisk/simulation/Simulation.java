@@ -83,8 +83,8 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
 
         } while (where_clients[nbClients + 1] != nbClients && running);
         nettoyage();
-        notifierObservateurs();
         running = false;
+        notifierObservateurs();
     }
 
     public void setNbClients(int clients) {
@@ -94,6 +94,7 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
     public void stopSimulation() {
         kitC.stopAllProcesses(this);
         running = false;
+        notifierObservateurs();
     }
 
     public void startSimulation() {
