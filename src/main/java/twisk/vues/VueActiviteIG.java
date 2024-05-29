@@ -1,5 +1,6 @@
 package twisk.vues;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,67 +31,68 @@ public class VueActiviteIG extends VueEtapeIG {
 
     public void reagir()
     {
-        getChildren().clear();
+        Runnable command = () -> {
+            getChildren().clear();
 
-        BorderPane es = new BorderPane();
+            BorderPane es = new BorderPane();
 
-        getEtape().resetHauteur();
-        if (getEtape().estUneEntree())
-        {
-            Image imageEntree = null;
-            try {
-                imageEntree = new Image(new FileInputStream("src/main/ressources/images/entree.png"));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            getEtape().resetHauteur();
+            if (getEtape().estUneEntree()) {
+                Image imageEntree = null;
+                try {
+                    imageEntree = new Image(new FileInputStream("src/main/ressources/images/entree.png"));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                ImageView imageViewEntree = new ImageView(imageEntree);
+                imageViewEntree.setPreserveRatio(true);
+                imageViewEntree.setFitHeight(25);
+
+                BorderPane.setMargin(imageViewEntree, new Insets(10, 0, 0, 0));
+
+                es.setLeft(imageViewEntree);
+                getEtape().changeHauteur(30);
             }
-            ImageView imageViewEntree = new ImageView(imageEntree);
-            imageViewEntree.setPreserveRatio(true);
-            imageViewEntree.setFitHeight(25);
 
-            BorderPane.setMargin(imageViewEntree, new Insets(10, 0, 0, 0));
+            if (getEtape().estUneSortie()) {
+                Image imageSortie = null;
+                try {
+                    imageSortie = new Image(new FileInputStream("src/main/ressources/images/sortie.png"));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                ImageView imageViewSortie = new ImageView(imageSortie);
+                imageViewSortie.setPreserveRatio(true);
+                imageViewSortie.setFitHeight(25);
 
-            es.setLeft(imageViewEntree);
-            getEtape().changeHauteur(30);
-        }
+                BorderPane.setMargin(imageViewSortie, new Insets(10, 0, 0, 0));
 
-        if (getEtape().estUneSortie())
-        {
-            Image imageSortie = null;
-            try {
-                imageSortie = new Image(new FileInputStream("src/main/ressources/images/sortie.png"));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                es.setRight(imageViewSortie);
+                getEtape().changeHauteur(30);
             }
-            ImageView imageViewSortie = new ImageView(imageSortie);
-            imageViewSortie.setPreserveRatio(true);
-            imageViewSortie.setFitHeight(25);
+            setPrefHeight(getEtape().getHauteur());
+            getChildren().add(getLabel());
+            getChildren().add(clientWindow);
+            getChildren().add(es);
 
-            BorderPane.setMargin(imageViewSortie, new Insets(10, 0, 0, 0));
-
-            es.setRight(imageViewSortie);
-            getEtape().changeHauteur(30);
+            if (getMonde().getEtapesSelectionnes().contains(getEtape())) {
+                setStyle("-fx-padding: 10px; " +
+                        "-fx-background-radius: 10px; " +
+                        "-fx-border-radius: 10px; " +
+                        "-fx-border-color: #0059FF; " +
+                        "-fx-background-color: #348feb;");
+            } else {
+                setStyle("-fx-padding: 10px; " +
+                        "-fx-background-radius: 10px; " +
+                        "-fx-border-radius: 10px; " +
+                        "-fx-border-color: #0059FF; " +
+                        "-fx-background-color: #FFFFFF;");
+            }
+        };
+        if (Platform.isFxApplicationThread()) {
+            command.run();
+        } else {
+            Platform.runLater(command);
         }
-        setPrefHeight(getEtape().getHauteur());
-        getChildren().add(getLabel());
-        getChildren().add(clientWindow);
-        getChildren().add(es);
-
-        if (getMonde().getEtapesSelectionnes().contains(getEtape()))
-        {
-            setStyle("-fx-padding: 10px; " +
-                    "-fx-background-radius: 10px; " +
-                    "-fx-border-radius: 10px; " +
-                    "-fx-border-color: #0059FF; " +
-                    "-fx-background-color: #348feb;");
-        }
-        else
-        {
-            setStyle("-fx-padding: 10px; " +
-                    "-fx-background-radius: 10px; " +
-                    "-fx-border-radius: 10px; " +
-                    "-fx-border-color: #0059FF; " +
-                    "-fx-background-color: #FFFFFF;");
-        }
-
     }
 }

@@ -1,5 +1,7 @@
 package twisk.outils;
 
+import twisk.simulation.Client;
+import twisk.simulation.GestionnaireClients;
 import twisk.simulation.Simulation;
 
 import java.io.BufferedWriter;
@@ -61,7 +63,14 @@ public class KitC {
         }
     }
 
-    public void stopAllProcesses(Simulation simulation) {
-        simulation.nettoyage();
+    public void killSimulation(GestionnaireClients clients) {
+        try {
+            for (Client client : clients) {
+                ProcessBuilder process = new ProcessBuilder("kill", "-9", String.valueOf(client.getNumeroClient()));
+                process.inheritIO().start().waitFor();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

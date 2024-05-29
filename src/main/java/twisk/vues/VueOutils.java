@@ -1,5 +1,6 @@
 package twisk.vues;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
@@ -28,6 +29,7 @@ public class VueOutils extends TilePane implements Observateur{
         setPadding(new Insets(5));
         setHgap(10);
         this.monde = monde;
+        monde.ajouterObservateur(this);
         simulation = false;
 
         buttons = new ArrayList<>();
@@ -65,7 +67,7 @@ public class VueOutils extends TilePane implements Observateur{
             imageViewPlay.setFitWidth(50);
             play = new Button("Lancer", imageViewPlay);
             play.setOnAction(e -> {
-                if(!simulation) {
+                if(!monde.isSimulationInProgress()) {
                     try {
                         monde.simuler();
                     } catch (MondeException ex) {
@@ -83,17 +85,14 @@ public class VueOutils extends TilePane implements Observateur{
                     }
                     play.setGraphic(imageViewStop);
                     play.setText("Stop");
-                    simulation = true;
-                    this.monde = monde;
+                    this.monde.notifierObservateurs();
                 } else {
                     ThreadsManager.getInstance().detruireTout();
-                    simulation = false;
-                    play.setGraphic(imageViewPlay);
-                    play.setText("Lancer");
+                    this.monde.notifierObservateurs();
                 }
             });
 
-            play.setTooltip(new Tooltip("lancer la simulation"));
+            play.setTooltip(new Tooltip("lancer/arreter la simulation"));
             buttons.add(play);
         }
         catch (FileNotFoundException e)
@@ -105,14 +104,20 @@ public class VueOutils extends TilePane implements Observateur{
 
     @Override
     public void reagir() {
-        getChildren().clear();
-        for (Button b : buttons) {
-            this.getChildren().add(b);
-        }
-        if(ThreadsManager.getInstance() == null) {
-            simulation = false;
-            play.setGraphic(imageViewPlay);
-            play.setText("Lancer");
+        Runnable command = () -> {
+            getChildren().clear();
+            if (!monde.isSimulationInProgress()) {
+                play.setGraphic(imageViewPlay);
+                play.setText("Lancer");
+            }
+            for (Button b : buttons) {
+                this.getChildren().add(b);
+            }
+        };
+        if (Platform.isFxApplicationThread()) {
+            command.run();
+        } else {
+            Platform.runLater(command);
         }
     }
 }

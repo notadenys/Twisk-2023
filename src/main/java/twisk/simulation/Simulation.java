@@ -3,29 +3,28 @@ package twisk.simulation;
 import twisk.monde.Etape;
 import twisk.monde.Guichet;
 import twisk.monde.Monde;
-import twisk.monde.SasSortie;
 import twisk.mondeIG.SujetObserve;
 import twisk.outils.KitC;
+import twisk.outils.MutableBoolean;
 
 import java.util.Iterator;
 
 public class Simulation extends SujetObserve implements Iterable<Client> {
-    private Monde monde;
     private final KitC kitC;
     private int nbClients;
     private final GestionnaireClients gestClients;
-    private volatile boolean running;
+    private MutableBoolean inProgress;
 
     public Simulation() {
-        monde = new Monde();
         kitC = new KitC();
         kitC.creerEnvironnement();
         nbClients = 1;
         gestClients = new GestionnaireClients();
+        inProgress = new MutableBoolean();
     }
 
     public void simuler(Monde monde) {
-        running = true;
+        inProgress.setValue(true);
         System.out.println(monde);
         System.out.println(monde.toC());
         kitC.creerFichier(monde.toC());
@@ -44,46 +43,50 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
         gestClients.setClients(resultat);
 
         notifierObservateurs();
-
         int[] where_clients;
         do {
-            where_clients = ou_sont_les_clients(monde.nbEtapes(), nbClients);
-            System.out.println("###################################");
-
-            // Process all stages except SasSortie
-            for (Etape etape : monde) {
-                if (!(etape instanceof SasSortie)) {
-                    System.out.println("etape " + etape.getNum() + " (" + etape.getNom() + ") : " +
-                            where_clients[etape.getNum() * (nbClients + 1)] + " clients : ");
-
-                    for (int j = 1; j < where_clients[etape.getNum() * (nbClients + 1)] + 1; j++) {
-                        gestClients.allerA(where_clients[j + etape.getNum() * (nbClients + 1)], etape, j);
-                        System.out.print(where_clients[j + etape.getNum() * (nbClients + 1)] + " ");
-                    }
-                    System.out.println();
-                }
-            }
-
-            // Process SasSortie
-            Etape sasSortie = monde.getSortie();
-            System.out.println("etape " + sasSortie.getNum() + " (" + sasSortie.getNom() + ") : " +
-                    where_clients[sasSortie.getNum() * (nbClients + 1)] + " clients : ");
-            for (int j = 1; j < where_clients[sasSortie.getNum() * (nbClients + 1)] + 1; j++) {
-                gestClients.allerA(where_clients[j + sasSortie.getNum() * (nbClients + 1)], sasSortie, j);
-                System.out.print(where_clients[j + sasSortie.getNum() * (nbClients + 1)] + " ");
-            }
-            System.out.println();
-
-            notifierObservateurs();
             try {
+                where_clients = ou_sont_les_clients(monde.nbEtapes(), nbClients);
+                System.out.println("###################################");
+
+                // Process all stages except SasSortie
+                for (Etape etape : monde) {
+                    if (!etape.estUneSortie()) {
+                        System.out.println("etape " + etape.getNum() + " (" + etape.getNom() + ") : " +
+                                where_clients[etape.getNum() * (nbClients + 1)] + " clients : ");
+
+                        for (int j = 1; j < where_clients[etape.getNum() * (nbClients + 1)] + 1; j++) {
+                            gestClients.allerA(where_clients[j + etape.getNum() * (nbClients + 1)], etape, j);
+                            System.out.print(where_clients[j + etape.getNum() * (nbClients + 1)] + " ");
+                        }
+                        System.out.println();
+                    }
+                }
+
+                // Process SasSortie
+                Etape sasSortie = monde.getSortie();
+                System.out.println("etape " + sasSortie.getNum() + " (" + sasSortie.getNom() + ") : " +
+                        where_clients[sasSortie.getNum() * (nbClients + 1)] + " clients : ");
+                for (int j = 1; j < where_clients[sasSortie.getNum() * (nbClients + 1)] + 1; j++) {
+                    gestClients.allerA(where_clients[j + sasSortie.getNum() * (nbClients + 1)], sasSortie, j);
+                    System.out.print(where_clients[j + sasSortie.getNum() * (nbClients + 1)] + " ");
+                }
+                System.out.println();
+
+                notifierObservateurs();
+
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
+                System.out.println("INTERRUPTED");
+                stopSimulation();
+                nettoyage();
+                notifierObservateurs();
                 throw new RuntimeException(e);
             }
-
-        } while (where_clients[nbClients + 1] != nbClients && running);
+        } while (where_clients[nbClients + 1] != nbClients && inProgress.getValue());
         nettoyage();
-        running = false;
+        inProgress.setValue(false);
+        System.out.println("STOP");
         notifierObservateurs();
     }
 
@@ -92,14 +95,12 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
     }
 
     public void stopSimulation() {
-        kitC.stopAllProcesses(this);
-        running = false;
+        kitC.killSimulation(gestClients);
+        inProgress.setValue(false);
         notifierObservateurs();
     }
 
-    public void startSimulation() {
-        running = true;
-    }
+    public MutableBoolean getInProgress() { return inProgress; }
 
     private int[] creationTabJeton(Monde monde) {
         int[] tab = new int[monde.nbEtapes()];

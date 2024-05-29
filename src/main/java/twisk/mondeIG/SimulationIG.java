@@ -3,10 +3,7 @@ package twisk.mondeIG;
 import javafx.concurrent.Task;
 import twisk.exceptions.MondeException;
 import twisk.monde.*;
-import twisk.outils.ClassLoaderPerso;
-import twisk.outils.CorrespondancesEtapes;
-import twisk.outils.FabriqueNumero;
-import twisk.outils.ThreadsManager;
+import twisk.outils.*;
 import twisk.simulation.GestionnaireClients;
 import twisk.vues.Observateur;
 
@@ -18,11 +15,9 @@ import java.util.Map.Entry;
 
 public class SimulationIG implements Observateur {
     private final MondeIG monde;
-    private boolean simulation;
 
     public SimulationIG(MondeIG mondeIG) {
         monde = mondeIG;
-        simulation = false;
     }
 
     // verifie le monde pour repondre a toutes les contraintes
@@ -158,22 +153,20 @@ public class SimulationIG implements Observateur {
                 ajouterObservateur.invoke(o, sIG);
                 Method getGestionnaireClients = cl.getMethod("getGestionnaireClients");
                 monde.setGestionnaireClients((GestionnaireClients) getGestionnaireClients.invoke(o));
+                Method getInProgress = cl.getMethod("getInProgress");
+                monde.setSimulationInProgress((MutableBoolean) getInProgress.invoke(o));
+
                 Method simuler = cl.getMethod("simuler", Monde.class);
                 simuler.invoke(o, mondeSim);
                 return null;
             }
         };
         ThreadsManager.getInstance().lancer(task);
-        simulation = false;
-    }
-
-    public void setSimulation() {
-        simulation = !simulation;
-        System.out.println("STOP STOP STOP STOP STOP");
     }
 
     @Override
     public void reagir() {
+        System.out.println(monde.isSimulationInProgress());
         monde.notifierObservateurs();
     }
 }
