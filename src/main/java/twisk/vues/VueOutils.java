@@ -85,6 +85,10 @@ public class VueOutils extends TilePane implements Observateur{
                     this.monde = monde;
                 } else {
                     ThreadsManager.getInstance().detruireTout();
+                    simulation = false;
+                    play.setGraphic(imageViewPlay);
+                    play.setText("Lancer");
+
                 }
             });
 

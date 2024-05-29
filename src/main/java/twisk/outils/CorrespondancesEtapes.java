@@ -16,10 +16,10 @@ public class CorrespondancesEtapes {
         this.correspondances.put(etapeIG, etape);
     }
 
-    public Etape get(EtapeIG etapeIG){
+    public Etape getEtape(EtapeIG etapeIG){
         return this.correspondances.get(etapeIG);
     }
-    public EtapeIG getIG(Etape etapeActuelle) {
+    public EtapeIG getEtapeIG(Etape etapeActuelle) {
         for (Map.Entry<EtapeIG, Etape> entry : correspondances.entrySet()) {
             if (entry.getValue() == etapeActuelle) {
                 return entry.getKey();

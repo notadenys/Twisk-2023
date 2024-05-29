@@ -1,5 +1,4 @@
 package twisk.vues;
-
 import javafx.application.Platform;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -9,12 +8,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import twisk.mondeIG.*;
 import twisk.simulation.Client;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class VueMondeIG extends Pane implements Observateur {
     private final MondeIG monde;
@@ -76,6 +73,7 @@ public class VueMondeIG extends Pane implements Observateur {
                     circle.setFill(Color.ORANGE);
                     break;
             }
+            circle.setVisible(true);
             circles.add(circle);
         }
         return circles;
@@ -101,32 +99,25 @@ public class VueMondeIG extends Pane implements Observateur {
                     }
                 }
             }
-            if(monde.getGestionnaireClients() != null) {
+
+            if (monde.getGestionnaireClients() != null) {
                 int id = 0;
-                Iterator<Client> iter = monde.getGestionnaireClients().iterator();
-                while (iter.hasNext()) {
-                    Client client = iter.next();
-                    EtapeIG etp = monde.getCorrespondance().getIG(client.getEtapeActuelle());
+                for (Client client : monde.getGestionnaireClients()) {
+                    EtapeIG etp = monde.getCorrespondance().getEtapeIG(client.getEtapeActuelle());
                     if (etp != null) {
-                        if (etp.estUneActivite()) {
+                        if (etp.estUneActivite() || etp.estUneSortie()) {
                             ActiviteIG a = (ActiviteIG) etp;
                             Random random = new Random();
-                            if(client.getEtapeActuelle().estUneSortie()) {
-                                System.out.println("SORTIE SORTIE SORTIE SORTIE SORTIE");
-                                clients.get(id).setCenterX(0);
-                                clients.get(id).setCenterY(0);
-                            } else {
-                                int randomX = random.nextInt(210);
-                                int randomY = random.nextInt(55);
-                                int x = a.getX() + 20 + randomX;
-                                int y = a.getY() + 35 + randomY;
-                                clients.get(id).setCenterX(x);
-                                clients.get(id).setCenterY(y);
-                            }
+                            int randomX = random.nextInt(210);
+                            int randomY = random.nextInt(55);
+                            System.out.println(client.getEtapeActuelle());
+                            int x = a.getX() + 20 + randomX;
+                            int y = a.getY() + 35 + randomY;
+                            clients.get(id).setCenterX(x);
+                            clients.get(id).setCenterY(y);
+                            clients.get(id).setVisible(true);
                             id++;
-                        }
-                        if (etp.estUnGuichet()) {
-                            assert etp instanceof GuichetIG;
+                        } else if (etp.estUnGuichet()) {
                             GuichetIG a = (GuichetIG) etp;
                             int mult = client.getRang();
                             if (mult > 8) {
@@ -136,6 +127,7 @@ public class VueMondeIG extends Pane implements Observateur {
                             int y = a.getY() + 40;
                             clients.get(id).setCenterX(x);
                             clients.get(id).setCenterY(y);
+                            clients.get(id).setVisible(true);
                             id++;
                         }
                     }
@@ -144,18 +136,17 @@ public class VueMondeIG extends Pane implements Observateur {
 
             arcs = new ArrayList<>();
             monde.refreshArcs();
-            for (Iterator<ArcIG> it = monde.arcs(); it.hasNext(); ) {
+            for(Iterator<ArcIG> it = monde.arcs(); it.hasNext(); ) {
                 ArcIG arc = it.next();
                 arcs.add(new VueArcIG(monde, arc));
             }
 
-            for (VueActiviteIG activite : activites) {
+            for(VueActiviteIG activite : activites) {
                 activite.relocate(activite.getX(), activite.getY());
             }
-            for (VueGuichetIG vueGuichetIG : guichets) {
+            for(VueGuichetIG vueGuichetIG : guichets) {
                 vueGuichetIG.relocate(vueGuichetIG.getX(), vueGuichetIG.getY());
             }
-
             getChildren().addAll(arcs);
             getChildren().addAll(activites);
             getChildren().addAll(guichets);

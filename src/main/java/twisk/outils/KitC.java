@@ -1,5 +1,7 @@
 package twisk.outils;
 
+import twisk.simulation.Simulation;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -57,5 +59,9 @@ public class KitC {
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void stopAllProcesses(Simulation simulation) {
+        simulation.nettoyage();
     }
 }

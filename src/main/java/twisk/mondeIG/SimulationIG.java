@@ -130,8 +130,8 @@ public class SimulationIG implements Observateur {
         Iterator<EtapeIG[]> iterLiason = monde.iteratorliaison(); // adding next steps
         while(iterLiason.hasNext()) {
             EtapeIG[] liaison = iterLiason.next();
-            Etape etape1 = correspondances.get(liaison[0]);
-            Etape etape2 = correspondances.get(liaison[1]);
+            Etape etape1 = correspondances.getEtape(liaison[0]);
+            Etape etape2 = correspondances.getEtape(liaison[1]);
             etape1.ajouterSuccesseur(etape2);
         }
         this.monde.setCorrespondance(correspondances);
@@ -148,11 +148,7 @@ public class SimulationIG implements Observateur {
         Constructor<?> constr = cl.getConstructor();
         Object o = constr.newInstance();
         SimulationIG sIG = this;
-//        if(simulation) {
-//            // simulation.stop
-//        } else {
-//            simulation = true;
-//        }
+
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() throws Exception {
