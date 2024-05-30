@@ -5,6 +5,7 @@ import twisk.exceptions.MondeException;
 
 import twisk.outils.CorrespondancesEtapes;
 import twisk.outils.MutableBoolean;
+import twisk.outils.TailleComposants;
 import twisk.simulation.GestionnaireClients;
 
 import java.lang.reflect.InvocationTargetException;
@@ -401,7 +402,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     }
 
     public void setNbClients(int nbClients) throws MondeException {
-        if(nbClients >= 50) {
+        if(nbClients > TailleComposants.getInstance().getClientsW()/10) {
             throw new MondeException("Trop de clients");
         } else {
             this.nbClients = nbClients;

@@ -9,7 +9,7 @@ public class VueClient extends Circle {
 
 
     public VueClient(Client client) {
-        super(5);
+        super(7);
         this.client = client;
         switch (client.getColor()) {
             case 0:

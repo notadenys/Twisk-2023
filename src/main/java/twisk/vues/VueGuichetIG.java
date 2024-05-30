@@ -76,7 +76,9 @@ public class VueGuichetIG extends VueEtapeIG implements Observateur{
             Iterator<VueClient> clientIterator = this.iterator();
             while (clientIterator.hasNext()) {
                 VueClient client = clientIterator.next();
-                ((StackPane)grid.getChildren().get(client.getRang()-1)).getChildren().add(client);
+                if (client.getRang() <= 10) {
+                    ((StackPane)grid.getChildren().get(client.getRang()-1)).getChildren().add(client);
+                }
             }
 
             getChildren().add(grid);

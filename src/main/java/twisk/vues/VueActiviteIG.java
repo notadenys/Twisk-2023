@@ -28,6 +28,7 @@ public class VueActiviteIG extends VueEtapeIG {
                 "-fx-background-insets: 0 0 -1 0, 0, 1, 2; " +
                 "-fx-background-radius: 3px, 3px, 2px, 1px;");
         clientWindow.setMinSize(TailleComposants.getInstance().getClientsW(), TailleComposants.getInstance().getClientsH());
+        clientWindow.setSpacing(3);
 
         reagir();
     }
