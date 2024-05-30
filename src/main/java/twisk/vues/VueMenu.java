@@ -71,7 +71,7 @@ public class VueMenu extends MenuBar implements Observateur {
                 monde.deselectionner();
             } catch (TwiskException exc){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
+                alert.setTitle("Erreur");
                 alert.setHeaderText(null);
                 alert.setContentText(exc.getMessage());
                 PauseTransition pause = new PauseTransition(Duration.seconds(3));
@@ -92,7 +92,7 @@ public class VueMenu extends MenuBar implements Observateur {
                 monde.deselectionner();
             } catch (TwiskException exc){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
+                alert.setTitle("Erreur");
                 alert.setHeaderText(null);
                 alert.setContentText(exc.getMessage());
                 PauseTransition pause = new PauseTransition(Duration.seconds(3));

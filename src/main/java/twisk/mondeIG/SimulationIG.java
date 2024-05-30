@@ -22,6 +22,15 @@ public class SimulationIG implements Observateur {
 
     // verifie le monde pour repondre a toutes les contraintes
     private void verifierMondeIG() throws MondeException {
+
+        // pas d'entrees
+        if (monde.getEntrees().isEmpty())
+            throw new MondeException("Il n'y a aucun entree defini");
+
+        // pas de sorties
+        if (monde.getSorties().isEmpty())
+            throw new MondeException("Il n'y a aucun sortie defini");
+
         // etapes deconnectees
         for (EtapeIG etape : monde.getEtapes())
         {
@@ -31,14 +40,6 @@ public class SimulationIG implements Observateur {
             if (etape.getSuccesseurs().isEmpty() && !etape.estUneSortie())
                 throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de successeurs");
         }
-
-        // pas d'entrees
-        if (monde.getEntrees().isEmpty())
-            throw new MondeException("Il n'y a aucun entree defini");
-
-        // pas de sorties
-        if (monde.getSorties().isEmpty())
-            throw new MondeException("Il n'y a aucun sortie defini");
 
         // guichets ont mauvais nombre de successeurs
         for (GuichetIG guichet : monde.getGuichets()) {
