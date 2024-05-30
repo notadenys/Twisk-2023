@@ -1,12 +1,10 @@
 package twisk.mondeIG;
 
-import twisk.exceptions.ArcException;
+import javafx.scene.control.Alert;
 import twisk.exceptions.MondeException;
-
 import twisk.outils.CorrespondancesEtapes;
 import twisk.outils.MutableBoolean;
 import twisk.simulation.GestionnaireClients;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -21,7 +19,6 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     private final ArrayList<EtapeIG[]> liaisons;
     private GestionnaireClients gestionnaireClients;
     private CorrespondancesEtapes correspondance;
-    private SimulationIG sim;
     private MutableBoolean simulationInProgress;
 
     public MondeIG()
@@ -139,37 +136,22 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         return activites;
     }
 
-    /**
-     * @return all the limited activities
-     */
-    public ArrayList<ActiviteIG> getActivitesRestraintes()
-    {
-        ArrayList<ActiviteIG> activites = new ArrayList<>();
-        for (ActiviteIG activite : getActivites())
-        {
-            if (activite.isRestrainte())
-            {
-                activites.add(activite);
-            }
-        }
-        return activites;
-    }
 
     /* Contraintes pour les arcs
     - Meme etape
     - Meme chemin
      */
-    public void ajouter(String point1, String point2) throws ArcException {
+    public void ajouter(String point1, String point2) {
         PointDeControleIG p1 = getPoint(point1);
         PointDeControleIG p2 = getPoint(point2);
 
         if (p1.getEtape() == p2.getEtape() && p1 != p2)
         {
-            throw new ArcException("Impossible d'ajouter l'arc sur le meme etape");
+            showErrorAlert("Impossible d'ajouter l'arc sur le meme etape");
         }
         else if (p1.getEtape().getSuccesseurs().contains(p2.getEtape()) || p2.getEtape().getSuccesseurs().contains(p1.getEtape()))
         {
-            throw new ArcException("Impossible d'ajouter l'arc sur etape : deja connecte");
+            showErrorAlert("Impossible d'ajouter l'arc sur etape : deja connecte");
         }
         else if (p1 == p2)  // deuxieme click sur le point va desactiver le selection
         {
@@ -346,8 +328,8 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         return arcs.iterator();
     }
 
-    public void simuler() throws MondeException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        sim = new SimulationIG(this);
+    public void simuler() throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, MondeException {
+        SimulationIG sim = new SimulationIG(this);
         sim.simuler();
     }
 
@@ -395,5 +377,12 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
 
     public void setCorrespondance(CorrespondancesEtapes correspondance) {
         this.correspondance = correspondance;
+    }
+
+    private void showErrorAlert(String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur d'arc");
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
