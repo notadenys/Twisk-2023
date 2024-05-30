@@ -67,7 +67,7 @@ public class VueOutils extends TilePane implements Observateur{
             imageViewPlay.setFitWidth(50);
             play = new Button("Lancer", imageViewPlay);
             play.setOnAction(e -> {
-                if(!monde.isSimulationInProgress()) {
+                if(monde.isSimulationStopped()) {
                     try {
                         monde.simuler();
                     } catch (MondeException ex) {
@@ -106,7 +106,7 @@ public class VueOutils extends TilePane implements Observateur{
     public void reagir() {
         Runnable command = () -> {
             getChildren().clear();
-            if (!monde.isSimulationInProgress()) {
+            if (monde.isSimulationStopped()) {
                 play.setGraphic(imageViewPlay);
                 play.setText("Lancer");
             }

@@ -15,15 +15,17 @@ import java.util.Random;
 
 public class VueMondeIG extends Pane implements Observateur {
     private final MondeIG monde;
-    private ArrayList<VueActiviteIG> activites;
-    private ArrayList<VueGuichetIG> guichets;
-    private ArrayList<VuePointDeControleIG> points;
-    private ArrayList<VueArcIG> arcs;
-    private ArrayList<Circle> clients;
+    private final ArrayList<VueActiviteIG> activites;
+    private final ArrayList<VueGuichetIG> guichets;
+    private final ArrayList<VuePointDeControleIG> points;
+    private final ArrayList<VueArcIG> arcs;
 
     public VueMondeIG(MondeIG monde) {
         this.monde = monde;
-        this.clients = createClients();
+        activites = new ArrayList<>();
+        guichets = new ArrayList<>();
+        points = new ArrayList<>();
+        arcs = new ArrayList<>();
         monde.ajouterObservateur(this);
 
         setOnDragOver((DragEvent event) -> {
@@ -50,91 +52,44 @@ public class VueMondeIG extends Pane implements Observateur {
         reagir();
     }
 
-    private ArrayList<Circle> createClients() {
-        ArrayList<Circle> circles = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            Random random = new Random();
-            int color = random.nextInt(5);
-            Circle circle = new Circle(5);
-            switch (color) {
-                case 0:
-                    circle.setFill(Color.RED);
-                    break;
-                case 1:
-                    circle.setFill(Color.GREENYELLOW);
-                    break;
-                case 2:
-                    circle.setFill(Color.BLUE);
-                    break;
-                case 3:
-                    circle.setFill(Color.MAGENTA);
-                    break;
-                case 4:
-                    circle.setFill(Color.ORANGE);
-                    break;
+    private void setUpClients(VueEtapeIG etapeIG) {
+        if (!monde.isSimulationStopped()) {
+            for (Client client : monde.getGestionnaireClients()) {
+                    if (client.getEtapeActuelle() != null) {
+                        if (client.getEtapeActuelle().getNom().equals(etapeIG.getEtape().getNom())) {
+                            etapeIG.add(new VueClient(client));
+                        }
+                    }
             }
-            circle.setVisible(true);
-            circles.add(circle);
         }
-        return circles;
     }
 
     public void reagir() {
         Runnable command = () -> {
             getChildren().clear();
-            activites = new ArrayList<>();
-            guichets = new ArrayList<>();
-            points = new ArrayList<>();
+            activites.clear();
+            guichets.clear();
+            points.clear();
             for (Map.Entry<Integer, EtapeIG> etapeMap : monde) {
                 EtapeIG etape = etapeMap.getValue();
                 if (etape.estUneActivite()) {
-                    activites.add(new VueActiviteIG(monde, etape));
+                    VueActiviteIG activite = new VueActiviteIG(monde, etape);
+                    setUpClients(activite);
+                    activites.add(activite);
                     for (PointDeControleIG point : etape) {
                         points.add(new VuePointDeControleIG(monde, point));
                     }
                 } else if (etape.estUnGuichet()) {
-                    guichets.add(new VueGuichetIG(monde, etape));
+                    VueGuichetIG guichet = new VueGuichetIG(monde, etape);
+                    setUpClients(guichet);
+                    guichets.add(guichet);
                     for (PointDeControleIG point : etape) {
                         points.add(new VuePointDeControleIG(monde, point));
                     }
                 }
             }
 
-            if (monde.getGestionnaireClients() != null) {
-                int id = 0;
-                for (Client client : monde.getGestionnaireClients()) {
-                    EtapeIG etp = monde.getCorrespondance().getEtapeIG(client.getEtapeActuelle());
-                    if (etp != null) {
-                        if (etp.estUneActivite() || etp.estUneSortie()) {
-                            ActiviteIG a = (ActiviteIG) etp;
-                            Random random = new Random();
-                            int randomX = random.nextInt(210);
-                            int randomY = random.nextInt(55);
-                            System.out.println(client.getEtapeActuelle());
-                            int x = a.getX() + 20 + randomX;
-                            int y = a.getY() + 35 + randomY;
-                            clients.get(id).setCenterX(x);
-                            clients.get(id).setCenterY(y);
-                            clients.get(id).setVisible(true);
-                            id++;
-                        } else if (etp.estUnGuichet()) {
-                            GuichetIG a = (GuichetIG) etp;
-                            int mult = client.getRang();
-                            if (mult > 8) {
-                                mult = 8;
-                            }
-                            int x = a.getX() + 200 - (22 * mult);
-                            int y = a.getY() + 40;
-                            clients.get(id).setCenterX(x);
-                            clients.get(id).setCenterY(y);
-                            clients.get(id).setVisible(true);
-                            id++;
-                        }
-                    }
-                }
-            }
-
-            arcs = new ArrayList<>();
+            arcs.clear();
             monde.refreshArcs();
             for(Iterator<ArcIG> it = monde.arcs(); it.hasNext(); ) {
                 ArcIG arc = it.next();
@@ -151,7 +106,6 @@ public class VueMondeIG extends Pane implements Observateur {
             getChildren().addAll(activites);
             getChildren().addAll(guichets);
             getChildren().addAll(points);
-            getChildren().addAll(clients);
         };
 
         if (Platform.isFxApplicationThread()) {

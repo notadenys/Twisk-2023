@@ -148,7 +148,7 @@ public class SimulationIG implements Observateur {
             @Override
             protected Void call() throws Exception {
                 Method setNbClients = cl.getMethod("setNbClients", int.class);
-                setNbClients.invoke(o, 5);
+                setNbClients.invoke(o, 10);
                 Method ajouterObservateur = cl.getMethod("ajouterObservateur", Observateur.class);
                 ajouterObservateur.invoke(o, sIG);
                 Method getGestionnaireClients = cl.getMethod("getGestionnaireClients");
@@ -166,7 +166,6 @@ public class SimulationIG implements Observateur {
 
     @Override
     public void reagir() {
-        System.out.println(monde.isSimulationInProgress());
         monde.notifierObservateurs();
     }
 }

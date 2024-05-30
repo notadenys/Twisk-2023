@@ -12,6 +12,9 @@ import twisk.mondeIG.EtapeIG;
 import twisk.mondeIG.MondeIG;
 import twisk.outils.TailleComposants;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 
 public abstract class VueEtapeIG extends VBox implements Observateur{
     private final MondeIG monde;
@@ -19,13 +22,13 @@ public abstract class VueEtapeIG extends VBox implements Observateur{
     private final Label label;
     private final int x;
     private final int y;
-    private int largeur;
-    private int hauteur;
+    private ArrayList<VueClient> clients;
 
     public VueEtapeIG(MondeIG monde, EtapeIG etape)
     {
         this.monde = monde;
         this.etape = etape;
+        clients = new ArrayList<>();
         x = etape.getX();
         y = etape.getY();
         label = new Label(this.etape.toString());
@@ -65,5 +68,14 @@ public abstract class VueEtapeIG extends VBox implements Observateur{
 
     public EtapeIG getEtape() {
         return etape;
+    }
+
+    public void add(VueClient client) {
+        clients.add(client);
+        reagir();
+    }
+
+    public Iterator<VueClient> iterator() {
+        return clients.iterator();
     }
 }
