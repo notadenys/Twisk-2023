@@ -353,8 +353,8 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         this.gestionnaireClients = gestionnaireClients;
     }
 
-    public boolean isSimulationInProgress() {
-        return simulationInProgress.getValue();
+    public boolean isSimulationStopped() {
+        return !simulationInProgress.getValue();
     }
 
     public void setSimulationInProgress(MutableBoolean simulationInProgress) {

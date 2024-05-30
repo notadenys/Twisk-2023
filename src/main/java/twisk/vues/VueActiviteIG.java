@@ -12,6 +12,8 @@ import twisk.outils.TailleComposants;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Iterator;
+import java.util.Random;
 
 public class VueActiviteIG extends VueEtapeIG {
     private final HBox clientWindow;
@@ -26,6 +28,7 @@ public class VueActiviteIG extends VueEtapeIG {
                 "-fx-background-insets: 0 0 -1 0, 0, 1, 2; " +
                 "-fx-background-radius: 3px, 3px, 2px, 1px;");
         clientWindow.setMinSize(TailleComposants.getInstance().getClientsW(), TailleComposants.getInstance().getClientsH());
+
         reagir();
     }
 
@@ -72,6 +75,17 @@ public class VueActiviteIG extends VueEtapeIG {
             }
             setPrefHeight(getEtape().getHauteur());
             getChildren().add(getLabel());
+
+            clientWindow.getChildren().clear();
+            Iterator<VueClient> clientIterator = this.iterator();
+            while (clientIterator.hasNext()) {
+                VueClient client = clientIterator.next();
+                Random random = new Random();
+                client.setCenterX(random.nextInt(TailleComposants.getInstance().getClientsW()));
+                client.setCenterY(random.nextInt(TailleComposants.getInstance().getClientsH()));
+                clientWindow.getChildren().add(client);
+            }
+
             getChildren().add(clientWindow);
             getChildren().add(es);
 
