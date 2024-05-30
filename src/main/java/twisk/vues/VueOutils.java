@@ -2,6 +2,7 @@ package twisk.vues;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -70,16 +71,9 @@ public class VueOutils extends TilePane implements Observateur{
                 if(monde.isSimulationStopped()) {
                     try {
                         monde.simuler();
-                    } catch (MondeException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (InvocationTargetException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (NoSuchMethodException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (InstantiationException ex) {
-                        throw new RuntimeException(ex);
+                    } catch (MondeException | ClassNotFoundException | InvocationTargetException |
+                             NoSuchMethodException | InstantiationException ex) {
+                        showErrorAlert(ex.getMessage());
                     } catch (IllegalAccessException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -120,4 +114,12 @@ public class VueOutils extends TilePane implements Observateur{
             Platform.runLater(command);
         }
     }
+
+    private void showErrorAlert(String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
 }

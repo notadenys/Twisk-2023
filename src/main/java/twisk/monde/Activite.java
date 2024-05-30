@@ -3,53 +3,70 @@ package twisk.monde;
 import javax.naming.InvalidNameException;
 import java.util.Iterator;
 
+/**
+ * Represents an activity step in the workflow.
+ */
 public class Activite extends Etape {
     protected int temps = 0;
     protected int ecartTemps = 0;
+
     /**
-     * @param nom name of activity
+     * Constructor for creating an activity with a given name.
+     *
+     * @param nom the name of the activity.
+     * @throws InvalidNameException if the name is invalid.
      */
     public Activite(String nom) throws InvalidNameException {
         super(nom);
     }
+
     /**
-     * @param nom name of activity
-     * @param temps time on activity
-     * @param ecartTemps +- time on activity
+     * Constructor for creating an activity with a given name, time, and time variance.
+     *
+     * @param nom       the name of the activity.
+     * @param temps     the duration of the activity.
+     * @param ecartTemps the variance in the duration of the activity.
      */
-    public Activite(String nom, int temps, int ecartTemps){
+    public Activite(String nom, int temps, int ecartTemps) {
         super(nom);
         this.temps = temps;
         this.ecartTemps = ecartTemps;
     }
 
+    /**
+     * Checks if this step is an activity.
+     *
+     * @return true if it is an activity, false otherwise.
+     */
+    @Override
     public boolean estUneActivite() {
         return true;
     }
 
+    /**
+     * Checks if this step is a guichet (booth).
+     *
+     * @return false as this is not a guichet.
+     */
+    @Override
     public boolean estUnGuichet() {
         return false;
     }
+
+    /**
+     * Checks if this step is a sortie (exit).
+     *
+     * @return false as this is not a sortie.
+     */
+    @Override
     public boolean estUneSortie() {
         return false;
     }
 
     /**
-     * @return time of activity
-     */
-    public int getTemps() {
-        return temps;
-    }
-
-    /**
-     * @return +- to time of activity
-     */
-    public int getEcartTemps() {
-        return ecartTemps;
-    }
-
-    /**
-     * @return code C of activity step
+     * Generates the C code representation of the activity step.
+     *
+     * @return the C code as a String.
      */
     @Override
     public String toC() {
@@ -88,21 +105,34 @@ public class Activite extends Etape {
 
             str.append(successeur.toC());
         }
-        return str.toString() ;
+        return str.toString();
     }
 
+    /**
+     * Gets the constant name representation of the activity.
+     *
+     * @return the constant name.
+     */
     @Override
-    public String getConstNom()
-    {
+    public String getConstNom() {
         return getModifiedNom().toUpperCase();
     }
 
+    /**
+     * Gets the define directive for the activity.
+     *
+     * @return the define directive as a String.
+     */
     @Override
-    public String toDefine()
-    {
+    public String toDefine() {
         return "#define " + getConstNom() + " " + getNum();
     }
 
+    /**
+     * Checks if this activity is a restricted activity.
+     *
+     * @return false as this is not a restricted activity.
+     */
     public boolean estUneActiviteRestreinte() {
         return false;
     }
