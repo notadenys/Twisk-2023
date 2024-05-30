@@ -9,13 +9,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Represents a subject that can be observed by observers.
  */
 public class SujetObserve {
-    private final ArrayList<Observateur> observateurs;
+    private final CopyOnWriteArrayList<Observateur> observateurs;
 
     /**
      * Constructs a new subject.
      */
     public SujetObserve() {
-        this.observateurs = new ArrayList<>();
+        this.observateurs = new CopyOnWriteArrayList<>();
     }
 
     /**
