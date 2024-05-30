@@ -171,10 +171,13 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         {
             throw new ArcException("Impossible d'ajouter l'arc sur etape : deja connecte");
         }
-        else if (p1 == p2)  // deuxieme click sur le point va desactiver le selection
+        else if (p1 == p2)
         {
             setEnAttente(false);
             notifierObservateurs();
+        }
+        else if (estAccessibleDepuis(p1.getEtape(), p2.getEtape())) {
+            throw new ArcException("Impossible d'ajouter l'arc : cela créerait une boucle");
         }
         else
         {
@@ -395,5 +398,25 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
 
     public void setCorrespondance(CorrespondancesEtapes correspondance) {
         this.correspondance = correspondance;
+    }
+
+    public boolean estAccessibleDepuis(EtapeIG candidat, EtapeIG racine) {
+        Set<EtapeIG> visited = new HashSet<>();
+        return dfs(racine, candidat, visited);
+    }
+
+    private boolean dfs(EtapeIG current, EtapeIG candidat, Set<EtapeIG> visited) {
+        if (current == candidat) {
+            return true;
+        }
+        visited.add(current);
+        for (EtapeIG successor : current.getSuccesseurs()) {
+            if (!visited.contains(successor)) {
+                if (dfs(successor, candidat, visited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
