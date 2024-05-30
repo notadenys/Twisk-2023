@@ -7,7 +7,6 @@ import twisk.monde.*;
 import twisk.outils.*;
 import twisk.simulation.GestionnaireClients;
 import twisk.vues.Observateur;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,7 +23,7 @@ public class SimulationIG implements Observateur {
     }
 
     // verifies the world for all constraints
-    private void verifierMondeIG() throws MondeException {
+    private void verifierMondeIG() {
         // check disconnected steps
         for (EtapeIG etape : monde.getEtapes()) {
             if (etape.getPredecesseurs().isEmpty() && !etape.estUneEntree()) {
