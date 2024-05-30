@@ -10,22 +10,28 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import twisk.mondeIG.EtapeIG;
 import twisk.mondeIG.MondeIG;
-import twisk.outils.TailleComposants;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public abstract class VueEtapeIG extends VBox implements Observateur{
+/**
+ * Represents an abstract graphical view of an EtapeIG.
+ */
+public abstract class VueEtapeIG extends VBox implements Observateur {
     private final MondeIG monde;
     private final EtapeIG etape;
     private final Label label;
     private final int x;
     private final int y;
-    private ArrayList<VueClient> clients;
+    private final ArrayList<VueClient> clients;
 
-    public VueEtapeIG(MondeIG monde, EtapeIG etape)
-    {
+    /**
+     * Constructs a new VueEtapeIG.
+     *
+     * @param monde The MondeIG associated with the VueEtapeIG.
+     * @param etape The EtapeIG represented by the VueEtapeIG.
+     */
+    public VueEtapeIG(MondeIG monde, EtapeIG etape) {
         this.monde = monde;
         this.etape = etape;
         clients = new ArrayList<>();
@@ -54,18 +60,47 @@ public abstract class VueEtapeIG extends VBox implements Observateur{
         });
     }
 
-    public Label getLabel(){return label;}
+    /**
+     * Gets the label associated with the VueEtapeIG.
+     *
+     * @return The label.
+     */
+    public Label getLabel() {
+        return label;
+    }
+
+    /**
+     * Gets the x-coordinate of the VueEtapeIG.
+     *
+     * @return The x-coordinate.
+     */
     public int getX() {
         return x;
     }
+
+    /**
+     * Gets the y-coordinate of the VueEtapeIG.
+     *
+     * @return The y-coordinate.
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Gets the MondeIG associated with the VueEtapeIG.
+     *
+     * @return The MondeIG.
+     */
     public MondeIG getMonde() {
         return monde;
     }
 
+    /**
+     * Gets the EtapeIG represented by the VueEtapeIG.
+     *
+     * @return The EtapeIG.
+     */
     public EtapeIG getEtape() {
         return etape;
     }

@@ -20,9 +20,8 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     private boolean isEnAttente;
     private final ArrayList<EtapeIG[]> liaisons;
     private GestionnaireClients gestionnaireClients;
-    private CorrespondancesEtapes correspondance;
-    private SimulationIG sim;
     private MutableBoolean simulationInProgress;
+    private int nbClients;
 
     public MondeIG()
     {
@@ -34,6 +33,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         arcsSelectionnes = new ArrayList<>();
         liaisons = new ArrayList<>();
         gestionnaireClients = new GestionnaireClients();
+        nbClients = 7;
     }
 
     public void ajouter(ActiviteIG activite)
@@ -139,22 +139,6 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         return activites;
     }
 
-    /**
-     * @return all the limited activities
-     */
-    public ArrayList<ActiviteIG> getActivitesRestraintes()
-    {
-        ArrayList<ActiviteIG> activites = new ArrayList<>();
-        for (ActiviteIG activite : getActivites())
-        {
-            if (activite.isRestrainte())
-            {
-                activites.add(activite);
-            }
-        }
-        return activites;
-    }
-
     /* Contraintes pour les arcs
     - Meme etape
     - Meme chemin
@@ -171,10 +155,13 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         {
             throw new ArcException("Impossible d'ajouter l'arc sur etape : deja connecte");
         }
-        else if (p1 == p2)  // deuxieme click sur le point va desactiver le selection
+        else if (p1 == p2)
         {
             setEnAttente(false);
             notifierObservateurs();
+        }
+        else if (estAccessibleDepuis(p1.getEtape(), p2.getEtape())) {
+            throw new ArcException("Impossible d'ajouter l'arc : cela créerait une boucle");
         }
         else
         {
@@ -347,7 +334,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     }
 
     public void simuler() throws MondeException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        sim = new SimulationIG(this);
+        SimulationIG sim = new SimulationIG(this);
         sim.simuler();
     }
 
@@ -391,6 +378,37 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     }
 
     public void setCorrespondance(CorrespondancesEtapes correspondance) {
-        this.correspondance = correspondance;
+    }
+
+    public boolean estAccessibleDepuis(EtapeIG candidat, EtapeIG racine) {
+        Set<EtapeIG> visited = new HashSet<>();
+        return dfs(racine, candidat, visited);
+    }
+
+    public boolean dfs(EtapeIG current, EtapeIG candidat, Set<EtapeIG> visited) {
+        if (current == candidat) {
+            return true;
+        }
+        visited.add(current);
+        for (EtapeIG successor : current.getSuccesseurs()) {
+            if (!visited.contains(successor)) {
+                if (dfs(successor, candidat, visited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void setNbClients(int nbClients) throws MondeException {
+        if(nbClients >= 50) {
+            throw new MondeException("Trop de clients");
+        } else {
+            this.nbClients = nbClients;
+        }
+    }
+
+    public int getNbClients() {
+        return nbClients;
     }
 }

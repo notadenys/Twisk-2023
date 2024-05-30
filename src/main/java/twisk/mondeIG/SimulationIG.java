@@ -22,15 +22,6 @@ public class SimulationIG implements Observateur {
 
     // verifie le monde pour repondre a toutes les contraintes
     private void verifierMondeIG() throws MondeException {
-        // etapes deconnectees
-        for (EtapeIG etape : monde.getEtapes())
-        {
-            if (etape.getPredecesseurs().isEmpty() && !etape.estUneEntree())
-                throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de predecesseurs)");
-
-            if (etape.getSuccesseurs().isEmpty() && !etape.estUneSortie())
-                throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de successeurs");
-        }
 
         // pas d'entrees
         if (monde.getEntrees().isEmpty())
@@ -46,6 +37,16 @@ public class SimulationIG implements Observateur {
         // pas de sorties
         if (monde.getSorties().isEmpty())
             throw new MondeException("Il n'y a aucun sortie defini");
+
+        // etapes deconnectees
+        for (EtapeIG etape : monde.getEtapes())
+        {
+            if (etape.getPredecesseurs().isEmpty() && !etape.estUneEntree())
+                throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de predecesseurs)");
+
+            if (etape.getSuccesseurs().isEmpty() && !etape.estUneSortie())
+                throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de successeurs");
+        }
 
         // check if exits have any successors
         for (EtapeIG etape : monde.getSorties()) {
@@ -162,7 +163,7 @@ public class SimulationIG implements Observateur {
             @Override
             protected Void call() throws Exception {
                 Method setNbClients = cl.getMethod("setNbClients", int.class);
-                setNbClients.invoke(o, 10);
+                setNbClients.invoke(o, monde.getNbClients());
                 Method ajouterObservateur = cl.getMethod("ajouterObservateur", Observateur.class);
                 ajouterObservateur.invoke(o, sIG);
                 Method getGestionnaireClients = cl.getMethod("getGestionnaireClients");
