@@ -23,7 +23,7 @@ public class SimulationIG implements Observateur {
     }
 
     // verifies the world for all constraints
-    private void verifierMondeIG() {
+    private void verifierMondeIG() throws MondeException {
         // check disconnected steps
         for (EtapeIG etape : monde.getEtapes()) {
             if (etape.getPredecesseurs().isEmpty() && !etape.estUneEntree()) {
@@ -45,11 +45,25 @@ public class SimulationIG implements Observateur {
             return;
         }
 
+        // check if entries have any predecessors
+        for (EtapeIG etape : monde.getEntrees()) {
+            if (!etape.getPredecesseurs().isEmpty()) {
+                throw new MondeException("Erreur de connexion. Entree " + etape.getNom() + " a des predecesseurs");
+            }
+        }
+
         // check if there are no exits
         if (monde.getSorties().isEmpty()) {
             showErrorAlert("Erreur de simulation", "Il n'y a aucune sortie définie");
             interruptSimulation();
             return;
+        }
+
+        // check if exits have any successors
+        for (EtapeIG etape : monde.getSorties()) {
+            if (!etape.getSuccesseurs().isEmpty()) {
+                throw new MondeException("Erreur de connexion. Sortie " + etape.getNom() + " a des successeurs");
+            }
         }
 
         // check guichets for incorrect number of successors
@@ -114,7 +128,7 @@ public class SimulationIG implements Observateur {
         }
     }
 
-    private Monde creerMonde() {
+    private Monde creerMonde() throws MondeException {
         verifierMondeIG();
         if (interrupted) {
             return null; // return null if the simulation was interrupted during verification
