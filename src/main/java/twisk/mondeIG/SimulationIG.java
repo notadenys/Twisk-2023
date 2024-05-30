@@ -1,6 +1,7 @@
 package twisk.mondeIG;
 
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
 import twisk.exceptions.MondeException;
 import twisk.monde.*;
 import twisk.outils.*;
@@ -15,72 +16,110 @@ import java.util.Map.Entry;
 
 public class SimulationIG implements Observateur {
     private final MondeIG monde;
+    private volatile boolean interrupted; // flag to indicate if the simulation should be interrupted
 
     public SimulationIG(MondeIG mondeIG) {
         monde = mondeIG;
+        interrupted = false;
     }
 
-    // verifie le monde pour repondre a toutes les contraintes
+    // verifies the world for all constraints
     private void verifierMondeIG() throws MondeException {
-        // etapes deconnectees
-        for (EtapeIG etape : monde.getEtapes())
-        {
-            if (etape.getPredecesseurs().isEmpty() && !etape.estUneEntree())
-                throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de predecesseurs)");
-
-            if (etape.getSuccesseurs().isEmpty() && !etape.estUneSortie())
-                throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de successeurs");
-        }
-
-        // pas d'entrees
-        if (monde.getEntrees().isEmpty())
-            throw new MondeException("Il n'y a aucun entree defini");
-
-        // pas de sorties
-        if (monde.getSorties().isEmpty())
-            throw new MondeException("Il n'y a aucun sortie defini");
-
-        // guichets ont mauvais nombre de successeurs
-        for (GuichetIG guichet : monde.getGuichets()) {
-            if (guichet.getSuccesseurs().isEmpty())
-                throw new MondeException("Guichet " + guichet.getNom() + " n'a pas de successeurs");
-            if (guichet.getSuccesseurs().size() > 1)
-                throw new MondeException("Guichet " + guichet.getNom() + " a plus que 1 successeur");
-            if (guichet.getSuccesseurs().get(0).estUnGuichet())
-                throw new MondeException("Guichet " + guichet.getNom() + " a un guichet comme successeur");
-        }
-
-        // mettre a jour les activites restraintes et verifier s'ils ont que 1 predecesseur
-        for (GuichetIG guichet : monde.getGuichets())
-        {
-            ActiviteIG activite = (ActiviteIG)guichet.getSuccesseurs().get(0);
-            activite.setRestrainte(true);
-            if (activite.getPredecesseurs().size() > 1)
-                throw new MondeException("Activite " + activite.getNom() + " a plus que 1 predecesseur");
-        }
-
-        // verifier si un ou plusieurs etapes ont les noms vides
+        // check disconnected steps
         for (EtapeIG etape : monde.getEtapes()) {
-            if (etape.getNom().isEmpty()) throw new MondeException("Un ou plusieurs etapes ont les noms vides");
+            if (etape.getPredecesseurs().isEmpty() && !etape.estUneEntree()) {
+                showErrorAlert("Erreur de connexion", "Etape " + etape.getNom() + " est deconnectee (pas de predecesseurs)");
+                interruptSimulation();
+                return;
+            }
+            if (etape.getSuccesseurs().isEmpty() && !etape.estUneSortie()) {
+                showErrorAlert("Erreur de connexion", "Etape " + etape.getNom() + " est deconnectee (pas de successeurs)");
+                interruptSimulation();
+                return;
+            }
         }
 
-        // verifier si un ou plusieurs activites ont les memes noms
+        // check if there are no entries
+        if (monde.getEntrees().isEmpty()) {
+            showErrorAlert("Erreur de simulation", "Il n'y a aucun entrée définie");
+            interruptSimulation();
+            return;
+        }
+
+        // check if there are no exits
+        if (monde.getSorties().isEmpty()) {
+            showErrorAlert("Erreur de simulation", "Il n'y a aucune sortie définie");
+            interruptSimulation();
+            return;
+        }
+
+        // check guichets for incorrect number of successors
+        for (GuichetIG guichet : monde.getGuichets()) {
+            if (guichet.getSuccesseurs().isEmpty()) {
+                showErrorAlert("Erreur de simulation", "Guichet " + guichet.getNom() + " n'a pas de successeurs");
+                interruptSimulation();
+                return;
+            }
+            if (guichet.getSuccesseurs().size() > 1) {
+                showErrorAlert("Erreur de simulation", "Guichet " + guichet.getNom() + " a plus que 1 successeur");
+                interruptSimulation();
+                return;
+            }
+            if (guichet.getSuccesseurs().get(0).estUnGuichet()) {
+                showErrorAlert("Erreur de simulation", "Guichet " + guichet.getNom() + " a un guichet comme successeur");
+                interruptSimulation();
+                return;
+            }
+        }
+
+        // update restrained activities and check if they have only 1 predecessor
+        for (GuichetIG guichet : monde.getGuichets()) {
+            ActiviteIG activite = (ActiviteIG) guichet.getSuccesseurs().get(0);
+            activite.setRestrainte(true);
+            if (activite.getPredecesseurs().size() > 1) {
+                showErrorAlert("Erreur de simulation", "Activite " + activite.getNom() + " a plus que 1 predecesseur");
+                interruptSimulation();
+                return;
+            }
+        }
+
+        // check if any steps have empty names
+        for (EtapeIG etape : monde.getEtapes()) {
+            if (etape.getNom().isEmpty()) {
+                showErrorAlert("Erreur de simulation", "Un ou plusieurs étapes ont des noms vides");
+                interruptSimulation();
+                return;
+            }
+        }
+
+        // check if any activities have duplicate names
         ArrayList<String> noms = new ArrayList<>();
         for (ActiviteIG activite : monde.getActivites()) {
-            if (noms.contains(activite.getNom())) throw new MondeException ("Etape " + activite.getNom() + " a un doublon");
+            if (noms.contains(activite.getNom())) {
+                showErrorAlert("Erreur de simulation", "Etape " + activite.getNom() + " a un doublon");
+                interruptSimulation();
+                return;
+            }
             noms.add(activite.getNom());
         }
 
-        // verifier si un ou plusieurs guichets ont les memes noms
+        // check if any guichets have duplicate names
         noms = new ArrayList<>();
         for (GuichetIG guichet : monde.getGuichets()) {
-            if (noms.contains(guichet.getNom())) throw new MondeException ("Etape " + guichet.getNom() + " a un doublon");
+            if (noms.contains(guichet.getNom())) {
+                showErrorAlert("Erreur de simulation", "Etape " + guichet.getNom() + " a un doublon");
+                interruptSimulation();
+                return;
+            }
             noms.add(guichet.getNom());
         }
     }
 
     private Monde creerMonde() throws MondeException {
         verifierMondeIG();
+        if (interrupted) {
+            return null; // return null if the simulation was interrupted during verification
+        }
         FabriqueNumero.getInstance().reset();
         Monde mondeSim = new Monde();
         CorrespondancesEtapes correspondances = new CorrespondancesEtapes();
@@ -123,7 +162,7 @@ public class SimulationIG implements Observateur {
             }
         }
         Iterator<EtapeIG[]> iterLiason = monde.iteratorliaison(); // adding next steps
-        while(iterLiason.hasNext()) {
+        while (iterLiason.hasNext()) {
             EtapeIG[] liaison = iterLiason.next();
             Etape etape1 = correspondances.getEtape(liaison[0]);
             Etape etape2 = correspondances.getEtape(liaison[1]);
@@ -133,9 +172,27 @@ public class SimulationIG implements Observateur {
         return mondeSim;
     }
 
-    public void simuler() throws MondeException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    private void showErrorAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 
-        Monde mondeSim = creerMonde();
+    private void interruptSimulation() {
+        interrupted = true; // set the interruption flag
+        monde.setSimulationInProgress(new MutableBoolean(false)); // indicate that the simulation is not in progress
+        ThreadsManager.getInstance().detruireTout(); // destroy all running threads
+        monde.notifierObservateurs(); // notify observers to update the UI
+    }
+
+    public void simuler() throws MondeException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        Monde mondeSim = creerMonde(); // create the simulation world
+
+        if (interrupted || mondeSim == null) {
+            System.out.println("Simulation interrupted or mondeSim is null");
+            return; // exit if the simulation was interrupted during the world creation phase
+        }
 
         System.gc();
         ClassLoaderPerso classLoader = new ClassLoaderPerso(SimulationIG.class.getClassLoader());
@@ -161,6 +218,7 @@ public class SimulationIG implements Observateur {
                 return null;
             }
         };
+
         ThreadsManager.getInstance().lancer(task);
     }
 
