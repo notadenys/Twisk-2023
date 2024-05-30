@@ -75,7 +75,7 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
 
                 notifierObservateurs();
 
-                Thread.sleep(1000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 System.out.println("INTERRUPTED");
                 stopSimulation();
@@ -100,6 +100,8 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
         notifierObservateurs();
     }
 
+    public MutableBoolean getInProgress() { return inProgress; }
+
     private int[] creationTabJeton(Monde monde) {
         int[] tab = new int[monde.nbEtapes()];
         Iterator<Etape> iterator = monde.iterator();
@@ -113,6 +115,10 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
             }
         }
         return tab;
+    }
+
+    public GestionnaireClients getGestionnaireClients() {
+        return gestClients;
     }
 
     public native int[] start_simulation(int nbEtapes, int nbGuichets, int nbClients, int[] tabJetonsGuichets);

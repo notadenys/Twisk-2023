@@ -1,6 +1,6 @@
 package twisk.mondeIG;
 
-import javafx.scene.control.Alert;
+import twisk.exceptions.TempsException;
 import twisk.outils.TailleComposants;
 
 public class ActiviteIG extends EtapeIG
@@ -28,20 +28,20 @@ public class ActiviteIG extends EtapeIG
         return ecartTemps;
     }
 
-    public void setTemps(int temps)
+    public void setTemps(int temps) throws TempsException
     {
         if (temps < ecartTemps) {
-            showErrorAlert("Erreur de temps", "Temps est plus petit que l'ecart de temps");
+            throw new TempsException("Temps est plus petit que l'ecart de temps");
         } else {
             this.temps = temps;
         }
 
     }
 
-    public void setEcartTemps(int ecart)
+    public void setEcartTemps(int ecart) throws TempsException
     {
         if (ecart > temps) {
-            showErrorAlert("Erreur de l'ecart de temps", "L'ecart de temps est plus grand que le temps");
+            throw new TempsException("L'ecart de temps est plus grand que le temps");
         } else {
             this.ecartTemps = ecart;
         }
@@ -59,13 +59,6 @@ public class ActiviteIG extends EtapeIG
     }
     public boolean estUneActivite() {
         return true;
-    }
-
-    private void showErrorAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     @Override

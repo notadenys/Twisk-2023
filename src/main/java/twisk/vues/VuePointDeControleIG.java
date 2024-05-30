@@ -1,8 +1,12 @@
 package twisk.vues;
 
+import javafx.animation.PauseTransition;
+import javafx.scene.control.Alert;
 import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
+import twisk.exceptions.TwiskException;
 import twisk.mondeIG.MondeIG;
 import twisk.mondeIG.PointDeControleIG;
 
@@ -28,7 +32,20 @@ public class VuePointDeControleIG extends Circle {
         setOnMouseClicked(e -> {
             if (monde.isEnAttente())
             {
-                monde.ajouter(monde.getPointMemorise().getId(), point.getId());
+                try {
+                    monde.ajouter(monde.getPointMemorise().getId(), point.getId());
+                }
+                catch (TwiskException exc){
+                    monde.setEnAttente(false);
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Liaison impossible");
+                    alert.setHeaderText(null);
+                    alert.setContentText(exc.getMessage());
+                    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                    pause.play();
+                    pause.setOnFinished(ev -> alert.close());
+                    alert.showAndWait();
+                }
             }
             else {
                 monde.setPointMemorise(point);
@@ -57,7 +74,21 @@ public class VuePointDeControleIG extends Circle {
         setOnDragDropped((DragEvent event) -> {
             Dragboard db = event.getDragboard();
             if (db.hasString()) {
-                monde.ajouter(db.getString(), point.getId());
+                try {
+                    monde.ajouter(db.getString(), point.getId());
+                }
+                catch (TwiskException exception)
+                {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Liaison impossible");
+                    alert.setHeaderText(null);
+                    alert.setContentText(exception.getMessage());
+                    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                    pause.play();
+                    pause.setOnFinished(ev -> alert.close());
+                    alert.showAndWait();
+                }
+
                 monde.setEnAttente(false);
                 monde.notifierObservateurs();
                 event.setDropCompleted(true);

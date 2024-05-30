@@ -8,6 +8,7 @@ import javafx.scene.layout.*;
 import twisk.mondeIG.EtapeIG;
 import twisk.mondeIG.MondeIG;
 import twisk.outils.TailleComposants;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
