@@ -114,7 +114,7 @@ public class SimulationIG implements Observateur {
         }
     }
 
-    private Monde creerMonde() throws MondeException {
+    private Monde creerMonde() {
         verifierMondeIG();
         if (interrupted) {
             return null; // return null if the simulation was interrupted during verification

@@ -1,6 +1,6 @@
 package twisk.mondeIG;
 
-import twisk.exceptions.JetonsException;
+import javafx.scene.control.Alert;
 import twisk.outils.TailleComposants;
 
 public class GuichetIG extends EtapeIG{
@@ -15,9 +15,14 @@ public class GuichetIG extends EtapeIG{
     }
 
     public int getNbJetons() {return nbJetons;}
-    public void setNbJetons(int nb) throws JetonsException
+    public void setNbJetons(int nb)
     {
-        if (nb < 1) throw new JetonsException("Invalid nombre de jetons");
+        if (nb < 1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de jetons");
+            alert.setContentText("Invalid nombre de jetons");
+            alert.showAndWait();
+        }
         nbJetons = nb;
     }
 

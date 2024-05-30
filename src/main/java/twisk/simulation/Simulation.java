@@ -13,7 +13,7 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
     private final KitC kitC;
     private int nbClients;
     private final GestionnaireClients gestClients;
-    private MutableBoolean inProgress;
+    private final MutableBoolean inProgress;
 
     public Simulation() {
         kitC = new KitC();
@@ -75,7 +75,7 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
 
                 notifierObservateurs();
 
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 System.out.println("INTERRUPTED");
                 stopSimulation();
@@ -100,8 +100,6 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
         notifierObservateurs();
     }
 
-    public MutableBoolean getInProgress() { return inProgress; }
-
     private int[] creationTabJeton(Monde monde) {
         int[] tab = new int[monde.nbEtapes()];
         Iterator<Etape> iterator = monde.iterator();
@@ -117,10 +115,6 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
         return tab;
     }
 
-    public GestionnaireClients getGestionnaireClients() {
-        return gestClients;
-    }
-
     public native int[] start_simulation(int nbEtapes, int nbGuichets, int nbClients, int[] tabJetonsGuichets);
     public native int[] ou_sont_les_clients(int nbEtapes, int nbClients);
     public native void nettoyage();
@@ -128,14 +122,5 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
     @Override
     public Iterator<Client> iterator() {
         return gestClients.iterator();
-    }
-
-    public GestionnaireClients getGestClients() {
-        if (gestClients == null) {
-            System.out.println("GestClient IS empty");
-        } else {
-            System.out.println("GestClient is NOT empty");
-        }
-        return gestClients;
     }
 }
