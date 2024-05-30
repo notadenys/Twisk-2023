@@ -39,4 +39,8 @@ public final class ThreadsManager {
             thread.interrupt();
         }
     }
+
+    public boolean isEmpty() {
+        return threads.isEmpty();
+    }
 }
