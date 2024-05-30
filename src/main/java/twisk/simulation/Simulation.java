@@ -75,7 +75,7 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
 
                 notifierObservateurs();
 
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 System.out.println("INTERRUPTED");
                 stopSimulation();

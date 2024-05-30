@@ -52,7 +52,7 @@ public class VueMondeIG extends Pane implements Observateur {
 
     private ArrayList<Circle> createClients() {
         ArrayList<Circle> circles = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < monde.getNbClients(); i++) {
             Random random = new Random();
             int color = random.nextInt(5);
             Circle circle = new Circle(5);

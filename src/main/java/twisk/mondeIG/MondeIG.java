@@ -23,6 +23,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
     private CorrespondancesEtapes correspondance;
     private SimulationIG sim;
     private MutableBoolean simulationInProgress;
+    private int nbClients;
 
     public MondeIG()
     {
@@ -34,6 +35,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         arcsSelectionnes = new ArrayList<>();
         liaisons = new ArrayList<>();
         gestionnaireClients = new GestionnaireClients();
+        nbClients = 7;
     }
 
     public void ajouter(ActiviteIG activite)
@@ -405,7 +407,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
         return dfs(racine, candidat, visited);
     }
 
-    private boolean dfs(EtapeIG current, EtapeIG candidat, Set<EtapeIG> visited) {
+    public boolean dfs(EtapeIG current, EtapeIG candidat, Set<EtapeIG> visited) {
         if (current == candidat) {
             return true;
         }
@@ -418,5 +420,17 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
             }
         }
         return false;
+    }
+
+    public void setNbClients(int nbClients) throws MondeException {
+        if(nbClients >= 50) {
+            throw new MondeException("Trop de clients");
+        } else {
+            this.nbClients = nbClients;
+        }
+    }
+
+    public int getNbClients() {
+        return nbClients;
     }
 }

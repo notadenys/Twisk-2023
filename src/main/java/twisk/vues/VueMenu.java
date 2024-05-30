@@ -4,6 +4,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.util.Duration;
+import twisk.exceptions.MondeException;
 import twisk.exceptions.TwiskException;
 import twisk.mondeIG.*;
 
@@ -19,6 +20,7 @@ public class VueMenu extends MenuBar implements Observateur {
     private final MenuItem delai;
     private final MenuItem ecart;
     private final MenuItem jetons;
+    private final MenuItem clients;
 
     public VueMenu(MondeIG monde)
     {
@@ -123,11 +125,31 @@ public class VueMenu extends MenuBar implements Observateur {
             }
         });
 
+        clients = new MenuItem("Changer le nombre de clients");
+        clients.setOnAction(e -> {
+                    TextInputDialog input = new TextInputDialog();
+                    input.setHeaderText("Entrez le nombre de clients");
+                    input.showAndWait();
+                    try {
+                        monde.setNbClients(Integer.parseInt(input.getEditor().getText()));
+                    } catch (MondeException ex) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText(ex.getMessage());
+                        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                        pause.play();
+                        pause.setOnFinished(ev -> alert.close());
+                        alert.showAndWait();
+                    }
+                }
+            );
+
 
         fichier.getItems().addAll(quitter);
         edition.getItems().addAll(deselectionner, supprimer, renommer);
         mondeMenu.getItems().addAll(entree, sortie);
-        parametres.getItems().addAll(delai, ecart, jetons);
+        parametres.getItems().addAll(clients, delai, ecart, jetons);
         getMenus().addAll(fichier, edition, mondeMenu, parametres);
         monde.notifierObservateurs();
     }
