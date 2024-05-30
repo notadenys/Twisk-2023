@@ -7,6 +7,7 @@ import twisk.mondeIG.SujetObserve;
 import twisk.outils.KitC;
 import twisk.outils.MutableBoolean;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class Simulation extends SujetObserve implements Iterable<Client> {
@@ -33,6 +34,7 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
         System.load("/tmp/twisk/libTwisk.so");
 
         int[] tabJetonsGuichet = creationTabJeton(monde);
+        System.out.println("Jetons " + Arrays.toString(tabJetonsGuichet));
         int[] resultat = start_simulation(monde.nbEtapes(), monde.nbGuichets(), nbClients, tabJetonsGuichet);
         System.out.print("les clients : ");
         for (int i = 0; i < nbClients; i++) {
@@ -75,7 +77,7 @@ public class Simulation extends SujetObserve implements Iterable<Client> {
 
                 notifierObservateurs();
 
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 System.out.println("INTERRUPTED");
                 stopSimulation();

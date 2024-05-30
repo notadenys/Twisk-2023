@@ -2,6 +2,7 @@ package twisk.vues;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -11,6 +12,8 @@ import twisk.outils.TailleComposants;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Iterator;
+import java.util.Random;
 
 public class VueGuichetIG extends VueEtapeIG implements Observateur{
     GridPane grid;
@@ -28,7 +31,7 @@ public class VueGuichetIG extends VueEtapeIG implements Observateur{
         columnConstraints.setPercentWidth(10);
         grid.setHgap(1);
         for (int i = 0; i < 10; i++) {
-            Pane pane = new Pane() ;
+            StackPane pane = new StackPane();
             pane.minHeight(TailleComposants.getInstance().getGridH() ) ;
             pane.minWidth(TailleComposants.getInstance().getGridW() ) ;
             pane.prefWidth(TailleComposants.getInstance().getGridW() ) ;
@@ -44,6 +47,9 @@ public class VueGuichetIG extends VueEtapeIG implements Observateur{
     public void reagir() {
         Runnable command = () -> {
             getChildren().clear();
+            for (Node node : grid.getChildren()) {
+                ((StackPane) node).getChildren().clear();
+            }
 
             BorderPane es = new BorderPane();
 
@@ -66,6 +72,13 @@ public class VueGuichetIG extends VueEtapeIG implements Observateur{
             }
             setPrefHeight(getEtape().getHauteur());
             getChildren().add(getLabel());
+
+            Iterator<VueClient> clientIterator = this.iterator();
+            while (clientIterator.hasNext()) {
+                VueClient client = clientIterator.next();
+                ((StackPane)grid.getChildren().get(client.getRang()-1)).getChildren().add(client);
+            }
+
             getChildren().add(grid);
             getChildren().add(es);
 

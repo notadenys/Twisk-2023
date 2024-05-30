@@ -55,10 +55,18 @@ public class VueMenu extends MenuBar implements Observateur {
         });
 
         entree = new MenuItem("Marquer comme entree");
-        entree.setOnAction(e -> monde.marquerCommeEntree());
+        entree.setOnAction(e ->
+        {
+            monde.marquerCommeEntree();
+            monde.deselectionner();
+        });
 
         sortie = new MenuItem("Marquer comme sortie");
-        sortie.setOnAction(e -> monde.marquerCommeSortie());
+        sortie.setOnAction(e ->
+        {
+            monde.marquerCommeSortie();
+            monde.deselectionner();
+        });
 
         delai = new MenuItem("Changer le delai");
         delai.setOnAction(e ->

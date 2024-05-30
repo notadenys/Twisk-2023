@@ -5,7 +5,8 @@ import javafx.scene.shape.Circle;
 import twisk.simulation.Client;
 
 public class VueClient extends Circle {
-    private Client client;
+    private final Client client;
+
 
     public VueClient(Client client) {
         super(5);
@@ -31,4 +32,5 @@ public class VueClient extends Circle {
     }
 
     public Client getClient() { return client; }
+    public int getRang() {  return client.getRang(); }
 }
