@@ -8,8 +8,6 @@ import twisk.exceptions.MondeException;
 import twisk.exceptions.TwiskException;
 import twisk.mondeIG.*;
 
-import java.util.Objects;
-
 
 public class VueMenu extends MenuBar implements Observateur {
     MondeIG monde;
@@ -146,7 +144,9 @@ public class VueMenu extends MenuBar implements Observateur {
                     input.setHeaderText("Entrez le nombre de clients");
                     input.showAndWait();
                     try {
-                        monde.setNbClients(Integer.parseInt(input.getEditor().getText()));
+                        if (!input.getEditor().getText().isEmpty()) {
+                            monde.setNbClients(Integer.parseInt(input.getEditor().getText()));
+                        }
                     } catch (MondeException ex) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
