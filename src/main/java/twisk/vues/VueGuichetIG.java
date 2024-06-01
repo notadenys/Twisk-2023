@@ -19,7 +19,7 @@ import java.util.Iterator;
  * It extends VueEtapeIG and manages the graphical representation of a guichet.
  */
 public class VueGuichetIG extends VueEtapeIG implements Observateur {
-    private GridPane grid;
+    private final GridPane grid;
 
     /**
      * Constructor of VueGuichetIG.
@@ -40,14 +40,13 @@ public class VueGuichetIG extends VueEtapeIG implements Observateur {
         grid.setHgap(1);
         for (int i = 0; i < 10; i++) {
             StackPane pane = new StackPane();
-            pane.setMinHeight(TailleComposants.getInstance().getGridH());
-            pane.setMinWidth(TailleComposants.getInstance().getGridW());
-            pane.setPrefWidth(TailleComposants.getInstance().getGridW());
-            pane.setPrefHeight(TailleComposants.getInstance().getGridH());
-            pane.setStyle("-fx-background-color: linear-gradient(to top, #AFAFAF, #E4E1E1); " +
-                    "-fx-border-color: #00FF36;");
-            grid.add(pane, i, 0);
-            grid.getColumnConstraints().add(columnConstraints);
+            pane.minHeight(TailleComposants.getInstance().getGridH() ) ;
+            pane.minWidth(TailleComposants.getInstance().getGridW() ) ;
+            pane.prefWidth(TailleComposants.getInstance().getGridW() ) ;
+            pane.setPrefHeight(TailleComposants.getInstance().getGridH() );
+            pane.setStyle("-fx-background-color: linear-gradient(to top, #AFAFAF, #E4E1E1) ;-fx-border-color: #00FF36; ");
+            grid.add(pane,i,0);
+            grid.getColumnConstraints().add(columnConstraints) ;
         }
         reagir();
     }
