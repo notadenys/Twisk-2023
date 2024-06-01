@@ -4,10 +4,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import twisk.simulation.Client;
 
+/**
+ * VueClient is a class representing the view of a client in the simulation.
+ * It extends Circle and manages the graphical representation of a client.
+ */
 public class VueClient extends Circle {
     private final Client client;
 
-
+    /**
+     * Constructor of VueClient.
+     *
+     * @param client the client to be represented.
+     */
     public VueClient(Client client) {
         super(7);
         this.client = client;
@@ -31,6 +39,17 @@ public class VueClient extends Circle {
         this.setVisible(true);
     }
 
+    /**
+     * Gets the client represented by this view.
+     *
+     * @return the client.
+     */
     public Client getClient() { return client; }
-    public int getRang() {  return client.getRang(); }
+
+    /**
+     * Gets the rank of the client.
+     *
+     * @return the rank of the client.
+     */
+    public int getRang() { return client.getRang(); }
 }

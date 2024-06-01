@@ -10,32 +10,38 @@ import twisk.exceptions.TwiskException;
 import twisk.mondeIG.MondeIG;
 import twisk.mondeIG.PointDeControleIG;
 
+/**
+ * The VuePointDeControleIG class represents the visual component of a control point in the Twisk application.
+ * It extends Circle and handles user interactions like clicks and drag-and-drop operations.
+ */
 public class VuePointDeControleIG extends Circle {
-    PointDeControleIG point;
-    MondeIG monde;
-    public VuePointDeControleIG(MondeIG monde, PointDeControleIG point)
-    {
+    private final PointDeControleIG point;
+    private final MondeIG monde;
+
+    /**
+     * Constructor for VuePointDeControleIG.
+     * Initializes the visual representation of the control point and sets up event handlers.
+     *
+     * @param monde The MondeIG instance representing the world model.
+     * @param point The PointDeControleIG instance representing the control point.
+     */
+    public VuePointDeControleIG(MondeIG monde, PointDeControleIG point) {
         this.monde = monde;
         this.point = point;
         setCenterX(point.getX());
         setCenterY(point.getY());
         setRadius(6);
-        if (monde.isEnAttente() && monde.getPointMemorise() == point)
-        {
+        if (monde.isEnAttente() && monde.getPointMemorise() == point) {
             setFill(Color.BLUE);
-        }
-        else
-        {
+        } else {
             setFill(Color.DEEPPINK);
         }
 
         setOnMouseClicked(e -> {
-            if (monde.isEnAttente())
-            {
+            if (monde.isEnAttente()) {
                 try {
                     monde.ajouter(monde.getPointMemorise().getId(), point.getId());
-                }
-                catch (TwiskException exc){
+                } catch (TwiskException exc) {
                     monde.setEnAttente(false);
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Liaison impossible");
@@ -46,14 +52,12 @@ public class VuePointDeControleIG extends Circle {
                     pause.setOnFinished(ev -> alert.close());
                     alert.showAndWait();
                 }
-            }
-            else {
+            } else {
                 monde.setPointMemorise(point);
                 monde.setEnAttente(true);
             }
             monde.notifierObservateurs();
         });
-
 
         setOnDragDetected((MouseEvent event) -> {
             Dragboard dragboard = startDragAndDrop(TransferMode.LINK);
@@ -76,9 +80,7 @@ public class VuePointDeControleIG extends Circle {
             if (db.hasString()) {
                 try {
                     monde.ajouter(db.getString(), point.getId());
-                }
-                catch (TwiskException exception)
-                {
+                } catch (TwiskException exception) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Liaison impossible");
                     alert.setHeaderText(null);

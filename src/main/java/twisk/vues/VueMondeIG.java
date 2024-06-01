@@ -4,14 +4,11 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import twisk.mondeIG.*;
 import twisk.simulation.Client;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 
 public class VueMondeIG extends Pane implements Observateur {
     private final MondeIG monde;

@@ -8,9 +8,13 @@ import twisk.exceptions.MondeException;
 import twisk.exceptions.TwiskException;
 import twisk.mondeIG.*;
 
-
+/**
+ * The VueMenu class represents the menu bar in the Twisk application.
+ * It extends MenuBar and implements the Observateur interface to update the menu items
+ * based on the state of the MondeIG.
+ */
 public class VueMenu extends MenuBar implements Observateur {
-    MondeIG monde;
+    private final MondeIG monde;
 
     private final MenuItem renommer;
     private final MenuItem deselectionner;
@@ -20,8 +24,14 @@ public class VueMenu extends MenuBar implements Observateur {
     private final MenuItem delai;
     private final MenuItem ecart;
     private final MenuItem jetons;
-    public VueMenu(MondeIG monde)
-    {
+
+    /**
+     * Constructor for VueMenu.
+     * Initializes the menu bar with various menu items and sets up their event handlers.
+     *
+     * @param monde The MondeIG instance representing the world model.
+     */
+    public VueMenu(MondeIG monde) {
         super();
         this.monde = monde;
         monde.ajouterObservateur(this);
@@ -38,15 +48,13 @@ public class VueMenu extends MenuBar implements Observateur {
         deselectionner.setOnAction(e -> monde.deselectionner());
 
         supprimer = new MenuItem("Supprimer la selection");
-        supprimer.setOnAction(e ->
-        {
+        supprimer.setOnAction(e -> {
             monde.delete(monde.getArcsSelectionnes().toArray(new ArcIG[0]));
             monde.delete(monde.getEtapesSelectionnes().toArray(new EtapeIG[0]));
         });
 
         renommer = new MenuItem("Renommer la selection");
-        renommer.setOnAction(e ->
-        {
+        renommer.setOnAction(e -> {
             TextInputDialog input = new TextInputDialog();
             input.setHeaderText("Entrez le nouvelle nom de : " + monde.getEtapesSelectionnes().get(0).getNom());
             input.showAndWait();
@@ -57,109 +65,75 @@ public class VueMenu extends MenuBar implements Observateur {
         });
 
         entree = new MenuItem("Marquer comme entree");
-        entree.setOnAction(e ->
-        {
+        entree.setOnAction(e -> {
             monde.marquerCommeEntree();
             monde.deselectionner();
         });
 
         sortie = new MenuItem("Marquer comme sortie");
-        sortie.setOnAction(e ->
-        {
+        sortie.setOnAction(e -> {
             monde.marquerCommeSortie();
             monde.deselectionner();
         });
 
         delai = new MenuItem("Changer le delai");
-        delai.setOnAction(e ->
-        {
+        delai.setOnAction(e -> {
             try {
                 TextInputDialog input = new TextInputDialog();
                 input.setHeaderText("Entrez le delai desire de : " + monde.getEtapesSelectionnes().get(0).getNom());
                 input.showAndWait();
                 if (!input.getEditor().getText().isEmpty()) {
-                    ((ActiviteIG)monde.getEtapesSelectionnes().get(0)).setTemps(Integer.parseInt(input.getEditor().getText()));
+                    ((ActiviteIG) monde.getEtapesSelectionnes().get(0)).setTemps(Integer.parseInt(input.getEditor().getText()));
                 }
                 monde.deselectionner();
-            } catch (TwiskException exc){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText(exc.getMessage());
-                PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                pause.play();
-                pause.setOnFinished(ev -> alert.close());
-                alert.showAndWait();
+            } catch (TwiskException exc) {
+                showErrorMessage(exc.getMessage());
             }
         });
 
         ecart = new MenuItem("Changer l'ecart");
-        ecart.setOnAction(e ->
-        {
+        ecart.setOnAction(e -> {
             try {
                 TextInputDialog input = new TextInputDialog();
                 input.setHeaderText("Entrez l'ecart de temps desire de : " + monde.getEtapesSelectionnes().get(0).getNom());
                 input.showAndWait();
                 if (!input.getEditor().getText().isEmpty()) {
-                    ((ActiviteIG)monde.getEtapesSelectionnes().get(0)).setEcartTemps(Integer.parseInt(input.getEditor().getText()));
+                    ((ActiviteIG) monde.getEtapesSelectionnes().get(0)).setEcartTemps(Integer.parseInt(input.getEditor().getText()));
                 }
                 monde.deselectionner();
-            } catch (TwiskException exc){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText(exc.getMessage());
-                PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                pause.play();
-                pause.setOnFinished(ev -> alert.close());
-                alert.showAndWait();
+            } catch (TwiskException exc) {
+                showErrorMessage(exc.getMessage());
             }
         });
 
         jetons = new MenuItem("Changer le nombre de jetons");
-        jetons.setOnAction(e ->
-        {
+        jetons.setOnAction(e -> {
             try {
                 TextInputDialog input = new TextInputDialog();
                 input.setHeaderText("Entrez le nombre de jetons desire de : " + monde.getEtapesSelectionnes().get(0).getNom());
                 input.showAndWait();
                 if (!input.getEditor().getText().isEmpty()) {
-                    ((GuichetIG)monde.getEtapesSelectionnes().get(0)).setNbJetons(Integer.parseInt(input.getEditor().getText()));
+                    ((GuichetIG) monde.getEtapesSelectionnes().get(0)).setNbJetons(Integer.parseInt(input.getEditor().getText()));
                 }
                 monde.deselectionner();
-            } catch (TwiskException exc){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText(exc.getMessage());
-                PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                pause.play();
-                pause.setOnFinished(ev -> alert.close());
-                alert.showAndWait();
+            } catch (TwiskException exc) {
+                showErrorMessage(exc.getMessage());
             }
         });
+
         MenuItem clients = new MenuItem("Changer le nombre de clients");
         clients.setOnAction(e -> {
-                    TextInputDialog input = new TextInputDialog();
-                    input.setHeaderText("Entrez le nombre de clients");
-                    input.showAndWait();
-                    try {
-                        if (!input.getEditor().getText().isEmpty()) {
-                            monde.setNbClients(Integer.parseInt(input.getEditor().getText()));
-                        }
-                    } catch (MondeException ex) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText(ex.getMessage());
-                        PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                        pause.play();
-                        pause.setOnFinished(ev -> alert.close());
-                        alert.showAndWait();
-                    }
+            TextInputDialog input = new TextInputDialog();
+            input.setHeaderText("Entrez le nombre de clients");
+            input.showAndWait();
+            try {
+                if (!input.getEditor().getText().isEmpty()) {
+                    monde.setNbClients(Integer.parseInt(input.getEditor().getText()));
                 }
-            );
-
+            } catch (MondeException ex) {
+                showErrorMessage(ex.getMessage());
+            }
+        });
 
         fichier.getItems().addAll(quitter);
         edition.getItems().addAll(deselectionner, supprimer, renommer);
@@ -169,6 +143,9 @@ public class VueMenu extends MenuBar implements Observateur {
         monde.notifierObservateurs();
     }
 
+    /**
+     * Reacts to changes in the world model by updating the menu items' enabled/disabled state.
+     */
     @Override
     public void reagir() {
         renommer.setDisable(monde.getEtapesSelectionnes().size() != 1);
@@ -179,5 +156,21 @@ public class VueMenu extends MenuBar implements Observateur {
         delai.setDisable(monde.getEtapesSelectionnes().size() != 1 || monde.isGuichetSelectionne());
         ecart.setDisable(monde.getEtapesSelectionnes().size() != 1 || monde.isGuichetSelectionne());
         jetons.setDisable(monde.getEtapesSelectionnes().size() != 1 || monde.isActiviteSelectionne());
+    }
+
+    /**
+     * Displays an error message in an alert dialog.
+     *
+     * @param message The error message to display.
+     */
+    private void showErrorMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.play();
+        pause.setOnFinished(ev -> alert.close());
+        alert.showAndWait();
     }
 }

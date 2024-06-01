@@ -13,49 +13,51 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.Map.Entry;
 
+/**
+ * The SimulationIG class is responsible for verifying the world configuration and running the simulation.
+ */
 public class SimulationIG implements Observateur {
     private final MondeIG monde;
 
+    /**
+     * Constructs a SimulationIG with the given MondeIG.
+     *
+     * @param mondeIG the world to simulate.
+     */
     public SimulationIG(MondeIG mondeIG) {
         monde = mondeIG;
     }
 
-    // verifie le monde pour repondre a toutes les contraintes
+    /**
+     * Verifies the world configuration to ensure all constraints are met.
+     *
+     * @throws MondeException if the world configuration is invalid.
+     */
     private void verifierMondeIG() throws MondeException {
+        if (monde.getEntrees().isEmpty()) throw new MondeException("Il n'y a aucun entree defini");
 
-        // pas d'entrees
-        if (monde.getEntrees().isEmpty())
-            throw new MondeException("Il n'y a aucun entree defini");
-
-        // check if entries have any predecessors
         for (EtapeIG etape : monde.getEntrees()) {
             if (!etape.getPredecesseurs().isEmpty()) {
                 throw new MondeException("Erreur de connexion. Entree " + etape.getNom() + " a des predecesseurs");
             }
         }
 
-        // pas de sorties
-        if (monde.getSorties().isEmpty())
-            throw new MondeException("Il n'y a aucun sortie defini");
+        if (monde.getSorties().isEmpty()) throw new MondeException("Il n'y a aucun sortie defini");
 
-        // etapes deconnectees
-        for (EtapeIG etape : monde.getEtapes())
-        {
+        for (EtapeIG etape : monde.getEtapes()) {
             if (etape.getPredecesseurs().isEmpty() && !etape.estUneEntree())
                 throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de predecesseurs)");
 
             if (etape.getSuccesseurs().isEmpty() && !etape.estUneSortie())
-                throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de successeurs");
+                throw new MondeException("Etape " + etape.getNom() + " est deconnectee(pas de successeurs)");
         }
 
-        // check if exits have any successors
         for (EtapeIG etape : monde.getSorties()) {
             if (!etape.getSuccesseurs().isEmpty()) {
                 throw new MondeException("Erreur de connexion. Sortie " + etape.getNom() + " a des successeurs");
             }
         }
 
-        // guichets ont mauvais nombre de successeurs
         for (GuichetIG guichet : monde.getGuichets()) {
             if (guichet.getSuccesseurs().isEmpty())
                 throw new MondeException("Guichet " + guichet.getNom() + " n'a pas de successeurs");
@@ -65,35 +67,38 @@ public class SimulationIG implements Observateur {
                 throw new MondeException("Guichet " + guichet.getNom() + " a un guichet comme successeur");
         }
 
-        // mettre a jour les activites restraintes et verifier s'ils ont que 1 predecesseur
-        for (GuichetIG guichet : monde.getGuichets())
-        {
-            ActiviteIG activite = (ActiviteIG)guichet.getSuccesseurs().get(0);
+        for (GuichetIG guichet : monde.getGuichets()) {
+            ActiviteIG activite = (ActiviteIG) guichet.getSuccesseurs().get(0);
             activite.setRestrainte(true);
             if (activite.getPredecesseurs().size() > 1)
                 throw new MondeException("Activite " + activite.getNom() + " a plus que 1 predecesseur");
         }
 
-        // verifier si un ou plusieurs etapes ont les noms vides
         for (EtapeIG etape : monde.getEtapes()) {
             if (etape.getNom().isEmpty()) throw new MondeException("Un ou plusieurs etapes ont les noms vides");
         }
 
-        // verifier si un ou plusieurs activites ont les memes noms
         ArrayList<String> noms = new ArrayList<>();
         for (ActiviteIG activite : monde.getActivites()) {
-            if (noms.contains(activite.getNom())) throw new MondeException ("Etape " + activite.getNom() + " a un doublon");
+            if (noms.contains(activite.getNom()))
+                throw new MondeException("Etape " + activite.getNom() + " a un doublon");
             noms.add(activite.getNom());
         }
 
-        // verifier si un ou plusieurs guichets ont les memes noms
         noms = new ArrayList<>();
         for (GuichetIG guichet : monde.getGuichets()) {
-            if (noms.contains(guichet.getNom())) throw new MondeException ("Etape " + guichet.getNom() + " a un doublon");
+            if (noms.contains(guichet.getNom()))
+                throw new MondeException("Etape " + guichet.getNom() + " a un doublon");
             noms.add(guichet.getNom());
         }
     }
 
+    /**
+     * Creates a Monde instance based on the current MondeIG.
+     *
+     * @return a new Monde instance.
+     * @throws MondeException if the world configuration is invalid.
+     */
     private Monde creerMonde() throws MondeException {
         verifierMondeIG();
         FabriqueNumero.getInstance().reset();
@@ -101,50 +106,60 @@ public class SimulationIG implements Observateur {
         CorrespondancesEtapes correspondances = new CorrespondancesEtapes();
         GestionnaireEtapes gestionnaireEtapes = new GestionnaireEtapes();
 
-        for (Entry<Integer, EtapeIG> entry : this.monde.entrySet()) { // iterating through all etaps of MondeIG
+        for (Entry<Integer, EtapeIG> entry : this.monde.entrySet()) {
             EtapeIG etapeIG = entry.getValue();
-            if (etapeIG.estUneActivite()) { // case we have activity
+            if (etapeIG.estUneActivite()) {
                 ActiviteIG actIG = (ActiviteIG) etapeIG;
                 Activite act;
-                if (actIG.isRestrainte()) { // checks activity for being Restrainte
+                if (actIG.isRestrainte()) {
                     act = new ActiviteRestreinte(actIG.getNom(), actIG.getTemps(), actIG.getEcartTemps());
                 } else {
                     act = new Activite(actIG.getNom(), actIG.getTemps(), actIG.getEcartTemps());
                 }
                 correspondances.ajouter(actIG, act);
                 gestionnaireEtapes.ajouter(act);
-                if (actIG.estUneEntree()) { // checks for being first/last etape
+                if (actIG.estUneEntree()) {
                     mondeSim.aCommeEntree(act);
                 }
                 if (actIG.estUneSortie()) {
                     mondeSim.aCommeSortie(act);
                 }
                 mondeSim.ajouter(act);
-            } else if (etapeIG.estUnGuichet()) { // case we have guichet
+            } else if (etapeIG.estUnGuichet()) {
                 GuichetIG guichetIG = (GuichetIG) etapeIG;
                 Guichet guichet = new Guichet(guichetIG.getNom(), guichetIG.getNbJetons());
                 correspondances.ajouter(guichetIG, guichet);
-                if (guichetIG.estUneEntree()) { // checks for being first/last etape
+                if (guichetIG.estUneEntree()) {
                     mondeSim.aCommeEntree(guichet);
                 }
                 mondeSim.ajouter(guichet);
             }
         }
-        Iterator<EtapeIG[]> iterLiason = monde.iteratorliaison(); // adding next steps
-        while(iterLiason.hasNext()) {
+
+        Iterator<EtapeIG[]> iterLiason = monde.iteratorliaison();
+        while (iterLiason.hasNext()) {
             EtapeIG[] liaison = iterLiason.next();
             Etape etape1 = correspondances.getEtape(liaison[0]);
             Etape etape2 = correspondances.getEtape(liaison[1]);
             etape1.ajouterSuccesseur(etape2);
         }
+
         this.monde.setCorrespondance(correspondances);
         return mondeSim;
     }
 
+    /**
+     * Starts the simulation.
+     *
+     * @throws MondeException            if the world configuration is invalid.
+     * @throws ClassNotFoundException    if a required class is not found.
+     * @throws NoSuchMethodException     if a required method is not found.
+     * @throws InvocationTargetException if there is an error invoking a method.
+     * @throws InstantiationException    if a required class cannot be instantiated.
+     * @throws IllegalAccessException    if there is an illegal access to a method.
+     */
     public void simuler() throws MondeException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-
         Monde mondeSim = creerMonde();
-
         System.gc();
         ClassLoaderPerso classLoader = new ClassLoaderPerso(SimulationIG.class.getClassLoader());
         Class<?> cl = classLoader.loadClass("twisk.simulation.Simulation");
@@ -172,6 +187,9 @@ public class SimulationIG implements Observateur {
         ThreadsManager.getInstance().lancer(task);
     }
 
+    /**
+     * Reacts to changes by notifying observers.
+     */
     @Override
     public void reagir() {
         monde.notifierObservateurs();

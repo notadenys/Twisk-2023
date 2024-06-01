@@ -15,11 +15,20 @@ import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.Random;
 
+/**
+ * VueActiviteIG is a class representing the view of an activity in the interface graphique.
+ * It extends VueEtapeIG and manages the graphical representation of an activity.
+ */
 public class VueActiviteIG extends VueEtapeIG {
     private final HBox clientWindow;
 
-    public VueActiviteIG(MondeIG monde, EtapeIG etape)
-    {
+    /**
+     * Constructor of VueActiviteIG.
+     *
+     * @param monde the world containing the activity.
+     * @param etape the activity step to be displayed.
+     */
+    public VueActiviteIG(MondeIG monde, EtapeIG etape) {
         super(monde, etape);
         monde.ajouterObservateur(this);
         clientWindow = new HBox();
@@ -33,8 +42,10 @@ public class VueActiviteIG extends VueEtapeIG {
         reagir();
     }
 
-    public void reagir()
-    {
+    /**
+     * React to changes in the model and update the view accordingly.
+     */
+    public void reagir() {
         Runnable command = () -> {
             getChildren().clear();
 

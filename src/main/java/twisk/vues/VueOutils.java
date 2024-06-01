@@ -13,11 +13,15 @@ import twisk.mondeIG.ActiviteIG;
 import twisk.mondeIG.GuichetIG;
 import twisk.mondeIG.MondeIG;
 import twisk.outils.ThreadsManager;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.io.FileInputStream;
 
+/**
+ * The VueOutils class represents the toolbar with buttons to control the simulation in the Twisk application.
+ * It extends TilePane and implements the Observateur interface to update the buttons based on the state of the MondeIG.
+ */
 public class VueOutils extends TilePane implements Observateur{
     MondeIG monde;
     ArrayList<Button> buttons;
@@ -25,8 +29,13 @@ public class VueOutils extends TilePane implements Observateur{
     private Button play;
     ImageView imageViewPlay;
 
-    public VueOutils(MondeIG monde)
-    {
+    /**
+     * Constructor for VueOutils.
+     * Initializes the toolbar with various buttons and sets up their event handlers.
+     *
+     * @param monde The MondeIG instance representing the world model.
+     */
+    public VueOutils(MondeIG monde) {
         setPadding(new Insets(5));
         setHgap(10);
         this.monde = monde;
@@ -43,6 +52,7 @@ public class VueOutils extends TilePane implements Observateur{
             Image image = new Image(input);
             Image image2 = new Image(input2);
             Image image3 = new Image(input3);
+
             ImageView imageViewActivite = new ImageView(image);
             imageViewActivite.setFitHeight(50);
             imageViewActivite.setFitWidth(50);
@@ -68,7 +78,7 @@ public class VueOutils extends TilePane implements Observateur{
             imageViewPlay.setFitWidth(50);
             play = new Button("Lancer", imageViewPlay);
             play.setOnAction(e -> {
-                if(monde.isSimulationStopped()) {
+                if (monde.isSimulationStopped()) {
                     try {
                         monde.simuler();
                     } catch (MondeException | ClassNotFoundException | InvocationTargetException |
@@ -88,14 +98,15 @@ public class VueOutils extends TilePane implements Observateur{
 
             play.setTooltip(new Tooltip("lancer/arreter la simulation"));
             buttons.add(play);
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         reagir();
     }
 
+    /**
+     * Reacts to changes in the world model by updating the toolbar buttons' state.
+     */
     @Override
     public void reagir() {
         Runnable command = () -> {
@@ -115,11 +126,15 @@ public class VueOutils extends TilePane implements Observateur{
         }
     }
 
+    /**
+     * Displays an error message in an alert dialog.
+     *
+     * @param content The error message to display.
+     */
     private void showErrorAlert(String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Erreur");
         alert.setContentText(content);
         alert.showAndWait();
     }
-
 }
