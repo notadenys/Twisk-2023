@@ -19,6 +19,10 @@ public class ArcIG {
         this.monde = monde;
         this.p1 = monde.getPoint(p1);
         this.p2 = monde.getPoint(p2);
+
+        // arc is starting in p1
+        this.p1.setSortie(true);
+
         this.p1.getEtape().ajouterSuccesseur(this.p2.getEtape());
         this.p2.getEtape().ajouterPredecesseur(this.p1.getEtape());
     }

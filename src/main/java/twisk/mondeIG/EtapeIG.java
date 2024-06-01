@@ -34,11 +34,15 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG>{
         successeurs = new ArrayList<>();
         predecesseurs = new ArrayList<>();
 
+        // Activity has 4 points and Guichet has only 2
         points = new ArrayList<>();
+        if(estUneActivite()) {
+            points.add(new PointDeControleIG(this, 'T'));
+            points.add(new PointDeControleIG(this, 'B'));
+        }
         points.add(new PointDeControleIG(this, 'L'));
-        points.add(new PointDeControleIG(this, 'T'));
         points.add(new PointDeControleIG(this, 'R'));
-        points.add(new PointDeControleIG(this, 'B'));
+
     }
 
     public void move(int x, int y)
@@ -132,6 +136,13 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG>{
             {
                 return point;
             }
+        }
+        return null;
+    }
+
+    public PointDeControleIG getPointByPos(char pos) {
+        for (PointDeControleIG point : points) {
+            if (Objects.equals(point.getPos(), pos)) return point;
         }
         return null;
     }

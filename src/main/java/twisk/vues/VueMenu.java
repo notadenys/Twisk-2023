@@ -8,6 +8,8 @@ import twisk.exceptions.MondeException;
 import twisk.exceptions.TwiskException;
 import twisk.mondeIG.*;
 
+import java.util.Objects;
+
 
 public class VueMenu extends MenuBar implements Observateur {
     MondeIG monde;
@@ -50,7 +52,9 @@ public class VueMenu extends MenuBar implements Observateur {
             TextInputDialog input = new TextInputDialog();
             input.setHeaderText("Entrez le nouvelle nom de : " + monde.getEtapesSelectionnes().get(0).getNom());
             input.showAndWait();
-            monde.getEtapesSelectionnes().get(0).setNom(input.getEditor().getText());
+            if (!input.getEditor().getText().isEmpty()) {
+                monde.getEtapesSelectionnes().get(0).setNom(input.getEditor().getText());
+            }
             monde.deselectionner();
         });
 
@@ -75,7 +79,9 @@ public class VueMenu extends MenuBar implements Observateur {
                 TextInputDialog input = new TextInputDialog();
                 input.setHeaderText("Entrez le delai desire de : " + monde.getEtapesSelectionnes().get(0).getNom());
                 input.showAndWait();
-                ((ActiviteIG)monde.getEtapesSelectionnes().get(0)).setTemps(Integer.parseInt(input.getEditor().getText()));
+                if (!input.getEditor().getText().isEmpty()) {
+                    ((ActiviteIG)monde.getEtapesSelectionnes().get(0)).setTemps(Integer.parseInt(input.getEditor().getText()));
+                }
                 monde.deselectionner();
             } catch (TwiskException exc){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -96,7 +102,9 @@ public class VueMenu extends MenuBar implements Observateur {
                 TextInputDialog input = new TextInputDialog();
                 input.setHeaderText("Entrez l'ecart de temps desire de : " + monde.getEtapesSelectionnes().get(0).getNom());
                 input.showAndWait();
-                ((ActiviteIG)monde.getEtapesSelectionnes().get(0)).setEcartTemps(Integer.parseInt(input.getEditor().getText()));
+                if (!input.getEditor().getText().isEmpty()) {
+                    ((ActiviteIG)monde.getEtapesSelectionnes().get(0)).setEcartTemps(Integer.parseInt(input.getEditor().getText()));
+                }
                 monde.deselectionner();
             } catch (TwiskException exc){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -117,7 +125,9 @@ public class VueMenu extends MenuBar implements Observateur {
                 TextInputDialog input = new TextInputDialog();
                 input.setHeaderText("Entrez le nombre de jetons desire de : " + monde.getEtapesSelectionnes().get(0).getNom());
                 input.showAndWait();
-                ((GuichetIG)monde.getEtapesSelectionnes().get(0)).setNbJetons(Integer.parseInt(input.getEditor().getText()));
+                if (!input.getEditor().getText().isEmpty()) {
+                    ((GuichetIG)monde.getEtapesSelectionnes().get(0)).setNbJetons(Integer.parseInt(input.getEditor().getText()));
+                }
                 monde.deselectionner();
             } catch (TwiskException exc){
                 Alert alert = new Alert(Alert.AlertType.ERROR);

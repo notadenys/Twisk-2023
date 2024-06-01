@@ -8,12 +8,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import twisk.mondeIG.EtapeIG;
 import twisk.mondeIG.MondeIG;
+import twisk.mondeIG.PointDeControleIG;
 import twisk.outils.TailleComposants;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
-import java.util.Random;
 
 public class VueGuichetIG extends VueEtapeIG implements Observateur{
     GridPane grid;
@@ -73,11 +73,14 @@ public class VueGuichetIG extends VueEtapeIG implements Observateur{
             setPrefHeight(getEtape().getHauteur());
             getChildren().add(getLabel());
 
+            boolean isDirectionInversed = this.getEtape().getPointByPos('R').isSortie();
+
             Iterator<VueClient> clientIterator = this.iterator();
             while (clientIterator.hasNext()) {
                 VueClient client = clientIterator.next();
-                if (client.getRang() <= 10) {
-                    ((StackPane)grid.getChildren().get(client.getRang()-1)).getChildren().add(client);
+                if (client.getRang() <= 10) {  // draws only 10 first clients, so they fit in the grid
+                    int pos = isDirectionInversed ? 10 - client.getRang() : client.getRang()-1;
+                    ((StackPane)grid.getChildren().get(pos)).getChildren().add(client);
                 }
             }
 

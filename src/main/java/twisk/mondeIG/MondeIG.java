@@ -181,6 +181,7 @@ public class MondeIG extends SujetObserve implements Iterable<Map.Entry<Integer,
             arcsSelectionnes.remove(arcIG);
             arcIG.getP1().getEtape().supprimerSuccesseur(arcIG.getP2().getEtape());
             arcIG.getP2().getEtape().supprimerPredecesseur(arcIG.getP1().getEtape());
+            arcIG.getP1().setSortie(false);
         }
         notifierObservateurs();
         updateLiaison();

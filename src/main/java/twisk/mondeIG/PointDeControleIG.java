@@ -5,6 +5,7 @@ package twisk.mondeIG;
  */
 public class PointDeControleIG {
     private int x, y;
+    private boolean isSortie;
     private final String id;
     private final EtapeIG etape;
     private final char pos;
@@ -19,7 +20,7 @@ public class PointDeControleIG {
         this.etape = etape;
         id = String.valueOf(etape.getId()) + pos;
         this.pos = pos;
-
+        isSortie = false;
         follow(); // Updates the coordinates of the control point based on its position.
     }
 
@@ -70,6 +71,16 @@ public class PointDeControleIG {
     public int getY() {
         return y;
     }
+
+    public boolean isSortie() {
+        return isSortie;
+    }
+
+    public void setSortie(boolean sortie) {
+        isSortie = sortie;
+    }
+
+    public char getPos() { return pos; }
 
     /**
      * Gets the unique identifier of the control point.
