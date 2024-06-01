@@ -101,14 +101,8 @@ public class SimulationIG implements Observateur {
         CorrespondancesEtapes correspondances = new CorrespondancesEtapes();
         GestionnaireEtapes gestionnaireEtapes = new GestionnaireEtapes();
 
-        System.out.println("Initial state of monde: " + this.monde);
-        Iterator<Entry<Integer, EtapeIG>> iter = this.monde.entrySet().iterator();
-        System.out.println("Gestionnaire :" + gestionnaireEtapes);
-
-        while (iter.hasNext()) { // iterating through all etaps of MondeIG
-            Entry<Integer, EtapeIG> entry = iter.next();
+        for (Entry<Integer, EtapeIG> entry : this.monde.entrySet()) { // iterating through all etaps of MondeIG
             EtapeIG etapeIG = entry.getValue();
-            System.out.println("Processing EtapeIG: " + etapeIG.getNom());
             if (etapeIG.estUneActivite()) { // case we have activity
                 ActiviteIG actIG = (ActiviteIG) etapeIG;
                 Activite act;
@@ -119,7 +113,6 @@ public class SimulationIG implements Observateur {
                 }
                 correspondances.ajouter(actIG, act);
                 gestionnaireEtapes.ajouter(act);
-                System.out.println("Gestionnaire :" + gestionnaireEtapes);
                 if (actIG.estUneEntree()) { // checks for being first/last etape
                     mondeSim.aCommeEntree(act);
                 }

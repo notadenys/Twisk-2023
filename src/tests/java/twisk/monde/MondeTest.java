@@ -8,7 +8,7 @@ import javax.naming.InvalidNameException;
 class MondeTest {
 
     @Test
-    void aCommeEntree() throws InvalidNameException {
+    void aCommeEntree(){
         Monde mn = new Monde();
         Etape g1 = new Guichet("g1");
         mn.aCommeEntree(g1);
@@ -16,7 +16,7 @@ class MondeTest {
     }
 
     @Test
-    void aCommeSortie() throws InvalidNameException {
+    void aCommeSortie(){
         Monde mn = new Monde();
         Etape g1 = new Guichet("g1");
         mn.aCommeSortie(g1);
@@ -24,11 +24,10 @@ class MondeTest {
     }
 
     @Test
-    void ajouter() throws InvalidNameException {
+    void ajouter(){
         Monde mn = new Monde();
         Etape g1 = new Guichet("g1");
         mn.ajouter(g1);
-        System.out.println(mn.nbEtapes());
         assert(mn.nbEtapes() == 3) : "Error in ajouter()";
     }
 
