@@ -25,7 +25,6 @@ import java.util.ArrayList;
 public class VueOutils extends TilePane implements Observateur{
     MondeIG monde;
     ArrayList<Button> buttons;
-    boolean simulation;
     private Button play;
     ImageView imageViewPlay;
 
@@ -40,7 +39,6 @@ public class VueOutils extends TilePane implements Observateur{
         setHgap(10);
         this.monde = monde;
         monde.ajouterObservateur(this);
-        simulation = false;
 
         buttons = new ArrayList<>();
 
@@ -57,7 +55,11 @@ public class VueOutils extends TilePane implements Observateur{
             imageViewActivite.setFitHeight(50);
             imageViewActivite.setFitWidth(50);
             Button ajouterActivite = new Button("Activite", imageViewActivite);
-            ajouterActivite.setOnAction(e -> monde.ajouter(new ActiviteIG(4, 2)));
+            ajouterActivite.setOnAction(e -> {
+                if (monde.isSimulationStopped()) {
+                    monde.ajouter(new ActiviteIG(4, 2));
+                }
+            });
             ajouterActivite.setTooltip(new Tooltip("bouton qui permet d’ajouter une activité"));
             buttons.add(ajouterActivite);
 
@@ -65,7 +67,11 @@ public class VueOutils extends TilePane implements Observateur{
             imageViewGuichet.setFitHeight(50);
             imageViewGuichet.setFitWidth(50);
             Button ajouterGuichet = new Button("Guichet", imageViewGuichet);
-            ajouterGuichet.setOnAction(e -> monde.ajouter(new GuichetIG(2)));
+            ajouterGuichet.setOnAction(e -> {
+                if (monde.isSimulationStopped()) {
+                    monde.ajouter(new GuichetIG(2));
+                }
+            });
             ajouterGuichet.setTooltip(new Tooltip("bouton qui permet d’ajouter une activité"));
             buttons.add(ajouterGuichet);
 
@@ -99,7 +105,7 @@ public class VueOutils extends TilePane implements Observateur{
             play.setTooltip(new Tooltip("lancer/arreter la simulation"));
             buttons.add(play);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            showErrorAlert(e.getMessage());
         }
         reagir();
     }

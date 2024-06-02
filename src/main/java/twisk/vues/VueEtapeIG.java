@@ -46,17 +46,24 @@ public abstract class VueEtapeIG extends VBox implements Observateur {
                 "-fx-border-color: #0059FF; " +
                 "-fx-background-color: #FFFFFF;");
         setPrefSize(etape.getLargeur(), etape.getHauteur());
-        setOnMouseClicked(e -> monde.clickEtape(etape));
+        setOnMouseClicked(e -> {
+            if (monde.isSimulationStopped()) {
+                monde.clickEtape(etape);
+            }
+        });
+
 
         setOnDragDetected((MouseEvent event) -> {
-            Dragboard dragboard = startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-            content.putString(Integer.toString(etape.getId()));
+            if (monde.isSimulationStopped()) {
+                Dragboard dragboard = startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent content = new ClipboardContent();
+                content.putString(Integer.toString(etape.getId()));
 
-            ImageView preview = new ImageView(snapshot(null, null));
-            dragboard.setContent(content);
-            dragboard.setDragView(preview.getImage());
-            event.consume();
+                ImageView preview = new ImageView(snapshot(null, null));
+                dragboard.setContent(content);
+                dragboard.setDragView(preview.getImage());
+                event.consume();
+            }
         });
     }
 

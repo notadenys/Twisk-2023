@@ -45,7 +45,11 @@ public class VueArcIG extends Pane {
         p.getPoints().addAll(x1, y1, x2, y2, p2x, p2y, x1, y1);
 
         // Set event handler for mouse click on the arc
-        setOnMouseClicked(e -> monde.clickArc(arc));
+        setOnMouseClicked(e -> {
+            if (monde.isSimulationStopped()) {
+                monde.clickArc(arc);
+            }
+        });
 
         // Colorize the arc based on its presence in the monde
         coloriser(line, p);
