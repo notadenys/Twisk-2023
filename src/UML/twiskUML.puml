@@ -4,34 +4,66 @@ package twisk.mondeIG {
     class ArcIG {
         - PointDeControleIG p1
         - PointDeControleIG p2
+        - MondeIG monde
         + ArcIG(MondeIG, String, String)
         + PointDeControleIG getP1()
         + PointDeControleIG getP2()
         + String getP1ID()
         + String getP2ID()
+        + String toString()
+        + boolean equals(Object obj)
     }
 
     class EtapeIG {
+        - int x
+        - int y
         - int id
+        - int largeur
+        - int hauteur
         - String nom
-        - boolean entree
-        - boolean sortie
+        - boolean isEtree
+        - boolean isSortie
         - boolean restrainte
         - List<EtapeIG> successeurs
         - List<EtapeIG> predecesseurs
+        - ArrayList<PointDeControleIG> points
         + EtapeIG(String)
         + int getId()
+        + void move(int x, int y)
         + String getNom()
+        + void setNom(String nom)
+        + void setX(int x)
+        + void setY(int y)
+        + void setEntree(boolean bool)
+        + void setSortie(boolean bool)
+        + void setLargeur(int l)
+        + void setHauteur(int h)
+        + void changeHauteur(int hauteurDiff)
+        + void resetHauteur()
+        + void resetPoints()
+        + void getX(int x)
+        + void getY(int y)
         + boolean estUneEntree()
         + boolean estUneSortie()
+        + abstract boolean estUneActivite()
+        + abstract boolean estUnGuichet()
+        + int getId()
+        + int getLargeur()
+        + int getHauteur()
+        + PointDeControleIG getPoint(String id)
+        + PointDeControleIG getPointByPos(char pos)
         + boolean isRestrainte()
         + void setEntree(boolean)
         + void setSortie(boolean)
         + void setRestrainte(boolean)
         + void ajouterSuccesseur(EtapeIG)
         + void supprimerSuccesseur(EtapeIG)
+        + void ajouterPredecesseur(EtapeIG etape)
+        + void supprimerPredecesseur(EtapeIG etape)
+        + Iterator<PointDeControleIG> iterator()
         + List<EtapeIG> getSuccesseurs()
         + List<EtapeIG> getPredecesseurs()
+        + String toString()
     }
 
     class ActiviteIG extends EtapeIG {
@@ -40,12 +72,24 @@ package twisk.mondeIG {
         + ActiviteIG(String, int, int)
         + int getTemps()
         + int getEcartTemps()
+        + void setTemps(int temps)
+        + void setEcartTemps(int ecart)
+        + boolean isRestrainte()
+        + void setRestrainte(boolean restrainte)
+        + boolean estUnGuichet()
+        + boolean estUneActivite()
+        + String toString()
     }
 
     class GuichetIG extends EtapeIG {
         - int nbJetons
-        + GuichetIG(String, int)
+        + GuichetIG(String, int nbJetons)
         + int getNbJetons()
+        + void setNbJetons(int nb)
+        + boolean estUnGuichet()
+        + boolean estUneActivite()
+        + boolean estUneSortie()
+        + String toString()
     }
 
     class MondeIG {
@@ -94,7 +138,7 @@ package twisk.mondeIG {
         + EtapeIG getEtape(int)
         + Iterator<Map.Entry<Integer, EtapeIG>> iterator()
         + Iterator<ArcIG> arcs()
-        + void simuler() throws MondeException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException
+        + void simuler()
         + Set<Map.Entry<Integer, EtapeIG>> entrySet()
         + void updateLiaison()
         + GestionnaireClients getGestionnaireClients()
@@ -113,17 +157,33 @@ package twisk.mondeIG {
     class PointDeControleIG {
         - EtapeIG etape
         - String id
+        - int x
+        - int y
+        - boolean isSortie
+        - char pos
         + PointDeControleIG(EtapeIG, String)
         + EtapeIG getEtape()
         + String getId()
+        + void follow()
+        + int getY()
+        + int getX()
+        + boolean isSortie()
+        + void setSortie(boolean sortie)
+        + char getPos()
+        + String toString()
+        + boolean equals(Object obj)
     }
 
     class SujetObserve {
+        - CopyOnWriteArrayList<Observateur> observateurs
+        + SujetObserve()
         + void notifierObservateurs()
+        + void ajouterObservateur(Observateur obs)
     }
 
     class SimulationIG {
         - MondeIG monde
+        - Monde creerMonde()
         + SimulationIG(MondeIG)
         + void simuler() throws MondeException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException
         + void reagir()
@@ -131,15 +191,13 @@ package twisk.mondeIG {
 
     MondeIG --> ArcIG
     MondeIG --> EtapeIG
-    MondeIG --> GestionnaireClients
-    MondeIG --> MutableBoolean
+    MondeIG --> twisk.outils.GestionnaireClients
+    MondeIG --> twisk.outils.MutableBoolean
     MondeIG --> PointDeControleIG
-    MondeIG --> CorrespondancesEtapes
+    MondeIG --> twisk.outils.CorrespondancesEtapes
     MondeIG --> SujetObserve
     SimulationIG --> MondeIG
     ArcIG --> PointDeControleIG
-    EtapeIG <|-- ActiviteIG
-    EtapeIG <|-- GuichetIG
 }
 
 package twisk.monde {
@@ -193,36 +251,89 @@ package twisk.monde {
         + List<Etape> getSorties()
     }
 
-    class CorrespondancesEtapes {
-        - Map<EtapeIG, Etape> correspondance
-        + CorrespondancesEtapes()
-        + void ajouter(EtapeIG, Etape)
-        + Etape getEtape(EtapeIG)
+    class SasEntree extends Activite{
+        + SasEntree()
+        + boolean estUneEntree()
     }
 
-    Etape <|-- Activite
-    Activite <|-- ActiviteRestreinte
-    Etape <|-- Guichet
+    class SasSortie extends Activite{
+            + SasSortie()
+            + boolean estUneSortie()
+        }
+
     Monde --> Etape
     Monde --> CorrespondancesEtapes
 }
 
 package twisk.outils {
+    class ThreadsManager {
+        - static volatile ThreadsManager instance
+        - final ArrayList<Thread> threads
+        - ThreadsManager()
+        + static ThreadsManager getInstance()
+        + void lancer(Task<Void> task)
+        + void detruireTout()
+    }
+
+    class TailleComposants {
+        - int clientsW
+        - int clientsH
+        - int fenetreW
+        - int fenetreH
+        - int activiteW
+        - int activiteH
+        - int guichetW
+        - int guichetH
+        - int gridW
+        - int gridH
+        + TailleComposants()
+        + static TailleComposants getInstance()
+        + int getClientsW()
+        + int getClientsH()
+        + int getFenetreW()
+        + int getFenetreH()
+        + int getGuichetH()
+        + int getGuichetW()
+        + int getGridW()
+        + int getGridH()
+        + int getActiviteH()
+        + int getActiviteW()
+    }
+
+    class ClassLoaderPerso {
+          + ClassLoaderPerso(ClassLoader parent)
+          + Class<?> loadClass(String name)
+          + Class<?> getClass(String name)
+          - byte[] loadClassData(String name)
+    }
+
+    class FabriqueIdentifiant {
+        - FabriqueIdentifiant()
+        + static FabriqueIdentifiant getInstance()
+        + int getNumeroEtape()
+        + void reset()
+    }
+
+    class CorrespondancesEtapes {
+            - Map<EtapeIG, Etape> correspondance
+            + CorrespondancesEtapes()
+            + void ajouter(EtapeIG, Etape)
+            + Etape getEtape(EtapeIG)
+    }
+
+    class KitC {
+        + void creerEnvironnement()
+        + void creerFichier(String codeC)
+        + void compiler()
+        + void construireLaBibliotheque()
+        + void killSimulation(GestionnaireClients clients)
+    }
+
     class FabriqueNumero {
         - int compteur
         + FabriqueNumero getInstance()
         + int getNumeroEtape()
         + void reset()
-    }
-
-    class GestionnaireClients {
-        - List<Client> clients
-        + GestionnaireClients()
-        + void setClients(int, Etape...)
-        + List<Client> getClients()
-        + int getClientPosition(Client)
-        + int getClientPosition(int)
-        + Etape getClientEtape(Client)
     }
 
     class MutableBoolean {
@@ -233,7 +344,8 @@ package twisk.outils {
         + void set(boolean)
     }
 
-    FabriqueNumero --> GestionnaireClients
+    FabriqueNumero --> twisk.simulation.GestionnaireClients
+    ThreadsManager --> twisk.mondeIG.SimulationIg
 }
 
 package twisk.simulation {
@@ -248,6 +360,16 @@ package twisk.simulation {
         + boolean aReussi()
         + void setReussi()
     }
+
+    class GestionnaireClients {
+            - List<Client> clients
+            + GestionnaireClients()
+            + void setClients(int, Etape...)
+            + List<Client> getClients()
+            + int getClientPosition(Client)
+            + int getClientPosition(int)
+            + Etape getClientEtape(Client)
+        }
 
     class Simulation {
         - int nbClients
@@ -273,6 +395,10 @@ package twisk.simulation {
     Simulation --> GestionnaireClients
     Simulation --> Observateur
     Simulation --> MutableBoolean
+    Simulation --> KitC
+    Simulation --> FabriqueIdentifiant
+    Simulation --> ClassLoaderPerso
+    GestionnaireClients --> Client
 }
 
 package twisk.exceptions {
@@ -284,8 +410,17 @@ package twisk.exceptions {
         + ArcException(String)
     }
 
-    MondeException --> Exception
-    ArcException --> Exception
+    class JetonsExeption extends Exception {
+        + JetonsExeption(String errorMessage)
+    }
+
+    class TempsExeption extends Exception {
+        + TempsExeption(String errorMessage)
+    }
+
+    class TwiskExeption extends Exception {
+        + TwiskExeption(String errorMessage)
+    }
 }
 
 @enduml
