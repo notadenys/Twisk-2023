@@ -10,8 +10,6 @@ import twisk.mondeIG.EtapeIG;
 import twisk.mondeIG.MondeIG;
 import twisk.outils.TailleComposants;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -53,12 +51,7 @@ public class VueActiviteIG extends VueEtapeIG {
 
             getEtape().resetHauteur();
             if (getEtape().estUneEntree()) {
-                Image imageEntree = null;
-                try {
-                    imageEntree = new Image(new FileInputStream("src/main/ressources/images/entree.png"));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                Image imageEntree = new Image("images/entree.png");
                 ImageView imageViewEntree = new ImageView(imageEntree);
                 imageViewEntree.setPreserveRatio(true);
                 imageViewEntree.setFitHeight(25);
@@ -70,12 +63,7 @@ public class VueActiviteIG extends VueEtapeIG {
             }
 
             if (getEtape().estUneSortie()) {
-                Image imageSortie = null;
-                try {
-                    imageSortie = new Image(new FileInputStream("src/main/ressources/images/sortie.png"));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                Image imageSortie = new Image("images/sortie.png");
                 ImageView imageViewSortie = new ImageView(imageSortie);
                 imageViewSortie.setPreserveRatio(true);
                 imageViewSortie.setFitHeight(25);

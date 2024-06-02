@@ -73,15 +73,19 @@ public class VueMondeIG extends Pane implements Observateur {
                     VueActiviteIG activite = new VueActiviteIG(monde, etape);
                     setUpClients(activite);
                     activites.add(activite);
-                    for (PointDeControleIG point : etape) {
-                        points.add(new VuePointDeControleIG(monde, point));
+                    if (monde.isSimulationStopped()) {
+                        for (PointDeControleIG point : etape) {
+                            points.add(new VuePointDeControleIG(monde, point));
+                        }
                     }
                 } else if (etape.estUnGuichet()) {
                     VueGuichetIG guichet = new VueGuichetIG(monde, etape);
                     setUpClients(guichet);
                     guichets.add(guichet);
-                    for (PointDeControleIG point : etape) {
-                        points.add(new VuePointDeControleIG(monde, point));
+                    if (monde.isSimulationStopped()) {
+                        for (PointDeControleIG point : etape) {
+                            points.add(new VuePointDeControleIG(monde, point));
+                        }
                     }
                 }
             }

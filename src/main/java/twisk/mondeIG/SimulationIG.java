@@ -159,6 +159,7 @@ public class SimulationIG implements Observateur {
      * @throws IllegalAccessException    if there is an illegal access to a method.
      */
     public void simuler() throws MondeException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        monde.deselectionner();
         Monde mondeSim = creerMonde();
         System.gc();
         ClassLoaderPerso classLoader = new ClassLoaderPerso(SimulationIG.class.getClassLoader());

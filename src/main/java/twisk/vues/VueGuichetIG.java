@@ -10,8 +10,6 @@ import twisk.mondeIG.EtapeIG;
 import twisk.mondeIG.MondeIG;
 import twisk.outils.TailleComposants;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Iterator;
 
 /**
@@ -66,12 +64,7 @@ public class VueGuichetIG extends VueEtapeIG implements Observateur {
 
             getEtape().resetHauteur();
             if (getEtape().estUneEntree()) {
-                Image imageEntree = null;
-                try {
-                    imageEntree = new Image(new FileInputStream("src/main/ressources/images/entree.png"));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                Image imageEntree = new Image("images/entree.png");
                 ImageView imageViewEntree = new ImageView(imageEntree);
                 imageViewEntree.setPreserveRatio(true);
                 imageViewEntree.setFitHeight(25);

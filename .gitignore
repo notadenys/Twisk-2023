@@ -5,3 +5,4 @@
 src/main/C/libTwisk.so
 /src/main/C/main
 *.log
+/src/main/ressources/META-INF/

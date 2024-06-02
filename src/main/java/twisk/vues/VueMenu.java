@@ -7,6 +7,7 @@ import javafx.util.Duration;
 import twisk.exceptions.MondeException;
 import twisk.exceptions.TwiskException;
 import twisk.mondeIG.*;
+import twisk.outils.ThreadsManager;
 
 /**
  * The VueMenu class represents the menu bar in the Twisk application.
@@ -24,6 +25,7 @@ public class VueMenu extends MenuBar implements Observateur {
     private final MenuItem delai;
     private final MenuItem ecart;
     private final MenuItem jetons;
+    private final MenuItem clients;
 
     /**
      * Constructor for VueMenu.
@@ -42,7 +44,11 @@ public class VueMenu extends MenuBar implements Observateur {
         Menu parametres = new Menu("Parametres");
 
         MenuItem quitter = new MenuItem("Quitter");
-        quitter.setOnAction(e -> Platform.exit());
+        quitter.setOnAction(e ->
+                {
+                    ThreadsManager.getInstance().detruireTout();
+                    Platform.exit();
+                });
 
         deselectionner = new MenuItem("Effacer la selection");
         deselectionner.setOnAction(e -> monde.deselectionner());
@@ -121,7 +127,7 @@ public class VueMenu extends MenuBar implements Observateur {
             }
         });
 
-        MenuItem clients = new MenuItem("Changer le nombre de clients");
+        clients = new MenuItem("Changer le nombre de clients");
         clients.setOnAction(e -> {
             TextInputDialog input = new TextInputDialog();
             input.setHeaderText("Entrez le nombre de clients");
@@ -156,6 +162,7 @@ public class VueMenu extends MenuBar implements Observateur {
         delai.setDisable(monde.getEtapesSelectionnes().size() != 1 || monde.isGuichetSelectionne());
         ecart.setDisable(monde.getEtapesSelectionnes().size() != 1 || monde.isGuichetSelectionne());
         jetons.setDisable(monde.getEtapesSelectionnes().size() != 1 || monde.isActiviteSelectionne());
+        clients.setDisable(!monde.isSimulationStopped());
     }
 
     /**
