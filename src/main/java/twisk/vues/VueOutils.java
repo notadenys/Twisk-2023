@@ -13,8 +13,6 @@ import twisk.mondeIG.ActiviteIG;
 import twisk.mondeIG.GuichetIG;
 import twisk.mondeIG.MondeIG;
 import twisk.outils.ThreadsManager;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
@@ -25,7 +23,7 @@ import java.util.ArrayList;
 public class VueOutils extends TilePane implements Observateur{
     MondeIG monde;
     ArrayList<Button> buttons;
-    private Button play;
+    private final Button play;
     ImageView imageViewPlay;
 
     /**
@@ -41,15 +39,9 @@ public class VueOutils extends TilePane implements Observateur{
         monde.ajouterObservateur(this);
 
         buttons = new ArrayList<>();
-
-        try {
-            FileInputStream input = new FileInputStream("src/main/ressources/images/plus.png");
-            FileInputStream input2 = new FileInputStream("src/main/ressources/images/play.png");
-            FileInputStream input3 = new FileInputStream("src/main/ressources/images/stop.png");
-
-            Image image = new Image(input);
-            Image image2 = new Image(input2);
-            Image image3 = new Image(input3);
+            Image image = new Image("images/plus.png");
+            Image image2 = new Image("images/play.png");
+            Image image3 = new Image("images/stop.png");
 
             ImageView imageViewActivite = new ImageView(image);
             imageViewActivite.setFitHeight(50);
@@ -104,9 +96,6 @@ public class VueOutils extends TilePane implements Observateur{
 
             play.setTooltip(new Tooltip("lancer/arreter la simulation"));
             buttons.add(play);
-        } catch (FileNotFoundException e) {
-            showErrorAlert(e.getMessage());
-        }
         reagir();
     }
 
