@@ -1,0 +1,291 @@
+@startuml
+
+package twisk.mondeIG {
+    class ArcIG {
+        - PointDeControleIG p1
+        - PointDeControleIG p2
+        + ArcIG(MondeIG, String, String)
+        + PointDeControleIG getP1()
+        + PointDeControleIG getP2()
+        + String getP1ID()
+        + String getP2ID()
+    }
+
+    class EtapeIG {
+        - int id
+        - String nom
+        - boolean entree
+        - boolean sortie
+        - boolean restrainte
+        - List<EtapeIG> successeurs
+        - List<EtapeIG> predecesseurs
+        + EtapeIG(String)
+        + int getId()
+        + String getNom()
+        + boolean estUneEntree()
+        + boolean estUneSortie()
+        + boolean isRestrainte()
+        + void setEntree(boolean)
+        + void setSortie(boolean)
+        + void setRestrainte(boolean)
+        + void ajouterSuccesseur(EtapeIG)
+        + void supprimerSuccesseur(EtapeIG)
+        + List<EtapeIG> getSuccesseurs()
+        + List<EtapeIG> getPredecesseurs()
+    }
+
+    class ActiviteIG extends EtapeIG {
+        - int temps
+        - int ecartTemps
+        + ActiviteIG(String, int, int)
+        + int getTemps()
+        + int getEcartTemps()
+    }
+
+    class GuichetIG extends EtapeIG {
+        - int nbJetons
+        + GuichetIG(String, int)
+        + int getNbJetons()
+    }
+
+    class MondeIG {
+        - Map<Integer, EtapeIG> etapes
+        - ArrayList<ArcIG> arcs
+        - ArrayList<EtapeIG> etapesSelectionnes
+        - ArrayList<ArcIG> arcsSelectionnes
+        - PointDeControleIG pointMemorise
+        - boolean isEnAttente
+        - ArrayList<EtapeIG[]> liaisons
+        - GestionnaireClients gestionnaireClients
+        - MutableBoolean simulationInProgress
+        - int nbClients
+        + MondeIG()
+        + void ajouter(ActiviteIG)
+        + void ajouter(GuichetIG)
+        + void delete(EtapeIG...)
+        + void marquerCommeEntree()
+        + void marquerCommeSortie()
+        + ArrayList<EtapeIG> getEtapes()
+        + ArrayList<EtapeIG> getEntrees()
+        + ArrayList<EtapeIG> getSorties()
+        + ArrayList<GuichetIG> getGuichets()
+        + ArrayList<ActiviteIG> getActivites()
+        + void ajouter(String, String) throws ArcException
+        + void delete(ArcIG...)
+        + void checkArcs(EtapeIG)
+        + void refreshArcs()
+        + void clickEtape(EtapeIG)
+        + void selectionnerEtape(EtapeIG)
+        + void deselectionnerEtape(EtapeIG)
+        + void clickArc(ArcIG)
+        + boolean contains(ArcIG)
+        + void selectionnerArc(ArcIG)
+        + void deselectionnerArc(ArcIG)
+        + void deselectionner()
+        + ArrayList<EtapeIG> getEtapesSelectionnes()
+        + boolean isGuichetSelectionne()
+        + boolean isActiviteSelectionne()
+        + ArrayList<ArcIG> getArcsSelectionnes()
+        + PointDeControleIG getPointMemorise()
+        + void setPointMemorise(PointDeControleIG)
+        + boolean isEnAttente()
+        + void setEnAttente(boolean)
+        + PointDeControleIG getPoint(String)
+        + EtapeIG getEtape(int)
+        + Iterator<Map.Entry<Integer, EtapeIG>> iterator()
+        + Iterator<ArcIG> arcs()
+        + void simuler() throws MondeException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException
+        + Set<Map.Entry<Integer, EtapeIG>> entrySet()
+        + void updateLiaison()
+        + GestionnaireClients getGestionnaireClients()
+        + void setGestionnaireClients(GestionnaireClients)
+        + boolean isSimulationStopped()
+        + void setSimulationInProgress(MutableBoolean)
+        + Iterator<EtapeIG[]> iteratorliaison()
+        + String toString()
+        + void setCorrespondance(CorrespondancesEtapes)
+        + boolean estAccessibleDepuis(EtapeIG, EtapeIG)
+        + boolean dfs(EtapeIG, EtapeIG, Set<EtapeIG>)
+        + void setNbClients(int) throws MondeException
+        + int getNbClients()
+    }
+
+    class PointDeControleIG {
+        - EtapeIG etape
+        - String id
+        + PointDeControleIG(EtapeIG, String)
+        + EtapeIG getEtape()
+        + String getId()
+    }
+
+    class SujetObserve {
+        + void notifierObservateurs()
+    }
+
+    class SimulationIG {
+        - MondeIG monde
+        + SimulationIG(MondeIG)
+        + void simuler() throws MondeException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException
+        + void reagir()
+    }
+
+    MondeIG --> ArcIG
+    MondeIG --> EtapeIG
+    MondeIG --> GestionnaireClients
+    MondeIG --> MutableBoolean
+    MondeIG --> PointDeControleIG
+    MondeIG --> CorrespondancesEtapes
+    MondeIG --> SujetObserve
+    SimulationIG --> MondeIG
+    ArcIG --> PointDeControleIG
+    EtapeIG <|-- ActiviteIG
+    EtapeIG <|-- GuichetIG
+}
+
+package twisk.monde {
+    class Etape {
+        - String nom
+        - boolean estUneEntree
+        - boolean estUneSortie
+        - boolean estRestrainte
+        - List<Etape> successeurs
+        + Etape(String)
+        + String getNom()
+        + void setNom(String)
+        + boolean estUneEntree()
+        + boolean estUneSortie()
+        + boolean estRestrainte()
+        + void setEntree(boolean)
+        + void setSortie(boolean)
+        + void setRestrainte(boolean)
+        + void ajouterSuccesseur(Etape)
+        + List<Etape> getSuccesseurs()
+    }
+
+    class Activite extends Etape {
+        - int temps
+        - int ecartTemps
+        + Activite(String, int, int)
+        + int getTemps()
+        + int getEcartTemps()
+    }
+
+    class ActiviteRestreinte extends Activite {
+        + ActiviteRestreinte(String, int, int)
+    }
+
+    class Guichet extends Etape {
+        - int nbJetons
+        + Guichet(String, int)
+        + int getNbJetons()
+    }
+
+    class Monde {
+        - List<Etape> etapes
+        - List<Etape> entrees
+        - List<Etape> sorties
+        + Monde()
+        + void ajouter(Etape...)
+        + void aCommeEntree(Etape)
+        + void aCommeSortie(Etape)
+        + List<Etape> getEtapes()
+        + List<Etape> getEntrees()
+        + List<Etape> getSorties()
+    }
+
+    class CorrespondancesEtapes {
+        - Map<EtapeIG, Etape> correspondance
+        + CorrespondancesEtapes()
+        + void ajouter(EtapeIG, Etape)
+        + Etape getEtape(EtapeIG)
+    }
+
+    Etape <|-- Activite
+    Activite <|-- ActiviteRestreinte
+    Etape <|-- Guichet
+    Monde --> Etape
+    Monde --> CorrespondancesEtapes
+}
+
+package twisk.outils {
+    class FabriqueNumero {
+        - int compteur
+        + FabriqueNumero getInstance()
+        + int getNumeroEtape()
+        + void reset()
+    }
+
+    class GestionnaireClients {
+        - List<Client> clients
+        + GestionnaireClients()
+        + void setClients(int, Etape...)
+        + List<Client> getClients()
+        + int getClientPosition(Client)
+        + int getClientPosition(int)
+        + Etape getClientEtape(Client)
+    }
+
+    class MutableBoolean {
+        - boolean value
+        + MutableBoolean()
+        + MutableBoolean(boolean)
+        + boolean get()
+        + void set(boolean)
+    }
+
+    FabriqueNumero --> GestionnaireClients
+}
+
+package twisk.simulation {
+    class Client {
+        - int numeroClient
+        - int rang
+        - boolean aReussi
+        + Client(int)
+        + int getNumeroClient()
+        + int getRang()
+        + void incrementerRang()
+        + boolean aReussi()
+        + void setReussi()
+    }
+
+    class Simulation {
+        - int nbClients
+        - Monde monde
+        - GestionnaireClients gestionnaireClients
+        - List<Observateur> observateurs
+        - boolean simulationInProgress
+        + Simulation()
+        + void setNbClients(int)
+        + void ajouterObservateur(Observateur)
+        + void notifierObservateurs()
+        + void simuler(Monde) throws MondeException
+        + void arreterSimulation()
+        + boolean isSimulationInProgress()
+        + void setSimulationInProgress(boolean)
+    }
+
+    interface Observateur {
+        + void reagir()
+    }
+
+    Simulation --> Monde
+    Simulation --> GestionnaireClients
+    Simulation --> Observateur
+    Simulation --> MutableBoolean
+}
+
+package twisk.exceptions {
+    class MondeException extends Exception {
+        + MondeException(String)
+    }
+
+    class ArcException extends Exception {
+        + ArcException(String)
+    }
+
+    MondeException --> Exception
+    ArcException --> Exception
+}
+
+@enduml
